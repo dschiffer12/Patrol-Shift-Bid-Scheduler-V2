@@ -29,7 +29,5 @@ steps:
   inputs:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
     includeRootFolder: false
-    archiveFile: 'newDeploy'
-    archiveType: zip
     replaceExistingArchive: true
 - task: PublishBuildArtifacts@1
