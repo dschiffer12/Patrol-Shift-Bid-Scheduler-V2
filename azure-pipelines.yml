@@ -29,7 +29,7 @@ steps:
   inputs:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
     includeRootFolder: true
-    archiveFile: '$(Build.ArtifactStagingDirectory)/newDeploy.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
     archiveType: 'zip'
     replaceExistingArchive: true
 - task: PublishBuildArtifacts@1
