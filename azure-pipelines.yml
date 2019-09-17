@@ -28,6 +28,8 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
+    archiveFile: $(Build.BuildNumber).zip
+    archiveType: zip
     includeRootFolder: false
     replaceExistingArchive: true
 - task: PublishBuildArtifacts@1
