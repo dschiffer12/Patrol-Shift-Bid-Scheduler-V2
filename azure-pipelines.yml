@@ -28,8 +28,8 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
-    archiveFile: '$(system.defaultWorkingDirectory)/newDeploy.zip'
+    includeRootFolder: true
+    archiveFile: '$(Build.ArtifactStagingDirectory)/newDeploy.zip'
     archiveType: 'zip'
-    includeRootFolder: false
     replaceExistingArchive: true
 - task: PublishBuildArtifacts@1
