@@ -47,3 +47,6 @@ const app = new Vue({
 });
 
 
+axios.get('/api/user').then(response => {
+    console.log(response.data);
+ });
