@@ -1857,12 +1857,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
-
-    var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-    axios.get('/api/user').then(function (response) {
-      console.log(response.data);
-    });
   }
 });
 
