@@ -21,6 +21,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
 
 
 Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function() {
