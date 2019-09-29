@@ -12,14 +12,14 @@
 */
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return view('welcome');
-   });
+    Route::get('/', 'HomeController@index')->name('home');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// // Disable the register controller
+// Auth::routes(['register' => false]);
+
 
 Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
 
