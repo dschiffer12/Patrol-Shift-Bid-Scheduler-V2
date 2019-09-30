@@ -52,6 +52,61 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
+
+                            <div class="form-group col-md-6">
+                                <select id="role" class="form-control" required>
+                                    <option value="">Choose...</option>
+                                    <option value=1>Admin</option>
+                                    <option value=2>Supervisor</option>
+                                    <option value=3>Officer</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="date-in-position" class="col-md-4 col-form-label text-md-right">{{ __('Date in Position') }}</label>
+
+                            <div class="form-group col-md-6">
+                                <input id="date-in-position" class="form-control" type="date" required>
+
+                                @error('date-in-position')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+                            <label for="specialties" class="col-md-4 col-form-label text-md-right">{{ __('Specialties') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="specialties" type="text" class="form-control @error('specialties') is-invalid @enderror" name="specialties" value="{{ old('specialties') }}" autocomplete="specialties" autofocus>
+
+                                @error('specialties')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="specialties" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="specialties" type="text" class="form-control @error('notes') is-invalid @enderror" name="notes" value="{{ old('notes') }}" autocomplete="notes" autofocus>
+
+                                @error('Notes')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
