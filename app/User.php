@@ -61,10 +61,26 @@ class User extends Authenticatable
 
 
     /**
-     * For the User/Specialty relation (user belogs to many roles)
+     * For the User/Specialty relation (user belongs to many roles)
      */
     public function specialties() {
         return $this->belongsToMany('App\Specialty');
+    }
+
+    /**
+     * For the User/Officer relation (officer belongs to one user)
+     */
+    public function officer()
+    {
+        $this->belongsTo('App\Models\Officer');
+    }
+
+    /**
+     * Get the bidding queue that owns the user.
+     */
+    public function biddingqueue()
+    {
+        return $this->belongsTo('App\Models\BiddingQueue');
     }
 
 }

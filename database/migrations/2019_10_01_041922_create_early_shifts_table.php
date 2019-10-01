@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOfficersTable extends Migration
+class CreateEarlyShiftsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateOfficersTable extends Migration
      */
     public function up()
     {
-        Schema::create('officers', function (Blueprint $table) {
+        Schema::create('early_shifts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('unit_number');
-            $table->integer('emergency_number');
-            $table->integer('vehicle_number');
+            $table->integer('shift_id')->unsigned();
+            $table->time('early_start_time');
+            $table->time('early_end_time');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateOfficersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('officers');
+        Schema::dropIfExists('early_shifts');
     }
 }
