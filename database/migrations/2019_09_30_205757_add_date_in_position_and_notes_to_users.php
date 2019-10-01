@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSpecialtyUsersTable extends Migration
+class AddDateInPositionAndNotesToUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateSpecialtyUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('specialty_users', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->date('date_in_position');
+            $table->string('notes');
         });
     }
 
@@ -26,6 +26,8 @@ class CreateSpecialtyUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('specialty_users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['date_in_position', 'notes']);
+        });
     }
 }

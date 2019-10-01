@@ -82,7 +82,14 @@
                             <label for="specialties" class="col-md-4 col-form-label text-md-right">{{ __('Specialties') }}</label>
 
                             <div class="col-md-6">
-                                <input id="specialties" type="text" class="form-control @error('specialties') is-invalid @enderror" name="specialties" value="{{ old('specialties') }}" autocomplete="specialties" autofocus>
+                                <!-- <input id="specialties" type="text" class="form-control @error('specialties') is-invalid @enderror" name="specialties" value="{{ old('specialties') }}" autocomplete="specialties" autofocus> -->
+
+                                @foreach($specialties as $specialty)
+                                <div class="form-check">
+                                    <input type="checkbox" name="specialties[]" value="{{ $specialty->id }}">
+                                    <label>{{ $specialty->name }}</label>
+                                </div>
+                                @endforeach
 
                                 @error('specialties')
                                     <span class="invalid-feedback" role="alert">
