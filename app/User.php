@@ -38,17 +38,33 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
+    /**
+     * For the User/Roles relation
+     */
     public function roles() {
         return $this->belongsToMany('App\Role');
     }
 
+    /**
+     * To calidating roles/roles level
+     */
     public function hasAnyRoles($roles) {
         return null !== $this->roles()->whereIn('name', $roles)->first();
     }
 
+    /**
+     * To validate roles/roles level
+     */
     public function hasAnyRole($role) {
         return null !== $this->roles()->where('name', $role)->first();
+    }
+
+
+    /**
+     * For the User/Specialty relation (user belogs to many roles)
+     */
+    public function specialties() {
+        return $this->belongsToMany('App\Specialty');
     }
 
 }
