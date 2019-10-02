@@ -11,10 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', 'HomeController@index')->name('home');
+
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// // Disable the register controller
+// Auth::routes(['register' => false]);
+
+
+Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
+
+
+Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function() {
+
+    Route::resource('/users', 'UsersController')->middleware(['auth', 'auth.admin']);
+});
+

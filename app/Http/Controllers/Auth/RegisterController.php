@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
+use App\Specialty;
+use App\Role;
 
 class RegisterController extends Controller
 {
@@ -28,7 +34,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -37,7 +43,8 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        //$this->middleware('guest');
+        $this->middleware(['auth', 'auth.admin']);
     }
 
     /**
@@ -51,6 +58,10 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'role' => ['required'],
+            'date_in_position' => ['required'],
+            'specialties' => ['max:255'],
+            'notes' => ['max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -63,10 +74,58 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'date_in_position' => $data['date_in_position'],
+            'notes' => $data['notes'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // attach the role
+        $user->roles()->attach($data['role']);
+
+        // attach all the specialties
+        foreach($data['specialties'] as $specialty){
+            $user->specialties()->attach($specialty);
+        }
+        
+        return $user;
+    }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        // get all roles expet root.
+        $roles = Role::where('name', '!=', 'root')->get();
+        $specialties = Specialty::all();
+
+        return view('auth.register')->with([
+            'roles' => $roles, 
+            'specialties' => $specialties
+        ]);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     * Modified/overwriten to prevent auto-login after registration
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        //$this->guard()->login($user);
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
     }
 }

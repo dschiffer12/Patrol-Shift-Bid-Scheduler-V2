@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'role', 'date_in_position', 'specialties', 'notes', 'password',
     ];
 
     /**
@@ -37,4 +37,50 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * For the User/Roles relation
+     */
+    public function roles() {
+        return $this->belongsToMany('App\Role');
+    }
+
+    /**
+     * To calidating roles/roles level
+     */
+    public function hasAnyRoles($roles) {
+        return null !== $this->roles()->whereIn('name', $roles)->first();
+    }
+
+    /**
+     * To validate roles/roles level
+     */
+    public function hasAnyRole($role) {
+        return null !== $this->roles()->where('name', $role)->first();
+    }
+
+
+    /**
+     * For the User/Specialty relation (user belongs to many roles)
+     */
+    public function specialties() {
+        return $this->belongsToMany('App\Specialty');
+    }
+
+    /**
+     * For the User/Officer relation (officer belongs to one user)
+     */
+    public function officer()
+    {
+        $this->belongsTo('App\Models\Officer');
+    }
+
+    /**
+     * Get the bidding queue that owns the user.
+     */
+    public function biddingqueue()
+    {
+        return $this->belongsTo('App\Models\BiddingQueue');
+    }
+
 }
