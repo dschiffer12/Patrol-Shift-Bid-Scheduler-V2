@@ -55,11 +55,13 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
 
                             <div class="form-group col-md-6">
-                                <select id="role" class="form-control" required>
+                                <select id="role" class="form-control" name="role" required>
                                     <option value="">Choose...</option>
-                                    <option value=1>Admin</option>
-                                    <option value=2>Supervisor</option>
-                                    <option value=3>Officer</option>
+
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
+
                                 </select>
                             </div>
                         </div>
@@ -68,7 +70,7 @@
                             <label for="date-in-position" class="col-md-4 col-form-label text-md-right">{{ __('Date in Position') }}</label>
 
                             <div class="form-group col-md-6">
-                                <input id="date-in-position" class="form-control" type="date" required>
+                                <input id="date-in-position" class="form-control" type="date" name="date_in_position" required>
 
                                 @error('date-in-position')
                                     <span class="invalid-feedback" role="alert">

@@ -21,8 +21,8 @@ class CreateBiddingQueuesTable extends Migration
             $table->boolean('waiting_to_bid');
             $table->boolean('bidding');
             $table->boolean('bid_submitted');
-            $table->timestamp('start_time_bidding');
-            $table->timestamp('end_time_bidding');
+            $table->timestamp('start_time_bidding')->nullable();
+            $table->timestamp('end_time_bidding')->nullable();
             $table->timestamps();
         });
     }

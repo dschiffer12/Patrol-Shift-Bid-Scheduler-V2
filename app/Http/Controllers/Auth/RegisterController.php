@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 use App\Specialty;
+use App\Role;
 
 class RegisterController extends Controller
 {
@@ -57,6 +58,10 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'role' => ['required'],
+            'date_in_position' => ['required'],
+            'specialties' => ['max:255'],
+            'notes' => ['max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -69,11 +74,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'date_in_position' => $data['date_in_position'],
+            'notes' => $data['notes'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // attach the role
+        $user->roles()->attach($data['role']);
+
+        // attach all the specialties
+        foreach($data['specialties'] as $specialty){
+            $user->specialties()->attach($specialty);
+        }
+        
+        return $user;
     }
 
     /**
@@ -83,8 +100,14 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
+        // get all roles expet root.
+        $roles = Role::where('name', '!=', 'root')->get();
         $specialties = Specialty::all();
-        return view('auth.register')->with('specialties', $specialties);
+
+        return view('auth.register')->with([
+            'roles' => $roles, 
+            'specialties' => $specialties
+        ]);
     }
 
     /**

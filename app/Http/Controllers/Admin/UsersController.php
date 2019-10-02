@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\Role;
+use App\Specialty;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -60,12 +62,19 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
+        //this is not the place for admins to edit there own information
+        if(Auth::user()->id == $user->id){
+            return redirect()->route('admin.users.index');
+        }
+
         //dd($user);
         $roles = Role::all();
+        $specialties = Specialty::all();
 
         return view('admin.users.edit')->with([
             'user' => $user,
-            'roles' => $roles
+            'roles' => $roles,
+            'specialties' => $specialties
         ]);
     }
 
@@ -93,6 +102,9 @@ class UsersController extends Controller
     {
         // detach the user from the roles relationship table, can also be done using "on delete cascade"
         $user->roles()->detach();
+
+        // detach the user from the specialties relationship table, can also be done using "on delete cascade"
+        $user->specialties()->detach();
 
         $user->delete();
         return redirect()->route('admin.users.index');

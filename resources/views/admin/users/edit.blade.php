@@ -8,7 +8,7 @@
         <div class="col-md-12">
 
             <div class="card">
-                <div class="card-header">Edit user {{ $user->name }}
+                <div class="card-header"><b>Edit user:</b> {{ $user->name }}
                 </div>
             
                 <div class="card-body">
