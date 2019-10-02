@@ -18,6 +18,10 @@ class CreateBidScheduleShiftTable extends Migration
             $table->integer('shift_id')->unsigned();
             $table->integer('bidding_schedule_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('shift_id')->references('id')->on('shifts')->onCascade('delete');
+
+            $table->foreign('bidding_schedule_id')->references('id')->on('bidding_schedules')->onCascade('delete');
         });
     }
 

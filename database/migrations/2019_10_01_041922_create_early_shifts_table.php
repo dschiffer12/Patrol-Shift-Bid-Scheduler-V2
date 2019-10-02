@@ -19,6 +19,8 @@ class CreateEarlyShiftsTable extends Migration
             $table->time('early_start_time');
             $table->time('early_end_time');
             $table->timestamps();
+
+            $table->foreign('shift_id')->references('id')->on('shifts')->onCascade('delete');
         });
     }
 

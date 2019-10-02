@@ -24,6 +24,10 @@ class CreateBiddingQueuesTable extends Migration
             $table->timestamp('start_time_bidding')->nullable();
             $table->timestamp('end_time_bidding')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onCascade('delete');
+
+            $table->foreign('bidding_schedule_id')->references('id')->on('bidding_schedules')->onCascade('delete');
         });
     }
 

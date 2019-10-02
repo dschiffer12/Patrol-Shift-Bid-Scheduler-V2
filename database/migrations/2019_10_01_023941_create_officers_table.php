@@ -20,6 +20,8 @@ class CreateOfficersTable extends Migration
             $table->integer('emergency_number');
             $table->integer('vehicle_number');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onCascade('delete');
         });
     }
 

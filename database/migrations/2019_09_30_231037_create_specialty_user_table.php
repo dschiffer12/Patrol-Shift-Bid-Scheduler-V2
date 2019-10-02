@@ -18,6 +18,10 @@ class CreateSpecialtyUserTable extends Migration
             $table->integer('specialty_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onCascade('delete');
+
+            $table->foreign('user_id')->references('id')->on('users')->onCascade('delete');
         });
     }
 
