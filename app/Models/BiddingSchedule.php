@@ -11,14 +11,22 @@ class BiddingSchedule extends Model
      */
     public function shift()
     {
-        $this->belongsToMany('App\Models\Shift');
+        return $this->belongsToMany('App\Models\Shift');
     }
 
     /**
      * Get the bidding queue that owns the bidding schedule.
      */
-    public function post()
+    public function biddingqueue()
     {
         return $this->belongsTo('App\Models\BiddingQueue');
+    }
+
+    /**
+     * Get the bidding queue that owns the bidding schedule.
+     */
+    public function bid()
+    {
+        return $this->belongsTo('App\Models\Bid');
     }
 }

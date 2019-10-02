@@ -16,13 +16,13 @@ class CreateBiddingQueuesTable extends Migration
         Schema::create('bidding_queues', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('biddingschedule_id')->unsigned();
+            $table->integer('bidding_schedule_id')->unsigned();
             $table->integer('bidding_spot');
             $table->boolean('waiting_to_bid');
             $table->boolean('bidding');
             $table->boolean('bid_submitted');
-            $table->timestamp('start_time_bidding');
-            $table->timestamp('end_time_bidding');
+            $table->timestamp('start_time_bidding')->nullable();
+            $table->timestamp('end_time_bidding')->nullable();
             $table->timestamps();
         });
     }

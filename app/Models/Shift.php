@@ -11,7 +11,7 @@ class Shift extends Model
      */
     public function earlyshift()
     {
-        $this->belongsTo('App\Models\EarlyShift');
+        return $this->belongsTo('App\Models\EarlyShift');
     }
 
     /**
@@ -19,6 +19,6 @@ class Shift extends Model
      */
     public function shift()
     {
-        $this->belongsToMany('App\Models\BiddingSchedule');
+        return $this->belongsToMany('App\Models\BiddingSchedule');
     }
 }
