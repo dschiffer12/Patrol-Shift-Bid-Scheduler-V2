@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Shift extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'minimun_staff'
+    ];
+
+    /**
      * EarlyShift belongs to Shift
      */
     public function earlyshift()

@@ -15,9 +15,13 @@ class CreateBidScheduleShiftTable extends Migration
     {
         Schema::create('bid_schedule_shift', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('shift_id')->unsigned();
-            $table->integer('bidding_schedule_id')->unsigned();
+            $table->unsignedBigInteger('shift_id');
+            $table->unsignedBigInteger('bidding_schedule_id');
             $table->timestamps();
+
+            $table->foreign('shift_id')->references('id')->on('shifts')->onDelete('cascade');
+
+            $table->foreign('bidding_schedule_id')->references('id')->on('bidding_schedules')->onDelete('cascade');
         });
     }
 

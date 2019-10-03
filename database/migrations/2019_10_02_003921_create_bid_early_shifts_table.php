@@ -15,8 +15,8 @@ class CreateBidEarlyShiftsTable extends Migration
     {
         Schema::create('bid_early_shifts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('early_shift_id')->unsigned();
-            $table->integer('bid_id')->unsigned();
+            $table->unsignedBigInteger('early_shift_id');
+            $table->unsignedBigInteger('bid_id');
             $table->boolean('friday');
             $table->boolean('saturday');
             $table->boolean('sunday');
