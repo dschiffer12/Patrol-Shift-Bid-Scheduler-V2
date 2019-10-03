@@ -15,13 +15,13 @@ class CreateSpecialtyUserTable extends Migration
     {
         Schema::create('specialty_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('specialty_id')->unsigned();
-            $table->integer('user_id')->unsigned();
+            $table->unsignedBigInteger('specialty_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('specialty_id')->references('id')->on('specialties')->onCascade('delete');
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
 
-            $table->foreign('user_id')->references('id')->on('users')->onCascade('delete');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
