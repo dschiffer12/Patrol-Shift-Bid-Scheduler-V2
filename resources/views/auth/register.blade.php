@@ -99,12 +99,11 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="specialties" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>
+                            <label for="notes" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>
 
                             <div class="col-md-6">
-                                <input id="specialties" type="text" class="form-control @error('notes') is-invalid @enderror" name="notes" value="{{ old('notes') }}" autocomplete="notes" autofocus>
-
-                                @error('Notes')
+                                <textarea class="form-control @error('notes') is-invalid @enderror" name="notes" id="notes" rows="2" autocomplete="notes" autofocus></textarea>
+                                @error('notes')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
