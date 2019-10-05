@@ -46,14 +46,14 @@ class User extends Authenticatable
     }
 
     /**
-     * To calidating roles/roles level
+     * To calidating user/roles level
      */
     public function hasAnyRoles($roles) {
         return null !== $this->roles()->whereIn('name', $roles)->first();
     }
 
     /**
-     * To validate roles/roles level
+     * To validate user/roles level
      */
     public function hasAnyRole($role) {
         return null !== $this->roles()->where('name', $role)->first();
@@ -65,6 +65,13 @@ class User extends Authenticatable
      */
     public function specialties() {
         return $this->belongsToMany('App\Specialty');
+    }
+
+    /**
+     * To validate user/specialty level
+     */
+    public function hasAnySpecialty($specialty) {
+        return null !== $this->specialties()->where('name', $specialty)->first();
     }
 
     /**

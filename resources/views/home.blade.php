@@ -31,7 +31,7 @@
                     <label for="calendar_date" class="col-md-4 col-form-label text-md-right">{{ __('Select Date') }}</label>
 
                     <div class="form-group col-md-4">
-                        <input id="calendar_date" class="form-control" type="date" name="calendar_date" required>
+                        <input id="calendar_date" class="form-control" type="date" name="calendar_date" value={{date((now()))}} required>
 
                         @error('date-in-position')
                             <span class="calendar_date" role="alert">
@@ -56,10 +56,7 @@
         <div class="col col-md-8 align-self-center">
 
         <h5>The daily Schedule/P-Shift will be displayed here</h5>
-        <?php 
         
-        echo today()->format('m/d/Y')?>
-        </div>
     </div>
 </div>
 @endsection

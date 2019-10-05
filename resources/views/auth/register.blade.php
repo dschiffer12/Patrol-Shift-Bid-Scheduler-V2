@@ -3,15 +3,14 @@
 @section('content')
 
 <!-- Badge Logo -->
-<div class="container">
+<!-- <div class="container">
     <div class="row justify-content-center">
         <div class="col">
-            <!-- Badge -->
             <img src='img/badge.gif' class="rounded mx-auto d-block img-fluid" alt='Badge' >
                 <br>
         </div>
     </div>
-</div>
+</div> -->
 
 <div class="container">
     <div class="row justify-content-center">
@@ -59,7 +58,9 @@
                                     <option value="">Choose...</option>
 
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        <option value="{{ $role->id }}">{{ $role->name }}
+                                            
+                                        </option>
                                         @endforeach
 
                                 </select>
@@ -67,12 +68,12 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="date-in-position" class="col-md-4 col-form-label text-md-right">{{ __('Date in Position') }}</label>
+                            <label for="date_in_position" class="col-md-4 col-form-label text-md-right">{{ __('Date in Position') }}</label>
 
                             <div class="form-group col-md-6">
-                                <input id="date-in-position" class="form-control" type="date" name="date_in_position" required>
+                                <input id="date_in_position" class="form-control @error('date_in_position') is-invalid @enderror" type="date" name="date_in_position" required>
 
-                                @error('date-in-position')
+                                @error('date_in_position')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -87,27 +88,22 @@
                                 <!-- <input id="specialties" type="text" class="form-control @error('specialties') is-invalid @enderror" name="specialties" value="{{ old('specialties') }}" autocomplete="specialties" autofocus> -->
 
                                 @foreach($specialties as $specialty)
-                                <div class="form-check">
-                                    <input type="checkbox" name="specialties[]" value="{{ $specialty->id }}">
-                                    <label>{{ $specialty->name }}</label>
-                                </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="specialtiess[]" value="{{ $specialty->id }}">
+                                        <label>{{ $specialty->name }}</label>
+                                    </div>
+
                                 @endforeach
 
-                                @error('specialties')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="specialties" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>
+                            <label for="notes" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>
 
                             <div class="col-md-6">
-                                <input id="specialties" type="text" class="form-control @error('notes') is-invalid @enderror" name="notes" value="{{ old('notes') }}" autocomplete="notes" autofocus>
-
-                                @error('Notes')
+                                <textarea class="form-control @error('notes') is-invalid @enderror" name="notes" id="notes" rows="2" autocomplete="notes" autofocus></textarea>
+                                @error('notes')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -138,10 +134,15 @@
                         </div>
 
                         <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                            <div class="col-md-2 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                            </div>
+                            <div class="col-md-2 offset-md-1">
+                                <a  class="btn btn-secondary" href="{{ route('admin.users.index') }}">
+                                    {{ __('Cancel') }}
+                                </a>     
                             </div>
                         </div>
                     </form>

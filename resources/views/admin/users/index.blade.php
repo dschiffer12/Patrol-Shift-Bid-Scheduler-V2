@@ -5,7 +5,15 @@
 <div class="container">
     <div class="row justify-content-start mt-3 mb-3">
         <div class="col-md">
-            <h3>List of all users</h3>
+            <h3>List of all Users</h3>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row mt-3 mb-3 d-flex justify-content-end">
+        <div class="col-md-4 d-flex justify-content-end">
+            <a href="{{ route('register') }}"><button type="button" class="btn btn-success">Add New User</button></a>
         </div>
     </div>
 </div>
@@ -43,10 +51,11 @@
                                         <a href="{{ route('admin.users.edit', $user) }}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                     </div>
                                     <div class="col">
-                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="float-left">
+                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="delete">
+                                            <input type="hidden" name="_method" value="DELETE">
                                             @csrf
                                             {{ method_field('DELETE') }}
-                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            <button type="submit" onclick="return confirm('Delete {{$user->name}}?')" class="btn btn-danger">Delete</button>
                                         </form>
                                     </div>
                                 </div>        
@@ -60,4 +69,5 @@
         </div>
     </div>   
 </div>
+
 @endsection
