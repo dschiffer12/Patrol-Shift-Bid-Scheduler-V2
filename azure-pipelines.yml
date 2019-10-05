@@ -5,6 +5,7 @@
 
 trigger:
 - master
+- user-management
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -24,6 +25,9 @@ steps:
 
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
+
+- script: npm install && npm run dev
+  displayName: 'npm install && npm run dev'
 
 - task: ArchiveFiles@2
   inputs:
