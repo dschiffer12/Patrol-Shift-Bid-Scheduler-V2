@@ -27,5 +27,8 @@ Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth
 Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function() {
 
     Route::resource('/users', 'UsersController')->middleware(['auth', 'auth.admin']);
+
+    //Route for the Bidding Schedule actions.
+    Route::resource('/bidding-schedule', 'BiddingSchedule')->middleware(['auth', 'auth.admin']);
 });
 
