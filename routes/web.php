@@ -29,3 +29,8 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function() {
     Route::resource('/users', 'UsersController')->middleware(['auth', 'auth.admin']);
 });
 
+
+Route::namespace('User')->prefix('user')->name('user.')->group(function() {
+
+    Route::resource('/profile', 'ProfileController')->middleware(['auth']);
+});

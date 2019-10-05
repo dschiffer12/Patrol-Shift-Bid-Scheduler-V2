@@ -21,9 +21,10 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background-color: #e3f2fd;">
+            <!-- <div class="container border"> -->
+                <a class="navbar-brand ml-3" href="{{ url('/') }}">
+                    <img src="/img/badge-transparent.png" width="30" height="30" class="d-inline-block align-top" alt="">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -32,11 +33,24 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <!-- <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a href="{{ route('admin.users.index') }}">Manage Users</a>
-                        </li>
-                    </ul> -->
+                    <ul class="navbar-nav mr-auto">
+
+                        @auth
+                            @if(Auth::user()->hasAnyRoles(['root', 'admin']))
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin Control
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="/register">Add New User</a>
+                                        <a class="dropdown-item" href="/admin/users">Users Management</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </li>
+                            @endif
+                        @endauth       
+                    </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -63,8 +77,12 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <a  class="dropdown-item" href="{{ route('admin.users.index') }}">
+                                    <!-- <a  class="dropdown-item" href="{{ route('admin.users.index') }}">
                                         User Management
+                                    </a> -->
+
+                                    <a  class="dropdown-item" href="{{ route('user.profile.index') }}">
+                                        Profile Management
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -75,13 +93,21 @@
                         @endguest
                     </ul>
                 </div>
-            </div>
+            <!-- </div> -->
         </nav>
 
-        <main class="py-4">
-            @include('partials.alerts')
-            @yield('content')
-        </main>
-    </div>
-</body>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col col" >
+
+                    <main class="py-4">
+                        @include('partials.alerts')
+                        @yield('content')
+                    </main>
+                </div>
+            </div>
+        </div>
+
+    </body>
 </html>
