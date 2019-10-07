@@ -18,15 +18,15 @@ class Shift extends Model
     /**
      * EarlyShift belongs to Shift
      */
-    public function earlyshift()
+    public function early_shift()
     {
-        return $this->belongsTo('App\Models\EarlyShift');
+        return $this->hasOne('App\Models\EarlyShift');
     }
 
     /**
      * The bidding schedule that belong to the shift.
      */
-    public function shift()
+    public function biddingschedules()
     {
         return $this->belongsToMany('App\Models\BiddingSchedule');
     }

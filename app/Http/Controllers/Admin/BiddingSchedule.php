@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\User;
+use App\Models\Shift;
+use App\Models\EarlyShift;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -31,7 +34,14 @@ class BiddingSchedule extends Controller
      */
     public function create()
     {
-        //
+        $users = User::orderby('date_in_position')->paginate(10);
+        $shifts = Shift::all();
+
+
+        return view('admin.biddingschedule.createbiddingschedule')->with([
+            'users' => $users,
+            'shifts' => $shifts
+        ]);
     }
 
     /**

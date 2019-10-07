@@ -24,7 +24,7 @@
     <div class="container">
         <div class="row mt-3 mb-3 d-flex justify-content-end">
             <div class="col-md-4 d-flex justify-content-end">
-                <a href="{{ route('register') }}"><button type="button" class="btn btn-success">Create New Schedule</button></a>
+                <a href="bidding-schedule/create"><button type="button" class="btn btn-success">Create New Schedule</button></a>
             </div>
         </div>
     </div>

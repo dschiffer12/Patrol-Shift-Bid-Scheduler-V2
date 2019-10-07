@@ -10644,3 +10644,5 @@ a.text-dark:focus {
   }
 }
 
+table tr.active {background: #ccc;}
+

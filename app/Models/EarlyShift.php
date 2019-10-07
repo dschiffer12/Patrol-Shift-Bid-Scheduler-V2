@@ -20,6 +20,6 @@ class EarlyShift extends Model
      */
     public function shift()
     {
-        return $this->hasOne('App\Models\Shift');
+        return $this->belongsTo('App\Models\Shift');
     }
 }
