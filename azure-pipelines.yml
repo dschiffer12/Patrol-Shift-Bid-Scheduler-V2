@@ -4,10 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
 trigger:
-<<<<<<< HEAD
 - master
-=======
->>>>>>> 4821b26bc3e52ee094e34b59f0849acc076a655c
 - user-management
 
 pool:
