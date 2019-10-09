@@ -9,8 +9,7 @@
                 <div class="card-header">Create New Schedule</div>
 
                 <div class="card-body">
-                    <form action="bidding-schedule/store" method="POST">
-                        @method('POST')
+                    <form action={{ route('admin.bidding-schedule.store') }} method="POST">
                         @csrf
 
                         <div class="form-group row">
@@ -18,7 +17,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                             </div>
                         </div>
@@ -29,7 +28,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="start_date" type="date" class="form-control" name="start_date" value="" required>
+                                <input id="start_date" type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="" required>
 
                             </div>
                         </div>
@@ -39,7 +38,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="end_date" type="date" class="form-control" name="end_date" value="" required>
+                                <input id="end_date" type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="" required>
 
                             </div>
                         </div>
@@ -49,70 +48,56 @@
 
                             <div class="col-md-6">
 
-                                <input id="response_time" type="text" class="form-control" name="response_time" required>
+                                <input id="response_time" type="text" class="form-control @error('response_time') is-invalid @enderror"  name="response_time" required>
 
                             </div>
                         </div>
 
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary" style="margin-left: 240px; margin-bottom: 10px;" data-toggle="modal" data-target="#shiftModalCenter">
-                            Add Shifts
-                        </button>
+                        <!--Shift Table-->
+                        <div class="form-group row">
+                            <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="shiftModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Select or add Shifts</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table class="table" id="shiftTable" data-rs-selectable>
-                                            <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Shift Name</th>
-                                                <th scope="col">Start Time</th>
-                                                <th scope="col">End Time</th>
-                                                <th scope="col">Early Start Time</th>
-                                                <th scope="col">Early End Time</th>
-                                                <th scope="col">Early Sports</th>
-                                                <th scope="col">Minimum Staffing</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($shifts as $shift)
-                                                    <tr id = $index>
-                                                        <td>{{ $shift->name }}</td>
-                                                        <td>{{ $shift->start_time }}</td>
-                                                        <td>{{ $shift->end_time }}</td>
-                                                        <td>{{ $shift->early_shift->early_start_time }}</td>
-                                                        <td>{{ $shift->early_shift->early_end_time }}</td>
-                                                        <td>{{ $shift->early_shift->num_early_spot }}</td>
-                                                        <td>{{ $shift->minimun_staff }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-warning lef">Create New Shift</button>
-                                        <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary ">Add Shift Selected</button>
-                                    </div>
-                                </div>
+                                <table class="table table-bordered table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Shift Name</th>
+                                            <th scope="col">Start Time</th>
+                                            <th scope="col">End Time</th>
+                                            <th scope="col">Early Start Time</th>
+                                            <th scope="col">Early End Time</th>
+                                            <th scope="col">Early Sports</th>
+                                            <th scope="col">Minimum Staffing</th>
+                                            <th scope="col">Select</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($shifts as $shift)
+                                        <tr>
+                                            <td>{{ $shift->name }}</td>
+                                            <td>{{ $shift->start_time }}</td>
+                                            <td>{{ $shift->end_time }}</td>
+                                            <td>{{ $shift->early_shift->early_start_time }}</td>
+                                            <td>{{ $shift->early_shift->early_end_time }}</td>
+                                            <td>{{ $shift->early_shift->num_early_spot }}</td>
+                                            <td>{{ $shift->minimun_staff }}</td>
+                                            <td><input id="shift_{{ $shift->id }}" type="checkbox" class="form-control" name="shift.{{ $shift->id }}" /></td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                        <!--End Shift Table-->
 
-                        <h4>All Users, ordered by date in position.</h4>
+                        <h4 style="margin-top: 10%;">All Users, ordered by date in position.</h4>
 
                         <div class="form-group row">
 
-                            <div class="col-md-6">
-                                <table class="table" id="shiftTable" data-rs-selectable>
-                                    <thead class="thead-light">
+
+                            <div class="table-wrapper-scroll-y my-custom-scrollbar" >
+
+                                <table class="table table-bordered table-striped mb-0">
+                                    <thead>
                                         <tr>
                                             <th scope="col">Line</th>
                                             <th scope="col">Name</th>
@@ -124,17 +109,22 @@
                                     <tbody>
                                         @foreach($users as $index => $user)
                                             <tr id = $index>
-                                                <td>{{ $index }}</td>
+                                                <td>{{ $index + 1 }}</td>
                                                 <td>{{ $user->name }}</td>
-                                                <td>{{ $user->specialties->name }}</td>
+                                                <td>{{ implode(', ', $user->specialties()->get()->pluck('name')->toArray()) }}</td>
                                                 <td>{{ $user->date_in_position }}</td>
-                                                <td><input id="queue_position" type="number" class="form-control" name="queue_position"></td>
+                                                <td><input id="queue_position_{{ $index + 1 }}" type="number" class="form-control" name="queue_position_{{ $index + 1 }}" value={{ $index + 1 }}></td>
                                             </tr>
-                                            $index = $index + 1
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
 
+                        <div class="form-group row">
+                            <div class="col-md-6" style="margin-left: 5%;">
+                                <input id="seve_as_template" type="checkbox" class=" form-check-input" name="seve_as_template" >
+                                <label for="seve_as_template" class="l text-md-right">Save as a Template</label>
                             </div>
                         </div>
 

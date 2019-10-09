@@ -34,7 +34,7 @@ class BiddingSchedule extends Controller
      */
     public function create()
     {
-        $users = User::orderby('date_in_position')->paginate(10);
+        $users = User::orderby('date_in_position')->get();
         $shifts = Shift::all();
 
 
