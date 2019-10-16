@@ -14,11 +14,11 @@
     </div>
 </div> -->
 
-<div class="container border">
-    <div class="row justify-content-center">
+<div class="container">
+    <div class="row justify-content-start">
         <div class="col col-md-8">
 
-            <h1>This is the homepage, everyone has access to this page. </h1>
+            <h1>P-Sheet Page. </h1>
 
         </div>
     </div>
@@ -28,7 +28,7 @@
             <form method="GET" action="{{ route('home') }}">
                 
                 <div class="form-group row">
-                    <label for="calendar_date" class="col-md-4 col-form-label text-md-right">{{ __('Select Date') }}</label>
+                    <label for="calendar_date" class="col-md-2 col-form-label ">{{ __('Select Date') }}</label>
 
                     <div class="form-group col-md-4">
                         <input id="calendar_date" class="form-control" type="date" name="calendar_date" value={{date((now()))}} required>

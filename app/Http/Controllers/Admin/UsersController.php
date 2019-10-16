@@ -22,18 +22,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::all();
-        
-        // get all roles expet root.
-        $roles = Role::where('name', '!=', 'root')->get();
-        $specialties = Specialty::all();
-        //return view('admin.users.index')->with('users', $users);
-
-        // return view('admin.users.index')->with([
-        //     'users' => $users,
-        //     'roles' => $roles, 
-        //     'specialties' => $specialties
-        // ]);
-
+ 
         return view('admin.users.index')->with('users', User::paginate(5));
     }
 
@@ -165,7 +154,7 @@ class UsersController extends Controller
             $user->specialties()->sync($validatedData['specialtiess']);
         }
         
-        return redirect()->route('admin.users.index')->with('success', 'User: ' . $user->name . ' success updated.');
+        return redirect()->route('admin.users.index')->with('success', 'User: ' . $user->name . ' successfully updated.');
     }
 
     /**

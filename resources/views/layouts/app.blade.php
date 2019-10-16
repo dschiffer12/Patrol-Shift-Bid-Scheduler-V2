@@ -107,14 +107,14 @@
                         <div class="row top15">
                             <div class="col border pt-2">
                                 <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="#"><h5>{{ __('P-Sheet') }}</h5></a>
+                                    <a class="nav-link" href="{{ route('user.psheet.index') }}"><h5>{{ __('P-Sheet') }}</h5></a>
                                 </button>
                             </div>
                         </div>
                         <div class="row">
                         <div class="col border pt-2">
                                 <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="#"><h5>{{ __('Bid on Schedule') }}</h5></a>
+                                    <a class="nav-link" href="{{ route('user.biddingschedule.index') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
                                 </button>
                             </div>
                         </div>        
