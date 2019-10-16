@@ -117,7 +117,7 @@ class ProfileController extends Controller
 
         $user->save();
        
-        return redirect()->route('user.profile.index');
+        return redirect()->route('user.profile.index')->with('success', 'Personal information successfully updated.');
     }
 
     /**

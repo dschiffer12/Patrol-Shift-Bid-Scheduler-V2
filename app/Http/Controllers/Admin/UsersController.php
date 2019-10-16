@@ -77,7 +77,7 @@ class UsersController extends Controller
     {
         //this is not the place for admins to edit there own information
         if(Auth::user()->id == $user->id){
-            return redirect()->route('admin.users.index');
+            return redirect()->route('admin.users.index')->with('warning', 'You are not allowed to edit yourself.');
         }
 
         //dd($user);
@@ -163,7 +163,7 @@ class UsersController extends Controller
             $user->specialties()->sync($validatedData['specialtiess']);
         }
         
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('success', 'User: ' . $user->name . ' success updated.');
     }
 
     /**
@@ -181,6 +181,6 @@ class UsersController extends Controller
         $user->specialties()->detach();
 
         $user->delete();
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('success', 'User: '. $user->name . ' successfully deleted.');
     }
 }
