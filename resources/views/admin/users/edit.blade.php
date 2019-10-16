@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Edit user:<b> {{ $user->name }}</b></div>
 
                 <div class="card-body">
@@ -18,7 +18,7 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $user->name }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') ? old('name') : $user->name }}" required autocomplete="name" autofocus>
 
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
@@ -32,7 +32,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') ? old('email') : $user->email }}" required autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -46,7 +46,7 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
 
                             <div class="form-group col-md-6">
-                                <select id="role" class="form-control" name="role" value="{{ $user->role }}"required>
+                                <select id="role" class="form-control" name="role" value="{{ old('role') ? old('role') : $user->role }}"required>
                                     
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}" 
@@ -63,7 +63,7 @@
                             <label for="date_in_position" class="col-md-4 col-form-label text-md-right">{{ __('Date in Position') }}</label>
 
                             <div class="form-group col-md-6">
-                                <input id="date_in_position" class="form-control @error('date_in_position') is-invalid @enderror" type="date" name="date_in_position" value="{{ $user->date_in_position }}" required>
+                                <input id="date_in_position" class="form-control @error('date_in_position') is-invalid @enderror" type="date" name="date_in_position" value="{{ old('date_in_position') ? old('date_in_position') : $user->date_in_position }}" required>
 
                                 @error('date_in_position')
                                     <span class="invalid-feedback" role="alert">

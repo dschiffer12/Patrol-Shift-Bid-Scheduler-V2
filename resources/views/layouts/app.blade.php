@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +18,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -99,7 +100,28 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col col" >
+                @guest
+                @else
+                    <div class="auto col-md-auto menu">
+                    
+                        <div class="row top15">
+                            <div class="col border pt-2">
+                                <button type="button" class="btn btn-block text-left">
+                                    <a class="nav-link" href="#"><h5>{{ __('P-Sheet') }}</h5></a>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                        <div class="col border pt-2">
+                                <button type="button" class="btn btn-block text-left">
+                                    <a class="nav-link" href="#"><h5>{{ __('Bid on Schedule') }}</h5></a>
+                                </button>
+                            </div>
+                        </div>        
+                    </div>
+                @endguest
+
+                <div class="col" >
 
                     <main class="py-4">
                         @include('partials.alerts')
