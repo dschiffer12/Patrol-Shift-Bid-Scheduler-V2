@@ -28,11 +28,13 @@ class UsersController extends Controller
         $specialties = Specialty::all();
         //return view('admin.users.index')->with('users', $users);
 
-        return view('admin.users.index')->with([
-            'users' => $users,
-            'roles' => $roles, 
-            'specialties' => $specialties
-        ]);
+        // return view('admin.users.index')->with([
+        //     'users' => $users,
+        //     'roles' => $roles, 
+        //     'specialties' => $specialties
+        // ]);
+
+        return view('admin.users.index')->with('users', User::paginate(5));
     }
 
     /**
