@@ -1,22 +1,33 @@
-$('#shiftTable').on('clicked.rs.row',function (evt){
+//Fill queues for officer and array for shift
+$("#send-btn").click(function (){
 
-        $(this).toggleClass('active');
+    //Fill the officer queue array before sending the the controller.
+    $( ".officer-queue-array" ).each(function( index ) {
 
-    // Now it's safe to check what was selected
-    var rows = $(this).selectedrows();
-    console.log(rows);
+        var valueInput = $( this ).val();
+        var indexVal = index + 1;
+
+        $('#value_' + indexVal).val($('#value_' + indexVal).val() + valueInput);
+    });
+
+    //Fill the shift array before sending to the controller.
+    $( ".shift-queue-array" ).each(function( index ) {
+
+        var valueInput = $( this ).val();
+        //alert(valueInput);
+        //console.log(valueInput);
+
+        if(this.checked) {
+            $('#shift_hidden_' + index).val($('#shift_hidden_' + index).val() + valueInput);
+        }
+    });
+
 });
 
-/*$(document).ready(function() {
-    console.log('Holla Consol');
-    var table = $('#shiftTable').DataTable();
+//Date can not be less than current date.
+$(document).ready(function () {
+    $("#start_date").datepicker({ minDate: 0 });
+});
 
-    $('#shiftTable tbody').on( 'click', 'tr', function () {
-        $(this).toggleClass('selected');
-    } );
 
-    $('#button').click( function () {
-        alert( table.rows('.selected').data().length +' row(s) selected' );
-    } );
-} );*/
 

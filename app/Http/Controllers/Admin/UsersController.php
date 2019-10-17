@@ -22,7 +22,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::all();
-        
+
         // get all roles expet root.
         $roles = Role::where('name', '!=', 'root')->get();
         $specialties = Specialty::all();
@@ -30,7 +30,7 @@ class UsersController extends Controller
 
         return view('admin.users.index')->with([
             'users' => $users,
-            'roles' => $roles, 
+            'roles' => $roles,
             'specialties' => $specialties
         ]);
     }
@@ -102,7 +102,7 @@ class UsersController extends Controller
     {
         //dd($request);
         $user = User::findOrFail($id);
-        
+
         /**
          * Validate the form data
          */
@@ -131,7 +131,7 @@ class UsersController extends Controller
             $validatedData = array_merge($validatedData, $request->validate([
                 'password' => ['string', 'min:8'],
             ]));
-            
+
             DB::table('users')
                 ->where('id', $id)
                 ->update([
@@ -155,14 +155,14 @@ class UsersController extends Controller
                     'notes' => $validatedData['notes'],
                 ]);
         }
-      
+
         $user->roles()->sync($validatedData['role']);
 
         // attach all the specialties
         if($request->filled('specialtiess')) {
             $user->specialties()->sync($validatedData['specialtiess']);
         }
-        
+
         return redirect()->route('admin.users.index');
     }
 
