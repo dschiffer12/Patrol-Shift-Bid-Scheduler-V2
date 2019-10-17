@@ -13,6 +13,8 @@ class CreateBidsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('bids');
+        
         Schema::create('bids', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('bidding_schedule_id');

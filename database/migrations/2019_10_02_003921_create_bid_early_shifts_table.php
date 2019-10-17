@@ -13,6 +13,8 @@ class CreateBidEarlyShiftsTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('bid_early_shifts');
+        
         Schema::create('bid_early_shifts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('early_shift_id');
