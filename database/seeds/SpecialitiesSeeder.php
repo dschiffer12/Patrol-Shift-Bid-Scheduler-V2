@@ -13,7 +13,7 @@ class SpecialitiesSeeder extends Seeder
     public function run()
     {
         // Trunkate the databse so we don't repeat the seed
-        Specialty::truncate();
+        DB::table('specialties')->delete();
 
         Specialty::create(['name' => 'BTO']);
         Specialty::create(['name' => 'CSI']);

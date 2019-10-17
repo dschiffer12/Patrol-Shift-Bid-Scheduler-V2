@@ -93,7 +93,7 @@ class UsersController extends Controller
     {
         //dd($request);
         $user = User::findOrFail($id);
-        
+
         /**
          * Validate the form data
          */
@@ -122,7 +122,7 @@ class UsersController extends Controller
             $validatedData = array_merge($validatedData, $request->validate([
                 'password' => ['string', 'min:8'],
             ]));
-            
+
             DB::table('users')
                 ->where('id', $id)
                 ->update([
@@ -146,7 +146,7 @@ class UsersController extends Controller
                     'notes' => $validatedData['notes'],
                 ]);
         }
-      
+
         $user->roles()->sync($validatedData['role']);
 
         // attach all the specialties

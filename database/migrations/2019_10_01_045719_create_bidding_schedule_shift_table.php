@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBidScheduleShiftTable extends Migration
+class CreateBiddingScheduleShiftTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBidScheduleShiftTable extends Migration
      */
     public function up()
     {
-        Schema::create('bid_schedule_shift', function (Blueprint $table) {
+        Schema::create('bidding_schedule_shift', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('shift_id');
             $table->unsignedBigInteger('bidding_schedule_id');
@@ -32,6 +32,6 @@ class CreateBidScheduleShiftTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bid_schedule_shift');
+        Schema::dropIfExists('bidding_schedule_shift');
     }
 }

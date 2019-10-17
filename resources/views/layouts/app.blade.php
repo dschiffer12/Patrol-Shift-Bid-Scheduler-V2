@@ -86,6 +86,10 @@
                                         Profile Management
                                     </a>
 
+                                    <a  class="dropdown-item" href="{{ route('admin.bidding-schedule.index') }}">
+                                        Bidding Schedule Management
+                                    </a>
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -130,6 +134,15 @@
                 </div>
             </div>
         </div>
+
+        <!--JQuery hosted-->
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+
+    <script src="{{ asset('js/jquery.rowselector.min.js') }}" defer></script>
+    <script src="{{ asset('js/biddingschedule.js') }}" defer></script>
 
     </body>
 </html>

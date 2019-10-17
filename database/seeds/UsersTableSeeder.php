@@ -17,13 +17,13 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         // Truncate the databse so we don't repeat the seed
-        User::truncate();
+        DB::table('users')->delete();
 
         // Truncate the linking table too
-        DB::table('role_user')->truncate();
+        DB::table('role_user')->delete();
 
         // Truncate the specialty_user table too
-        DB::table('specialty_user')->truncate();
+        DB::table('specialty_user')->delete();
 
         // Get the roles information
         $rootRole = Role::where('name', 'root')->first();
@@ -92,7 +92,7 @@ class UsersTableSeeder extends Seeder
         $supervisor->specialties()->attach($ftsSpecialty);
         $officer->specialties()->attach($ftoSpecialty);
         $user->specialties()->attach($ftoSpecialty);
-        
+
 
     }
 }

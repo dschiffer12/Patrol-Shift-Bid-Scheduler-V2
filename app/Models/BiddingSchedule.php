@@ -20,7 +20,7 @@ class BiddingSchedule extends Model
      */
     public function shift()
     {
-        return $this->belongsToMany('App\Models\Shift');
+        return $this->belongsToMany('App\Models\Shift')->withPivot('bidding_schedule_id', 'shift_id')->withTimestamps();
     }
 
     /**
