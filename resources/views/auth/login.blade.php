@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col">
             <!-- Badge -->
-            <img src='img/badge.gif' class="rounded mx-auto d-block img-fluid" alt='Badge' >
+            <img src='img/badge-transparent.png' class="rounded mx-auto d-block img-fluid" alt='Badge' >
                 <br>
         </div>
     </div>
@@ -17,7 +17,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">

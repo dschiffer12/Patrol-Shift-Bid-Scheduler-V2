@@ -4,13 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
-
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use App\User;
 use App\Specialty;
 use App\Role;
 
@@ -34,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/admin/users';
 
     /**
      * Create a new controller instance.
@@ -59,8 +57,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => ['required'],
-            'date_in_position' => ['required'],
-            'specialties' => ['max:255'],
+            'date_in_position' => ['required', 'before:tomorrow'],
+            'specialtiess' => ['array'],
+            'specialtiess.*' => ['max:255'],
             'notes' => ['max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -86,7 +85,7 @@ class RegisterController extends Controller
         $user->roles()->attach($data['role']);
 
         // attach all the specialties
-        foreach($data['specialties'] as $specialty){
+        foreach($data['specialtiess'] as $specialty){
             $user->specialties()->attach($specialty);
         }
         

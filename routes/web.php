@@ -12,7 +12,7 @@
 */
 
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home')->middleware(['auth']);
 
 
 Auth::routes();
@@ -24,8 +24,13 @@ Auth::routes();
 Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
 
 
-Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function() {
-
-    Route::resource('/users', 'UsersController')->middleware(['auth', 'auth.admin']);
+Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->name('admin.')->group(function() {
+    Route::resource('/users', 'UsersController');
 });
 
+
+Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
+    Route::resource('/profile', 'ProfileController');
+    Route::resource('/psheet', 'PSheetController');
+    Route::resource('/biddingschedule', 'BiddingController');
+});
