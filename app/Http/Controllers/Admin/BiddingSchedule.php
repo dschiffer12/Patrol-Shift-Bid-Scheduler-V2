@@ -86,11 +86,13 @@ class BiddingSchedule extends Controller
 
         }
 
+        $bidding_spot_index = 1;  //Index to define the position in the bidding user queue.
+
         foreach (request('officerQueue') as $officer){
 
             $arrayString = explode(":", $officer);
 
-            if (!($arrayString[1] == "" || $arrayString[1] == "0")){
+            if (!$arrayString[1] == "" || !$arrayString[1] == "0"){
 
                 $officerIDInt = (int)$arrayString[0];
                 $officerPosition = (int)$arrayString[1];
@@ -99,7 +101,8 @@ class BiddingSchedule extends Controller
                 $officerObject = User::where(['id'=>$officerIDInt])->firstOrFail();
                 $bidding_queue->user_id = $officerIDInt;
                 $bidding_queue->bidding_schedule_id = $biddingID;
-                $bidding_queue->bidding_spot = $officerPosition;
+                $bidding_queue->bidding_spot = $bidding_spot_index;
+                $bidding_spot_index = $bidding_spot_index + 1;
                 if ($arrayString[1] == 1){
                     $bidding_queue->bidding = true;
                     $bidding_queue->waiting_to_bid = false;
@@ -109,7 +112,7 @@ class BiddingSchedule extends Controller
                 }
                 else{
                     $bidding_queue->bidding = false;
-                    $bidding_queue->waiting_to_bid = false;
+                    $bidding_queue->waiting_to_bid = true;
                     $bidding_queue->bid_submitted = false;
                     $bidding_queue->start_time_bidding = null;
                     $bidding_queue->end_time_bidding = null;
@@ -141,10 +144,14 @@ class BiddingSchedule extends Controller
      */
     public function edit($id)
     {
-        $biddingSchedule = NewBiddingSchedule::where(['id' => $id])->get();
+        $biddingschedule = NewBiddingSchedule::find($id);
+        $shifts = $biddingschedule->shift;
+        $users = BiddingQueue::where('bidding_schedule_id', $id)->get();
 
         return view('admin.biddingschedule.editbiddingschedule')->with([
-            'biddingschedule' => $biddingSchedule
+            'biddingschedule' => $biddingschedule,
+            'shifts' => $shifts,
+            'users' => $users
         ]);
     }
 

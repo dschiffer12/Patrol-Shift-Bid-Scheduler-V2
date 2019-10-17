@@ -6,10 +6,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Create New Schedule</div>
+                <div class="card-header">Edit Schedule {{ $biddingschedule->name }}</div>
 
                 <div class="card-body">
-                    <form action={{ route('admin.bidding-schedule.update') }} method="POST">
+                    <form action={{ route('admin.bidding-schedule.update', ['bidding_schedule' => $biddingschedule->id]) }} method="POST">
                         @csrf
                         @method('UPDATE')
 
@@ -29,7 +29,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="start_date" type="date" class="form-control datepicker @error('start_date') is-invalid @enderror" name="start_date" value="" required>
+                                <input id="start_date" type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="{{ $biddingschedule->start_day }}" required>
 
                             </div>
                         </div>
@@ -39,7 +39,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="end_date" type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="" required>
+                                <input id="end_date" type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="{{ $biddingschedule->end_day }}" required>
 
                             </div>
                         </div>
@@ -49,7 +49,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="response_time" type="text" class="form-control @error('response_time') is-invalid @enderror"  name="response_time" required>
+                                <input id="response_time" type="text" class="form-control @error('response_time') is-invalid @enderror"  name="response_time" value="{{ $biddingschedule->response_time }}" required>
 
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                             <td>{{ !empty($shift->early_shift) ? $shift->early_shift->early_end_time:'' }}</td>
                                             <td>{{ !empty($shift->early_shift) ? $shift->early_shift->num_early_spot:'' }}</td>
                                             <td>{{ $shift->minimun_staff }}</td>
-                                            <td><input id="shift_{{ $index }}" type="checkbox" class="form-control shift-queue-array" name="shift_{{ $index }}" ></td>
+                                            <td><input id="shift_{{ $index }}" type="checkbox" class="form-control shift-queue-array" name="shift_{{ $index }}" value="checked"/></td>
                                             <input id="shift_hidden_{{ $index }}" type="hidden"  name="shiftQueue[]" value="{{ $shift->id}}:" >
                                         </tr>
                                     @endforeach

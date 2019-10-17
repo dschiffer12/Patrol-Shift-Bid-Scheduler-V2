@@ -28,7 +28,7 @@
 
                             <div class="col-md-6">
 
-                                <input id="start_date" type="date" class="form-control datepicker @error('start_date') is-invalid @enderror" name="start_date" value="" required>
+                                <input id="start_date" type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="" required>
 
                             </div>
                         </div>
