@@ -95,7 +95,6 @@ class BiddingSchedule extends Controller
             if (!$arrayString[1] == "" || !$arrayString[1] == "0"){
 
                 $officerIDInt = (int)$arrayString[0];
-                $officerPosition = (int)$arrayString[1];
 
                 $bidding_queue = new BiddingQueue();
                 $officerObject = User::where(['id'=>$officerIDInt])->firstOrFail();
@@ -159,12 +158,75 @@ class BiddingSchedule extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Bidding Schedule int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $bidding_schedule = NewBiddingSchedule::find($id);
+
+        $bidding_schedule->name = request('name');
+        $bidding_schedule->start_day = request('start_date');
+        $bidding_schedule->end_day = request('end_date');
+        $bidding_schedule->response_time = request('response_time');
+        $scheduleTemplate = request('seve_as_template');
+        if ($scheduleTemplate == "on"){
+            $bidding_schedule->save_as_template = true;
+        }
+        else{
+            $bidding_schedule->save_as_template = false;
+        }
+        $bidding_schedule->currently_active = true;
+
+        $bidding_schedule->update();
+
+        foreach (request('shiftQueue') as $shift){
+            $arrayString = explode(":", $shift);
+            if ($arrayString[1] == "on")
+            {
+                $shiftID = (int)$arrayString[0];
+                $bidding_schedule->shift()->attach($shiftID);
+            }
+
+        }
+
+        BiddingQueue::where('bidding_schedule_id', $id)->delete(); //Delete all the rows beloging to a Schedule created in the Queue
+
+        $bidding_spot_index = 1;  //Index to define the position in the bidding user queue.
+
+        foreach (request('officerQueue') as $officer){
+
+            $arrayString = explode(":", $officer);
+
+            if (!$arrayString[1] == "" || !$arrayString[1] == "0"){
+
+                $officerIDInt = (int)$arrayString[0];
+
+                $bidding_queue = new BiddingQueue();
+                $officerObject = User::where(['id'=>$officerIDInt])->firstOrFail();
+                $bidding_queue->user_id = $officerIDInt;
+                $bidding_queue->bidding_schedule_id = $id;
+                $bidding_queue->bidding_spot = $bidding_spot_index;
+                $bidding_spot_index = $bidding_spot_index + 1;
+                if ($arrayString[1] == 1){
+                    $bidding_queue->bidding = true;
+                    $bidding_queue->waiting_to_bid = false;
+                    $bidding_queue->bid_submitted = false;
+                    $bidding_queue->start_time_bidding = null;
+                    $bidding_queue->end_time_bidding = null;
+                }
+                else{
+                    $bidding_queue->bidding = false;
+                    $bidding_queue->waiting_to_bid = true;
+                    $bidding_queue->bid_submitted = false;
+                    $bidding_queue->start_time_bidding = null;
+                    $bidding_queue->end_time_bidding = null;
+                }
+                $bidding_queue->save();
+            }
+        }
+
+        return redirect()->route('admin.bidding-schedule.index')->with('updated', 'Bidding Schedule updated successfully!');
     }
 
     /**
