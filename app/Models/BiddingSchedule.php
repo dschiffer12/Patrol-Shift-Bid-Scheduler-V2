@@ -23,6 +23,11 @@ class BiddingSchedule extends Model
         return $this->belongsToMany('App\Models\Shift')->withPivot('bidding_schedule_id', 'shift_id')->withTimestamps();
     }
 
+    public function shifts()
+    {
+        return $this->belongsToMany('App\Models\Shift');
+    }
+
     /**
      * Get the bidding queue that owns the bidding schedule.
      */

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Shift;
-use APP\Models\BiddingSchedule;
+use App\Models\BiddingSchedule;
 
 
 class BiddingScheduleSeeder extends Seeder
@@ -20,28 +20,6 @@ class BiddingScheduleSeeder extends Seeder
 
         // Truncate the linking table too
         DB::table('bidding_schedule_shift')->delete();
-
-
-        // // Get the roles information
-        // $rootRole = Role::where('name', 'root')->first();
-        // $adminRole = Role::where('name', 'admin')->first();
-        // $supervisorRole = Role::where('name', 'supervisor')->first();
-        // $officerRole = Role::where('name', 'officer')->first();
-		// $userRole = Role::where('name', 'user')->first();
-		
-		// // get the shifts information
-		// $shiftA = Shift::where('name', 'A')->first();
-		// $shiftB = Shift::where('name', 'B')->first();
-		// $shiftC = Shift::where('name', 'C')->first();
-
-
-
-
-        // // Get the specialities information
-        // $btoSpecialty = Specialty::where('name', 'BTO')->first();
-        // $csiSpecialty = Specialty::where('name', 'CSI')->first();
-        // $ftsSpecialty = Specialty::where('name', 'FTS')->first();
-		// $ftoSpecialty = Specialty::where('name', 'FTO')->first();
 		
 	
 		// create schedule Quarter 1
@@ -49,6 +27,16 @@ class BiddingScheduleSeeder extends Seeder
 			'start_day' => '2020-01-01',
 			'end_day' => '2020-03-31',
 			'name' => 'Fisrt Quarter 2020',
+			'response_time' => '2',
+			'save_as_template' => '0',
+			'currently_active' => '1',
+        ]);
+
+        // create schedule Quarter 2
+		$Quarter22019 = BiddingSchedule::create([
+			'start_day' => '2020-04-01',
+			'end_day' => '2020-07-31',
+			'name' => 'Second Quarter 2020',
 			'response_time' => '2',
 			'save_as_template' => '0',
 			'currently_active' => '1',
@@ -60,21 +48,11 @@ class BiddingScheduleSeeder extends Seeder
 
 		$Quarter12019->shifts()->attach($ShiftA);
 		$Quarter12019->shifts()->attach($ShiftB);
+        $Quarter12019->shifts()->attach($ShiftC);
+        
+        $Quarter12019->shifts()->attach($ShiftA);
+		$Quarter12019->shifts()->attach($ShiftB);
 		$Quarter12019->shifts()->attach($ShiftC);
-
-        // // assign the roles
-        // $root->roles()->attach($rootRole);
-        // $admin->roles()->attach($adminRole);
-        // $supervisor->roles()->attach($supervisorRole);
-        // $officer->roles()->attach($officerRole);
-        // $user->roles()->attach($userRole);
-
-        // $root->specialties()->attach($btoSpecialty);
-        // $admin->specialties()->attach($csiSpecialty);
-        // $supervisor->specialties()->attach($ftsSpecialty);
-        // $officer->specialties()->attach($ftoSpecialty);
-        // $user->specialties()->attach($ftoSpecialty);
-
 
     }
 }
