@@ -14,7 +14,7 @@
     </div>
 </div> -->
 
-<!-- <div class="container">
+<div class="container">
     <div class="row justify-content-start">
         <div class="col col-md">
             <h1>Bid on Schedule </h1>
@@ -36,11 +36,11 @@
             </form>
         </div>
     </div>
-</div> -->
+</div>
 
 
 
-<div class="container overflow-auto">
+<div class="container overflow-auto shadow mt-3 p-3">
     <div class="row mt-3">
         <div class="col-auto">
             <h5>Schedule Name:</h5>
@@ -65,7 +65,7 @@
             <h5>03/31/2020</h5>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
                 <tr>
@@ -109,7 +109,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
                 <tr>
@@ -173,7 +173,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
                 <tr>
