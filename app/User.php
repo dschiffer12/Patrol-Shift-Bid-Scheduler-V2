@@ -85,9 +85,10 @@ class User extends Authenticatable
     /**
      * Get the bidding queue that owns the user.
      */
-    public function biddingqueue()
+    public function bidding_queue()
     {
-        return $this->belongsTo('App\Models\BiddingQueue');
+        //return $this->belongsTo('App\Models\BiddingQueue');
+        return $this->hasMany('App\Models\BiddingQueue');
     }
 
 }

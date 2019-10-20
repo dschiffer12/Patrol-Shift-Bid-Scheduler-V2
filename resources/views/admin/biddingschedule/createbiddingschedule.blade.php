@@ -145,7 +145,6 @@
                             </div>
                         </div>
                     </form>
-                    <button id="clickme" class="btn-primary">Click Me</button>
                 </div>
             </div>
         </div>

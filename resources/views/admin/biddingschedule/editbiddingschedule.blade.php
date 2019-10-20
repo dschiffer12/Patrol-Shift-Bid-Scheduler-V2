@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <form action={{ route('admin.bidding-schedule.update', ['bidding_schedule' => $biddingschedule->id]) }} method="POST">
                         @csrf
-                        @method('UPDATE')
+                        @method('PUT')
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Schedule Nme</label>
@@ -113,11 +113,12 @@
                                         @foreach($users as $index => $user)
                                             <tr id = $index>
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $user->name }}</td>
-                                                <td>{{ implode(', ', $user->specialties()->get()->pluck('name')->toArray()) }}</td>
-                                                <td>{{ $user->date_in_position }}</td>
+                                                <td>{{ $user->user->name }}</td>
+                                                <td>{{ implode(', ', $user->user->specialties->pluck('name')->toArray()) }}</td>
+
+                                                <td>{{ $user->user->date_in_position }}</td>
                                                 <td><input id="queue_position_{{ $index + 1 }}" type="number" class="form-control officer-queue-array" name="queue_position_{{ $index + 1 }}" value="{{ $index + 1 }}"></td>
-                                                <input id="value_{{ $index + 1 }}" type="hidden" class="" name="officerQueue[]" value="{{ $user->id}}:">
+                                                <input id="value_{{ $index + 1 }}" type="hidden" class="" name="officerQueue[]" value="{{ $user->user->id}}:">
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -135,7 +136,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-2 offset-md-4">
                                 <button type="submit" class="btn btn-primary" id="send-btn">
-                                    {{ __('Create') }}
+                                    {{ __('Update') }}
                                 </button>
                             </div>
                             <div class="col-md-2 offset-md-1">
@@ -146,7 +147,6 @@
                             </div>
                         </div>
                     </form>
-                    <button id="clickme" class="btn-primary">Click Me</button>
                 </div>
             </div>
         </div>
