@@ -6,8 +6,10 @@ use App\User;
 use App\Models\Shift;
 use App\Models\EarlyShift;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\BiddingQueue;
+use App\Mail\EmailNotification;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Controller;
 use App\Models\BiddingSchedule as NewBiddingSchedule;
 
 class BiddingSchedule extends Controller
@@ -119,6 +121,9 @@ class BiddingSchedule extends Controller
                 $bidding_queue->save();
             }
         }
+
+        $firstUser = BiddingQueue::where('bidding_schedule_id', $biddingID)->first()->user;
+        $emailSend = $this->sendEmail($firstUser, $biddingObject);
 
         return redirect()->route('admin.bidding-schedule.index')->with('successful', 'Bidding Schedule created successfully!');
 
@@ -240,5 +245,33 @@ class BiddingSchedule extends Controller
         $biddingSchedule->delete();
 
         return redirect()->route('admin.bidding-schedule.index')->with('deleted', 'Bidding Schedule deleted successfully!');
+    }
+
+    /**
+     * Send Email to an user
+     *
+     * @param int $id User Id
+     * @return boolean email sent result
+    **/
+    public function sendEmail(User $user, NewBiddingSchedule $schedule)
+    {
+        /*$data['title'] = "Hello {$user->name},
+                            You are next to bid in the schedule {$schedule->name}.
+                            You have only {$schedule->response_time} hours to bid.";
+        Mail::send(['text'=>'mail'], $data, function($message) use ($user) {
+
+            $message->to($user->email, $user->name)
+
+                ->subject('Bid on Schedule');
+        });*/
+        Mail::to($user)->send(new EmailNotification($user, $schedule));
+
+        if (Mail::failures()) {
+            //return response()->Fail('Sorry! Please try again latter');
+            return false;
+        }else{
+            //return response()->success('Great! Successfully send in your mail');
+            return true;
+        }
     }
 }
