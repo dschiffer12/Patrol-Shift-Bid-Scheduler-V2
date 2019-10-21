@@ -58,12 +58,21 @@ class BiddingSchedule extends Controller
     {
         //Definition of the Model to store in the data base.
 
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'start_date' => ['required', 'after:today'],
+            'end_date' => ['required', 'after:today'],
+            'response_time' => ['required', 'numeric'],
+            'shiftQueue' => ['array'],
+            'officerQueue' => ['array']
+        ]);
+
         $bidding_schedule = new NewBiddingSchedule();
 
-        $bidding_schedule->name = request('name');
-        $bidding_schedule->start_day = request('start_date');
-        $bidding_schedule->end_day = request('end_date');
-        $bidding_schedule->response_time = request('response_time');
+        $bidding_schedule->name = $validatedData['name'];
+        $bidding_schedule->start_day = $validatedData['start_date'];
+        $bidding_schedule->end_day = $validatedData['end_date'];
+        $bidding_schedule->response_time = $validatedData['response_time'];
         $scheduleTemplate = request('seve_as_template');
         if ($scheduleTemplate == "on"){
             $bidding_schedule->save_as_template = true;
@@ -78,7 +87,7 @@ class BiddingSchedule extends Controller
         $biddingID = $bidding_schedule->id;
         $biddingObject = NewBiddingSchedule::where(['id'=>$biddingID])->firstOrFail();
 
-        foreach (request('shiftQueue') as $shift){
+        foreach ($validatedData['shiftQueue'] as $shift){
             $arrayString = explode(":", $shift);
             if ($arrayString[1] == "on")
             {
@@ -90,7 +99,7 @@ class BiddingSchedule extends Controller
 
         $bidding_spot_index = 1;  //Index to define the position in the bidding user queue.
 
-        foreach (request('officerQueue') as $officer){
+        foreach ($validatedData['officerQueue'] as $officer){
 
             $arrayString = explode(":", $officer);
 
@@ -168,12 +177,21 @@ class BiddingSchedule extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'start_date' => ['required', 'after:today'],
+            'end_date' => ['required', 'after:today'],
+            'response_time' => ['required', 'numeric'],
+            'shiftQueue' => ['array'],
+            'officerQueue' => ['array']
+        ]);
+
         $bidding_schedule = NewBiddingSchedule::find($id);
 
-        $bidding_schedule->name = request('name');
-        $bidding_schedule->start_day = request('start_date');
-        $bidding_schedule->end_day = request('end_date');
-        $bidding_schedule->response_time = request('response_time');
+        $bidding_schedule->name = $validatedData['name'];
+        $bidding_schedule->start_day = $validatedData['start_date'];
+        $bidding_schedule->end_day = $validatedData['end_date'];
+        $bidding_schedule->response_time = $validatedData['response_time'];
         $scheduleTemplate = request('seve_as_template');
         if ($scheduleTemplate == "on"){
             $bidding_schedule->save_as_template = true;
@@ -185,7 +203,7 @@ class BiddingSchedule extends Controller
 
         $bidding_schedule->update();
 
-        foreach (request('shiftQueue') as $shift){
+        foreach ($validatedData['shiftQueue'] as $shift){
             $arrayString = explode(":", $shift);
             if ($arrayString[1] == "on")
             {
@@ -199,7 +217,7 @@ class BiddingSchedule extends Controller
 
         $bidding_spot_index = 1;  //Index to define the position in the bidding user queue.
 
-        foreach (request('officerQueue') as $officer){
+        foreach ($validatedData['officerQueue'] as $officer){
 
             $arrayString = explode(":", $officer);
 

@@ -17,8 +17,13 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">Schedule Nme</label>
 
                             <div class="col-md-6">
-
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $biddingschedule->name }}" required autocomplete="name" autofocus>
+
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
 
                             </div>
                         </div>
@@ -28,8 +33,13 @@
                             <label for="start_date" class="col-md-4 col-form-label text-md-right">Schedule Start Date</label>
 
                             <div class="col-md-6">
-
                                 <input id="start_date" type="date" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="{{ $biddingschedule->start_day }}" required>
+
+                                @error('start_date')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
 
                             </div>
                         </div>
@@ -38,8 +48,13 @@
                             <label for="end_date" class="col-md-4 col-form-label text-md-right">Schedule End Date</label>
 
                             <div class="col-md-6">
-
                                 <input id="end_date" type="date" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="{{ $biddingschedule->end_day }}" required>
+
+                                @error('end_date')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
 
                             </div>
                         </div>
@@ -48,8 +63,13 @@
                             <label for="response_time" class="col-md-4 col-form-label text-md-right">Response Time</label>
 
                             <div class="col-md-6">
-
                                 <input id="response_time" type="text" class="form-control @error('response_time') is-invalid @enderror"  name="response_time" value="{{ $biddingschedule->response_time }}" required>
+
+                                @error('response_time')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
 
                             </div>
                         </div>
@@ -88,6 +108,13 @@
                                     @endforeach
                                     </tbody>
                                 </table>
+
+                                @error('shiftQueue')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+
                             </div>
                         </div>
                         <!--End Shift Table-->
@@ -123,6 +150,13 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+
+                                @error('officerQueue')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+
                             </div>
                         </div>
 
