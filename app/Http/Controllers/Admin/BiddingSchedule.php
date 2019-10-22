@@ -203,6 +203,8 @@ class BiddingSchedule extends Controller
 
         $bidding_schedule->update();
 
+        $bidding_schedule->shift()->detach();
+
         foreach ($validatedData['shiftQueue'] as $shift){
             $arrayString = explode(":", $shift);
             if ($arrayString[1] == "on")
