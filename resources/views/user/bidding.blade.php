@@ -18,19 +18,23 @@
     <div class="row justify-content-start">
         <div class="col col-md">
             <h1>Bid on Schedule </h1>
-            <form>
+            <!-- <form action="{{ route('user.biddingschedule.show', ['biddingschedule' => '16']) }}" method="GET" class="delete"> -->
+            <form action="#" method="GET" class="delete">
+            @csrf
                 <div class="form-row align-items-center mt-5">
                     <div class="col-auto my-1">
-                        <label class="mr-sm-2 sr-only" for="selectSchedule">Select Schedule</label>
-                        <select class="custom-select mr-sm-2" id="selectSchedule">
-                            <option selected>Select a Schedule</option>
-                            <option value="1">Schedule 1</option>
-                            <option value="2">Schedule 2</option>
-                            <option value="3">...</option>
+                        <label class="mr-sm-2 sr-only" for="schedule_id">Select Schedule</label>
+                        <select class="custom-select mr-sm-2" id="schedule_id" name="schedule_id">
+                            <!-- <option selected>Select a Schedule</option> -->
+                            @isset($schedules)
+                                @foreach ($schedules as $schedule)
+                                <option value="{{ $schedule->id }}">{{ $schedule->name }}</option>
+                                @endforeach
+                            @endisset
                         </select>
                     </div>
                     <div class="col-auto my-1">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
                     </div>
                 </div>
             </form>
