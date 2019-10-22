@@ -31,7 +31,7 @@ steps:
   displayName: 'Starting Chrome and the Web Server'
 
 - script: |
-    vendor/bin/phpunit --testdox --verbose
+    vendor/bin/phpunit --log-junit tests/Results/TEST-phpunit-junit.xml
   displayName: 'Running Unit Tests'
 
   # Publish Test Results to Azure Pipelines/TFS
