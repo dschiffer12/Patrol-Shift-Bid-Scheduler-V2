@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Mail;
+
+use App\User;
+use App\Models\BiddingSchedule;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class EmailNotification extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public $user, $biddingSchedule;
+
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct(User $user, BiddingSchedule $biddingSchedule)
+    {
+        $this->user = $user;
+        $this->biddingSchedule = $biddingSchedule;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->view('admin.biddingschedule.bidnotification')->with([
+            'user' => $this->user,
+            'schedule' => $this->biddingSchedule
+
+        ]);
+    }
+}

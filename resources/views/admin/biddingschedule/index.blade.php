@@ -8,6 +8,12 @@
     </div>
 @endif
 
+@if (session('updated'))
+    <div class="alert alert-success" role="alert">
+        {{ session('updated') }}
+    </div>
+@endif
+
 @if (session('deleted'))
     <div class="alert alert-warning" role="alert">
         {{ session('deleted') }}
