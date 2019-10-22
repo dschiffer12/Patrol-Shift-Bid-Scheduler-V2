@@ -79,7 +79,7 @@
                 <th scope="col">Early Start</th>
                 <th scope="col">Early Ends</th>
                 <th scope="col">Num. Early Spots</th>
-                <th scope="col">Minimum Stsffing</th>
+                <th scope="col">Minimum Staffing</th>
                 </tr>
             </thead>
             <tbody>
