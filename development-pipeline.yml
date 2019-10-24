@@ -64,3 +64,8 @@ steps:
     #buildConfiguration: # Optional
     #publishRunAttachments: true # Optional
   condition: always()
+
+# Delete .env
+- task: DeleteFiles@1
+  inputs:
+    Contents: '.env'
