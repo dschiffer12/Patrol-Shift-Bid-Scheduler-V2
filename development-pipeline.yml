@@ -25,9 +25,6 @@ steps:
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
   
-- script: composer require --dev laravel/dusk
-  displayName: 'Laravel Dusk Dependency'
-  
 - script: |
     php artisan dusk:install
   displayName: 'Laravel Dusk Install'
