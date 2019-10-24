@@ -25,10 +25,10 @@ steps:
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
 
-- script: |
-    php artisan key:generate
-    php artisan migrate
-  displayName: 'Running Migrations'
+##- script: |
+##    php artisan key:generate
+##    php artisan migrate
+##  displayName: 'Running Migrations'
 
 - script: |
     sudo npm i -g npm
