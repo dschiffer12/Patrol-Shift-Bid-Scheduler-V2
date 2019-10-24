@@ -37,8 +37,8 @@ steps:
 # Delete .env
 - task: DeleteFiles@1
   inputs:
-    SourceFolder: 
-    Contents: '$(system.defaultWorkingDirectory)/*env'
+    SourceFolder: '$(build.sourcesdirectory)' 
+    Contents: '*env'
   displayName: 'Deleting .env'
 
 - task: ArchiveFiles@2
