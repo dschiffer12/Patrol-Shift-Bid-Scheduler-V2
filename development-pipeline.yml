@@ -55,9 +55,9 @@ steps:
     vendor/bin/phpunit --log-junit tests/Results/TEST-phpunit-junit.xml
   displayName: 'Running Unit Tests'
   
-##- script: |
-##    php artisan dusk --log-junit tests/Results/TEST-dusk-junit.xml
-##  displayName: 'Running Browser Tests'
+- script: |
+    php artisan dusk --log-junit tests/Results/TEST-dusk-junit.xml
+  displayName: 'Running Browser Tests'
 
   # Publish Test Results to Azure Pipelines/TFS
 - task: PublishTestResults@2
