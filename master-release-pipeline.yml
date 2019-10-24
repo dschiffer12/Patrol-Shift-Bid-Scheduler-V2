@@ -26,11 +26,6 @@ steps:
   displayName: 'composer install'
 
 - script: |
-    php artisan key:generate
-    php artisan migrate
-  displayName: 'Running Migrations'
-
-- script: |
     sudo npm i -g npm
     sudo chown -R vsts:vsts ~/.npm
     sudo chown -R vsts:vsts ~/.config
