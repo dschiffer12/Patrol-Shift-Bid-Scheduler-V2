@@ -1,17 +1,16 @@
 # PHP
-# Test and package your PHP project.
+# Test your PHP project.
 # Add steps that run tests, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
 trigger:
-- master
-- user-management
+- development
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  phpVersion: 7.2
+  phpVersion: 7.3
 
 steps:
 - script: |
@@ -23,11 +22,52 @@ steps:
     php -version
   displayName: 'Use PHP version $(phpVersion)'
 
-- task: ArchiveFiles@2
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'composer install'
+  
+- script: composer require --dev laravel/dusk
+  displayName: 'Laravel Dusk Dependency'
+  
+- script: |
+    php artisan dusk:install
+  displayName: 'Laravel Dusk Install'
+
+- script: |
+    php artisan key:generate
+    php artisan migrate
+  displayName: 'Running Migrations'
+
+- script: |
+    sudo npm i -g npm
+    sudo chown -R vsts:vsts ~/.npm
+    sudo chown -R vsts:vsts ~/.config
+    npm install
+    npm run prod
+    node -v
+  displayName: 'Generating build assets'
+
+- script: |
+    screen -d -m google-chrome-stable --headless --disable-gpu --disable-dev-shm-usage --disable-software-rasterizer --remote-debugging-port=9222 http://localhost &
+    screen -d -m php artisan serve &
+  displayName: 'Starting Chrome and the Web Server'
+
+- script: |
+    vendor/bin/phpunit --log-junit tests/Results/TEST-phpunit-junit.xml
+  displayName: 'Running Unit Tests'
+  
+- script: |
+    php artisan dusk --log-junit tests/Results/TEST-dusk-junit.xml
+  displayName: 'Running Browser Tests'
+
+  # Publish Test Results to Azure Pipelines/TFS
+- task: PublishTestResults@2
   inputs:
-    rootFolderOrFile: '$(system.defaultWorkingDirectory)'
-    includeRootFolder: true
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildNumber).zip'
-    archiveType: 'zip'
-    replaceExistingArchive: true
-- task: PublishBuildArtifacts@1
+    testRunner: 'JUnit' # Options: JUnit, NUnit, VSTest, xUnit
+    testResultsFiles: '**/TEST-*.xml'
+    searchFolder: '$(System.DefaultWorkingDirectory)/tests/Results' # Optional
+    mergeTestResults: false # Optional
+    #testRunTitle: # Optional
+    #buildPlatform: # Optional
+    #buildConfiguration: # Optional
+    #publishRunAttachments: true # Optional
+  condition: always()
