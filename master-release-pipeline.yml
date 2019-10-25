@@ -34,6 +34,13 @@ steps:
     node -v
   displayName: 'Generating build assets'
 
+# Delete .env
+- task: DeleteFiles@1
+  displayName: 'Delete files from '
+  inputs:
+    Contents: .env
+
+
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(system.defaultWorkingDirectory)'
