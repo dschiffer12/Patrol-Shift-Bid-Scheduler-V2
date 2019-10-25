@@ -29,8 +29,10 @@ class BiddingScheduleControllerTest extends TestCase
     **/
     public function testAuthUsersRootAdminAccessSchedule()
     {
-        $this->actingAs(factory(User::class)->create(['name' => 'admin']));
+        $user = factory(User::class)->create(['name' => 'Admin User']);
+        $this->actingAs($user);
 
+        $this->withoutMiddleware();
         $response = $this->get('/admin/bidding-schedule/index');
 
         $response->assertOk();
