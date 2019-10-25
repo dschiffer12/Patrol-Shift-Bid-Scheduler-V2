@@ -38,12 +38,9 @@ steps:
 - task: DeleteFiles@1
   displayName: 'Delete files from .env'
   inputs:
-    SourceFolder: /.env
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: /*env
 
-- task: DeleteFiles@1
-  inputs:
-    SourceFolder: 
-    Contents: 'myFileShare'
 
 - task: ArchiveFiles@2
   inputs:
