@@ -58,13 +58,22 @@ class BiddingSchedule extends Controller
     {
         //Definition of the Model to store in the data base.
 
-        $validatedData = $request->validate([
+        /*$validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'start_date' => ['required', 'after:today'],
             'end_date' => ['required', 'after:today'],
             'response_time' => ['required', 'numeric'],
             'shiftQueue' => ['array'],
             'officerQueue' => ['array']
+        ]);*/
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|after:today',
+            'end_date' => 'required|after:today',
+            'response_time' => 'required|numeric',
+            'shiftQueue' => 'array',
+            'officerQueue' => 'array'
         ]);
 
         $bidding_schedule = new NewBiddingSchedule();
