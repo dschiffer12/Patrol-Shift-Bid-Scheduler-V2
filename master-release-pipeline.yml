@@ -36,10 +36,9 @@ steps:
 
 # Delete .env
 - task: DeleteFiles@1
-  displayName: 'Delete files from .env'
+  displayName: 'Delete files from '
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: /*env
+    Contents: .env
 
 
 - task: ArchiveFiles@2
