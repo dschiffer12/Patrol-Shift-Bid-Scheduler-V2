@@ -35,7 +35,6 @@ steps:
   displayName: 'Generating build assets'
 
 # Delete .env
-steps:
 - task: DeleteFiles@1
   displayName: 'Delete files from .env'
   inputs:
