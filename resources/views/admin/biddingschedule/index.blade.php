@@ -96,7 +96,7 @@
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <form action="{{ route('admin.bidding-schedule.destroy', $biddingschedules) }}" method="POST" class="delete">
+                                                <form action="{{ route('admin.bidding-schedule.destroy', $biddingschedules->id) }}" method="POST" class="delete">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     @csrf
                                                     {{ method_field('DELETE') }}
