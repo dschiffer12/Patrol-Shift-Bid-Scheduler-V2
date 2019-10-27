@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\User;
+use App\Models\Shift;
 use App\Models\BiddingQueue;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Admin\BiddingSchedule;
 use App\Models\BiddingSchedule as BiddingScheduleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,14 +70,17 @@ class BiddingScheduleControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        factory(Shift::class)->create();
 
         $this->withoutMiddleware();
         $response = $this->post('/admin/bidding-schedule', [
             'name' => 'Test Schedule',
-            'start_date' => '2019-4-3',
-            'end_date' => '2019-7-3',
+            'start_date' => '2020-4-3',
+            'end_date' => '2020-7-3',
             'response_time' => 2,
-            'shiftQueue' => ["1:1"],
+            'save_as_template' => true,
+            'currently_active' => true,
+            'shiftQueue' => ["1:on"],
             'officerQueue' => ["1:1"]
 
         ]);
@@ -92,19 +97,21 @@ class BiddingScheduleControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        factory(Shift::class)->create();
 
         $this->withoutMiddleware();
         $response = $this->post('/admin/bidding-schedule', [
             'name' => 'Test Schedule',
-            'start_date' => '2019-4-3',
-            'end_date' => '2019-7-3',
+            'start_date' => '2020-4-3',
+            'end_date' => '2020-7-3',
             'response_time' => 2,
-            'shiftQueue' => ["1:1"],
+            'save_as_template' => true,
+            'currently_active' => true,
+            'shiftQueue' => ["1:on"],
             'officerQueue' => ["1:1"]
         ]);
 
-        $biddingSchedule = BiddingScheduleModel::all();
-        $shift = $biddingSchedule->shift();
+        $shift = DB::select('select * from bidding_schedule_shift');
 
         $this->assertCount(1, $shift);
     }
@@ -118,17 +125,146 @@ class BiddingScheduleControllerTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        factory(Shift::class)->create();
 
         $this->withoutMiddleware();
         $response = $this->post('/admin/bidding-schedule', [
             'name' => 'Test Schedule',
-            'start_date' => '2019-4-3',
-            'end_date' => '2019-7-3',
+            'start_date' => '2020-4-3',
+            'end_date' => '2020-7-3',
             'response_time' => 2,
-            'shiftQueue' => ["1:1"],
+            'save_as_template' => true,
+            'currently_active' => true,
+            'shiftQueue' => ["1:on"],
             'officerQueue' => ["1:1"]
         ]);
 
         $this->assertCount(1, BiddingQueue::all());
+    }
+
+
+    /**
+     * Assert one schedule update in the database
+     *
+     * @return viod
+     **/
+    public function testUpdateScheduleInDatabaseCountOne()
+    {
+        $this->withoutExceptionHandling();
+        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        factory(BiddingScheduleModel::class)->create();
+        factory(Shift::class)->create();
+
+        $this->withoutMiddleware();
+        $response = $this->put('/admin/bidding-schedule/1', [
+            'name' => 'Test Schedule 2',
+            'start_date' => '2020-4-2',
+            'end_date' => '2020-7-3',
+            'response_time' => 2,
+            'save_as_template' => true,
+            'currently_active' => true,
+            'shiftQueue' => ["1:on"],
+            'officerQueue' => ["1:1"]
+
+        ]);
+
+        $biddingSchedule = DB::select('select * from bidding_schedules where name = "Test Schedule 2"');
+
+        $this->assertCount(1, $biddingSchedule);
+    }
+
+    /**
+     * Assert one Shift update in the database once the schedule is saved in database
+     *
+     * @return viod
+     **/
+    public function testUpdateShiftOnScheduleInDatabaseCountOne()
+    {
+        $this->withoutExceptionHandling();
+        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        factory(Shift::class)->create();
+        factory(BiddingScheduleModel::class)->create();
+        /*$newBiddingSchedule->shift()->createMany(
+            factory(Shift::class, 1)->make()->toArray()
+        );*/
+
+        $this->withoutMiddleware();
+        $response = $this->put('/admin/bidding-schedule/1', [
+            'name' => 'Test Schedule',
+            'start_date' => '2020-4-3',
+            'end_date' => '2020-7-3',
+            'response_time' => 2,
+            'save_as_template' => true,
+            'currently_active' => true,
+            'shiftQueue' => ["1:on"],
+            'officerQueue' => ["1:1"]
+        ]);
+
+        $shift = DB::select('select * from bidding_schedule_shift');
+
+        $this->assertCount(1, $shift);
+    }
+
+    /**
+     * Assert one Bidding Queue update in the database once the schedule is saved in database
+     *
+     * @return viod
+     **/
+    public function testUpdateQueueOnScheduleInDatabaseCountOne()
+    {
+        $this->withoutExceptionHandling();
+        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        factory(Shift::class)->create();
+        factory(BiddingScheduleModel::class)->create();
+
+        $this->withoutMiddleware();
+        $response = $this->put('/admin/bidding-schedule/1', [
+            'name' => 'Test Schedule',
+            'start_date' => '2020-4-3',
+            'end_date' => '2020-7-3',
+            'response_time' => 2,
+            'save_as_template' => true,
+            'currently_active' => true,
+            'shiftQueue' => ["1:on"],
+            'officerQueue' => ["1:1"]
+        ]);
+
+        $this->assertCount(1, BiddingQueue::all());
+    }
+
+    /**
+     * Assert that bidding schedule, shift, and bidding queue are deleted
+     *
+     * @return void
+    **/
+    public function testBiddingScheduleShiftQueueDelete ()
+    {
+        $this->withoutExceptionHandling();
+        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        $user = User::all();
+        factory(Shift::class)->create();
+        factory(BiddingScheduleModel::class)->create();
+        $schedule = BiddingScheduleModel::all();
+        factory(BiddingQueue::class)->create([
+            'user_id' => $user[0]->id,
+            'bidding_schedule_id' => $schedule[0]->id,
+        ]);
+
+        $this->withoutMiddleware();
+        $this->delete(route('admin.bidding-schedule.destroy', $schedule[0]));
+
+        $schedule = BiddingScheduleModel::all();
+        $shift = DB::select('select * from bidding_schedule_shift');
+        $queue = BiddingQueue::all();
+
+        //Deleted in Bidding Schedule Shift Pivot table
+        $shift = DB::select('select * from bidding_schedule_shift');
+        $this->assertCount(0, $shift);
+
+        //Deleted in the Bidding Queue Table
+        $this->assertCount(0, BiddingQueue::all());
+
+        //Deleted in Bidding Schedule Table
+        $this->assertCount(0, BiddingScheduleModel::all());
     }
 }

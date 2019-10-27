@@ -58,22 +58,13 @@ class BiddingSchedule extends Controller
     {
         //Definition of the Model to store in the data base.
 
-        /*$validatedData = $request->validate([
+        $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'start_date' => ['required', 'after:today'],
             'end_date' => ['required', 'after:today'],
             'response_time' => ['required', 'numeric'],
             'shiftQueue' => ['array'],
             'officerQueue' => ['array']
-        ]);*/
-
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'start_date' => 'required|after:today',
-            'end_date' => 'required|after:today',
-            'response_time' => 'required|numeric',
-            'shiftQueue' => 'array',
-            'officerQueue' => 'array'
         ]);
 
         $bidding_schedule = new NewBiddingSchedule();
@@ -269,8 +260,14 @@ class BiddingSchedule extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(NewBiddingSchedule $biddingSchedule)
+    public function destroy($id)
     {
+        $biddingSchedule = NewBiddingSchedule::find($id);
+        $biddingSchedule->shift()->detach();
+        $biddingQueues = BiddingQueue::where('bidding_schedule_id', $id);
+        foreach ($biddingQueues as $biddingQueue){
+            $biddingQueue->delete();
+        }
         $biddingSchedule->delete();
 
         return redirect()->route('admin.bidding-schedule.index')->with('deleted', 'Bidding Schedule deleted successfully!');
@@ -284,22 +281,11 @@ class BiddingSchedule extends Controller
     **/
     public function sendEmail(User $user, NewBiddingSchedule $schedule)
     {
-        /*$data['title'] = "Hello {$user->name},
-                            You are next to bid in the schedule {$schedule->name}.
-                            You have only {$schedule->response_time} hours to bid.";
-        Mail::send(['text'=>'mail'], $data, function($message) use ($user) {
-
-            $message->to($user->email, $user->name)
-
-                ->subject('Bid on Schedule');
-        });*/
         Mail::to($user)->send(new EmailNotification($user, $schedule));
 
         if (Mail::failures()) {
-            //return response()->Fail('Sorry! Please try again latter');
             return false;
         }else{
-            //return response()->success('Great! Successfully send in your mail');
             return true;
         }
     }
