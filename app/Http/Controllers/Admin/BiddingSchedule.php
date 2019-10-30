@@ -132,7 +132,7 @@ class BiddingSchedule extends Controller
         }
 
         $firstUser = BiddingQueue::where('bidding_schedule_id', $biddingID)->first()->user;
-        $emailSend = $this->sendEmail($firstUser, $biddingObject);
+        // $emailSend = $this->sendEmail($firstUser, $biddingObject);
 
         return redirect()->route('admin.bidding-schedule.index')->with('successful', 'Bidding Schedule created successfully!');
 

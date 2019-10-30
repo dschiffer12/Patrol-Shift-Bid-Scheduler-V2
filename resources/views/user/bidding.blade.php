@@ -14,33 +14,37 @@
     </div>
 </div> -->
 
-<!-- <div class="container">
+<div class="container">
     <div class="row justify-content-start">
         <div class="col col-md">
             <h1>Bid on Schedule </h1>
-            <form>
+            <!-- <form action="{{ route('user.biddingschedule.show', ['biddingschedule' => '16']) }}" method="GET" class="delete"> -->
+            <form action="#" method="GET" class="delete">
+            @csrf
                 <div class="form-row align-items-center mt-5">
                     <div class="col-auto my-1">
-                        <label class="mr-sm-2 sr-only" for="selectSchedule">Select Schedule</label>
-                        <select class="custom-select mr-sm-2" id="selectSchedule">
-                            <option selected>Select a Schedule</option>
-                            <option value="1">Schedule 1</option>
-                            <option value="2">Schedule 2</option>
-                            <option value="3">...</option>
+                        <label class="mr-sm-2 sr-only" for="schedule_id">Select Schedule</label>
+                        <select class="custom-select mr-sm-2" id="schedule_id" name="schedule_id">
+                            <!-- <option selected>Select a Schedule</option> -->
+                            @isset($schedules)
+                                @foreach ($schedules as $schedule)
+                                <option value="{{ $schedule->id }}">{{ $schedule->name }}</option>
+                                @endforeach
+                            @endisset
                         </select>
                     </div>
                     <div class="col-auto my-1">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-</div> -->
+</div>
 
 
 
-<div class="container overflow-auto">
+<div class="container overflow-auto shadow mt-3 p-3">
     <div class="row mt-3">
         <div class="col-auto">
             <h5>Schedule Name:</h5>
@@ -65,7 +69,7 @@
             <h5>03/31/2020</h5>
         </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
                 <tr>
@@ -75,7 +79,7 @@
                 <th scope="col">Early Start</th>
                 <th scope="col">Early Ends</th>
                 <th scope="col">Num. Early Spots</th>
-                <th scope="col">Minimum Stsffing</th>
+                <th scope="col">Minimum Staffing</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,7 +113,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
                 <tr>
@@ -173,7 +177,7 @@
             </tbody>
         </table>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
                 <tr>

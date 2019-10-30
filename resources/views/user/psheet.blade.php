@@ -18,7 +18,7 @@
     <div class="row justify-content-start">
         <div class="col col-md-8">
 
-            <h1>P-Sheet Page. </h1>
+            <h1>Daily Roster Page. </h1>
 
         </div>
     </div>
@@ -55,7 +55,7 @@
     <div class="row justify-content-center border border-primary h-100">
         <div class="col col-md-8 align-self-center">
 
-        <h5>The daily Schedule/P-Shift will be displayed here</h5>
+        <h5>The Daily Roster will be displayed here</h5>
         
     </div>
 </div>

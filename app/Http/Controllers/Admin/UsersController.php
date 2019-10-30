@@ -67,9 +67,9 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         //this is not the place for admins to edit there own information
-        if(Auth::user()->id == $user->id){
-            return redirect()->route('admin.users.index')->with('warning', 'You are not allowed to edit yourself.');
-        }
+        // if(Auth::user()->id == $user->id){
+        //     return redirect()->route('admin.users.index')->with('warning', 'You are not allowed to edit yourself.');
+        // }
 
         //dd($user);
         $roles = Role::all();
