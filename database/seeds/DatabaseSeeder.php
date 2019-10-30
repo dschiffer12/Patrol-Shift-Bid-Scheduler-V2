@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(ShiftTableSeeder::class);
         $this->call(EarlyShiftTableSeeder::class);
+        $this->call(BiddingScheduleSeeder::class);
     }
 }

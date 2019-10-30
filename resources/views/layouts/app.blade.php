@@ -50,7 +50,7 @@
                                     </div>
                                 </li>
                             @endif
-                        @endauth       
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -85,11 +85,7 @@
                                     <a  class="dropdown-item" href="{{ route('user.profile.index') }}">
                                         Profile Management
                                     </a>
-
-                                    <a  class="dropdown-item" href="{{ route('admin.bidding-schedule.index') }}">
-                                        Bidding Schedule Management
-                                    </a>
-
+    
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -107,21 +103,29 @@
                 @guest
                 @else
                     <div class="auto col-md-auto menu">
-                    
+
                         <div class="row top15">
                             <div class="col border pt-2">
                                 <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('user.psheet.index') }}"><h5>{{ __('P-Sheet') }}</h5></a>
+                                    <a class="nav-link" href="{{ route('user.psheet.index') }}"><h5>{{ __('Daily Roster') }}</h5></a>
                                 </button>
                             </div>
                         </div>
                         <div class="row">
-                        <div class="col border pt-2">
+                            <div class="col border pt-2">
+                                <button type="button" class="btn btn-block text-left">
+                                    <a class="nav-link" href="{{ route('admin.bidding-schedule.index') }}"><h5>{{ __('Bidding Schedule Management') }}</h5></a>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col border pt-2">
                                 <button type="button" class="btn btn-block text-left">
                                     <a class="nav-link" href="{{ route('user.biddingschedule.index') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
                                 </button>
                             </div>
-                        </div>        
+                        </div>
                     </div>
                 @endguest
 
