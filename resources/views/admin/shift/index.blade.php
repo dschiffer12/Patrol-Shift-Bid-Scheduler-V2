@@ -23,18 +23,18 @@
 <div class="container">
     <div class="row justify-content-start mt-3 mb-3">
         <div class="col-md">
-            <h3>List of all Actice Schedules</h3>
+            <h3>List of all Shift with Early Shift</h3>
         </div>
     </div>
 </div>
 
 <!--If no record of schedules were found show warning and show button to Create New Schedule-->
-@if (count($biddingschedulesactive) <= 0)
+@if (count($shifts) <= 0)
     <div class="container">
         <div class="row justify-content-start mt-3 mb-3">
             <div class="col-md">
                 <div class="alert alert-warning" role="alert">
-                    No Record for Schedules were found.
+                    No Record for Shift were found.
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
     <div class="container">
         <div class="row mt-3 mb-3 d-flex justify-content-end">
             <div class="col-md-4 d-flex justify-content-end">
-                <a href="bidding-schedule/create"><button type="button" class="btn btn-success">Create New Schedule</button></a>
+                <a href="shift/create"><button type="button" class="btn btn-success">Create New Shift</button></a>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <div class="container">
         <div class="row mt-3 mb-3 d-flex justify-content-end">
             <div class="col-md-4 d-flex justify-content-end">
-                <a href="bidding-schedule/create"><button type="button" class="btn btn-success">Create New Schedule</button></a>
+                <a href="shift/create"><button type="button" class="btn btn-success">Create New Shift</button></a>
             </div>
         </div>
     </div>
@@ -66,41 +66,41 @@
                         <thead>
                             <tr>
                             <th class="text-center" scope="col">Name</th>
-                            <th class="text-center" scope="col">Start Date</th>
-                            <th class="text-center" scope="col">End Date</th>
-                            <th class="text-center" scope="col">Response Time</th>
-                            <th class="text-center" scope="col">Satatus</th>
+                            <th class="text-center" scope="col">Start Time</th>
+                            <th class="text-center" scope="col">End Time</th>
+                            <th class="text-center" scope="col">Early Start Time</th>
+                            <th class="text-center" scope="col">Early End Time</th>
+                            <th class="text-center" scope="col">Minimum Staff</th>
+                            <th class="text-center" scope="col">Minimum Early Spot</th>
                             <th class="text-center" scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($biddingschedulesactive as $biddingschedules)
+                            @foreach($shifts as $shift)
                                 <tr>
-                                    <td class="text-center">{{ $biddingschedules->name }}</td>
-                                    <td class="text-center">{{ date('m-d-Y', strtotime($biddingschedules->start_day)) }}</td>
-                                    <td class="text-center">{{ date('m-d-Y', strtotime($biddingschedules->end_day)) }}</td>
-                                    <td class="text-center">{{ $biddingschedules->response_time }}</td>
-                                    <td class="text-center">@if ($biddingschedules->currently_active == 1)
-                                                                Active
-                                                            @else I
-                                                                nactive
-                                                            @endif
-                                    </td>
+                                    <td class="text-center">{{ $shift->name }}</td>
+                                    <td class="text-center">{{ $shift->start_time }}</td>
+                                    <td class="text-center">{{ $shift->end_time }}</td>
+                                    <td>{{ !empty($shift->earlyShift) ?  $shift->earlyShift->early_start_time:'' }}</td>
+                                    <td>{{ !empty($shift->earlyShift) ? $shift->earlyShift->early_end_time:'' }}</td>
+                                    <td class="text-center">{{ $shift->minimun_staff }}</td>
+                                    <td>{{ !empty($shift->earlyShift) ? $shift->earlyShift->num_early_spot:'' }}</td>
+
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <a href="{{ route('admin.bidding-schedule.edit', $biddingschedules) }}"><button type="button" class="btn btn-primary float-left">View</button></a>
+                                                <a href="{{ route('admin.shift.edit', $shift->id) }}"><button type="button" class="btn btn-primary float-left">View</button></a>
                                             </div>
                                         </div>
                                     <td>
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <form action="{{ route('admin.bidding-schedule.destroy', $biddingschedules->id) }}" method="POST" class="delete">
+                                                <form action="{{ route('admin.shift.destroy', $shift->id) }}" method="POST" class="delete">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     @csrf
-                                                    @method("DELETE")
-                                                    <button type="submit" onclick="return confirm('Delete {{$biddingschedules->name}}?')" class="btn btn-danger">Diactivate</button>
+                                                    @method('DELETE')
+                                                    <button type="submit" onclick="return confirm('Delete {{$shift->name}}?')" class="btn btn-danger">Diactivate</button>
                                                 </form>
                                             </div>
                                         </div>

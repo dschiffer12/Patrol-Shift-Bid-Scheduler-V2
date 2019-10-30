@@ -196,7 +196,7 @@ class BiddingScheduleControllerTest extends TestCase
             'response_time' => 2,
             'save_as_template' => true,
             'currently_active' => true,
-            'shiftQueue' => ["1:on"],
+            'shiftQueue' => ["1:checked"],
             'officerQueue' => ["1:1"]
         ]);
 

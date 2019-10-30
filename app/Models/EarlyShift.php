@@ -10,9 +10,9 @@ class EarlyShift extends Model
      * The attributes that are mass assignable.
      *
      * @var array
-     */
+    **/
     protected $fillable = [
-        'early_start_time', 'early_end_time'
+        'early_start_time', 'early_end_time', 'num_early_spot'
     ];
 
     /**
