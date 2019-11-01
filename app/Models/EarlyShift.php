@@ -12,7 +12,7 @@ class EarlyShift extends Model
      * @var array
     **/
     protected $fillable = [
-        'early_start_time', 'early_end_time', 'num_early_spot'
+        'shift_id','early_start_time', 'early_end_time', 'num_early_spot'
     ];
 
     /**

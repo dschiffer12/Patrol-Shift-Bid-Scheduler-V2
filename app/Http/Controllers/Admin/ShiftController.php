@@ -25,7 +25,9 @@ class ShiftController extends Controller
 
     /**
      * Show the form for creating a new Shift and Early Shift.
+     * If the parameter $createMethod is 0 the request to crete the Shift is coming from the
      *
+     * @param $createMethod
      * @return \Illuminate\Http\Response
      */
     public function create()
@@ -69,14 +71,48 @@ class ShiftController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the form for creating a new Shift and Early Shift.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createFromSchedule()
+    {
+        return view('admin.shift.create_shift_from_schedule');
+    }
+
+    /**
+     * Create a new Shift and redirect to Create New Bidding Schedule.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function storeFromSchedule(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'start_time' => ['required'],
+            'end_time' => ['required'],
+            'minimun_staff' => ['required', 'numeric'],
+            'num_early_spot' => ['numeric'],
+        ]);
+
+        //Create and instantiate Shift Model to save in database
+        $shift = new Shift();
+        $shift->name = $validateData['name'];
+        $shift->start_time = $validateData['start_time'];
+        $shift->end_time = $validateData['end_time'];
+        $shift->minimun_staff = $validateData['minimun_staff'];
+
+        $shift->save();
+
+        //Save in Db early shift
+        $shift->earlyShift()->create([
+            'early_start_time' => request('early_start_time'),
+            'early_end_time' => request('early_end_time'),
+            'num_early_spot' => request('num_early_spot')
+        ]);
+
+        return redirect()->route('admin.bidding-schedule.create');
     }
 
     /**
@@ -89,7 +125,7 @@ class ShiftController extends Controller
     {
         $shift = Shift::findOrFail($id);
 
-        return view('admin.shift.editshift')->with([
+        return view('admin.shift.edit_shift')->with([
             'shift' => $shift
         ]);
     }
@@ -118,15 +154,12 @@ class ShiftController extends Controller
 
         $shift->update();
 
-        $hasEarlyShift = request('early_shift');
-        if($hasEarlyShift == 1)
-        {
-            $shift->earlyShift->updateOrCreate([
+        $shift->earlyShift->updateOrCreate(['shift_id' => $shift->id], [
                 'early_start_time' => request('early_start_time'),
                 'early_end_time' => request('early_end_time'),
                 'num_early_spot' => request('num_early_spot')
             ]);
-        }
+
 
         return redirect()->route('admin.shift.index')->with('updated', 'Shift updated successfully!');
     }

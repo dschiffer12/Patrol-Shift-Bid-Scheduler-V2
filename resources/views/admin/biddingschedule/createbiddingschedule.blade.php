@@ -107,6 +107,13 @@
                                     @endforeach
                                     </tbody>
                                 </table>
+                                <div class="container">
+                                    <div class="row mt-3 mb-3 d-flex justify-content-end">
+                                        <div class="col-md-4 d-flex justify-content-end">
+                                            <a href="{{ route('admin.shift.createFromSchedule') }}"><button type="button" class="btn btn-success">Create New Shift</button></a>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 @error('shiftQueue')
                                 <span class="invalid-feedback" role="alert">

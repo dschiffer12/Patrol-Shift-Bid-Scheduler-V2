@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Role;
 use App\User;
 use App\Models\Shift;
 use App\Models\BiddingQueue;
@@ -34,10 +35,12 @@ class BiddingScheduleControllerTest extends TestCase
     **/
     public function testAuthUsersRootAdminAccessSchedule()
     {
-        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create(['name' => 'root']);
+        $user->roles()->attach($role);
+        $this->actingAs($user);
 
-        $this->withoutMiddleware();
-        $response = $this->get('/admin/bidding-schedule/index');
+        $response = $this->get('/admin/bidding-schedule');
 
         $response->assertOk();
     }
@@ -46,7 +49,7 @@ class BiddingScheduleControllerTest extends TestCase
      * Assert that view return the correct list of data.
      *
      * @return void
-
+     **/
     public function testBiddingScheduleIndexReturnValuesView()
     {
         //$this->withoutExceptionHandling();
@@ -55,10 +58,27 @@ class BiddingScheduleControllerTest extends TestCase
         $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
 
         $this->withoutMiddleware();
-        $response = $this->get('/admin/bidding-schedule/index');
+        $response = $this->get('/admin/bidding-schedule');
 
         //$response->assertViewIs('admin.biddingschedule.index');
-        $response->assertViewHasAll(['biddingschedulesactive', 'biddingschedulestemplates'], );
+        $response->assertViewHasAll(['biddingschedulesactive', 'biddingschedulestemplates'] );
+    }
+
+    /**
+     * Assert that view return the correct list of data.
+     *
+     * @return void
+
+    public function testBiddingScheduleCreateReturnValuesView()
+    {
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create(['name' => 'root']);
+        $user->roles()->attach($role);
+        $this->actingAs($user)
+            ->get('get', '/admin/bidding-schedule/create')
+            //->assertViewIs('admin.biddingschedule.createbiddingschedule');
+        //$response->assertViewHasAll(['users', 'shifts'] );
+            ->assertOk();
     }**/
 
     /**
@@ -68,11 +88,15 @@ class BiddingScheduleControllerTest extends TestCase
     **/
     public function testStoreScheduleInDatabaseCountOne()
     {
-        $this->withoutExceptionHandling();
-        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        //$this->withoutExceptionHandling();
+        //$this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create(['name' => 'root']);
+        $user->roles()->attach($role);
+        $this->actingAs($user);
         factory(Shift::class)->create();
 
-        $this->withoutMiddleware();
+        //$this->withoutMiddleware();
         $response = $this->post('/admin/bidding-schedule', [
             'name' => 'Test Schedule',
             'start_date' => '2020-4-3',

@@ -15,7 +15,7 @@ class CreateEarlyShiftsTable extends Migration
     {
         Schema::create('early_shifts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('shift_id');
+            $table->unsignedBigInteger('shift_id')->default('default_value');;
             $table->time('early_start_time');
             $table->time('early_end_time');
             $table->integer('num_early_spot');
