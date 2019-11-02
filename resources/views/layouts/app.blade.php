@@ -85,7 +85,7 @@
                                     <a  class="dropdown-item" href="{{ route('user.profile.index') }}">
                                         Profile Management
                                     </a>
-    
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -111,6 +111,15 @@
                                 </button>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col border pt-2">
+                                <button type="button" class="btn btn-block text-left">
+                                    <a class="nav-link" href="{{ route('admin.shift.index') }}"><h5>{{ __('Shift Management') }}</h5></a>
+                                </button>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col border pt-2">
                                 <button type="button" class="btn btn-block text-left">
