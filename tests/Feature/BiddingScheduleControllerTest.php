@@ -52,12 +52,11 @@ class BiddingScheduleControllerTest extends TestCase
      **/
     public function testBiddingScheduleIndexReturnValuesView()
     {
-        //$this->withoutExceptionHandling();
-        //$biddingSchedule = new BiddingSchedule();
-        //$actualResult =  $biddingSchedule->index();
-        $this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create(['name' => 'root']);
+        $user->roles()->attach($role);
+        $this->actingAs($user);
 
-        $this->withoutMiddleware();
         $response = $this->get('/admin/bidding-schedule');
 
         //$response->assertViewIs('admin.biddingschedule.index');
@@ -68,18 +67,17 @@ class BiddingScheduleControllerTest extends TestCase
      * Assert that view return the correct list of data.
      *
      * @return void
-
+     **/
     public function testBiddingScheduleCreateReturnValuesView()
     {
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create(['name' => 'root']);
         $user->roles()->attach($role);
+
         $this->actingAs($user)
-            ->get('get', '/admin/bidding-schedule/create')
-            //->assertViewIs('admin.biddingschedule.createbiddingschedule');
-        //$response->assertViewHasAll(['users', 'shifts'] );
-            ->assertOk();
-    }**/
+            ->get(route('admin.bidding-schedule.create'))
+            ->assertViewHasAll(['users', 'shifts'] );
+    }
 
     /**
      * Assert one schedule stored in the database
@@ -88,15 +86,13 @@ class BiddingScheduleControllerTest extends TestCase
     **/
     public function testStoreScheduleInDatabaseCountOne()
     {
-        //$this->withoutExceptionHandling();
-        //$this->actingAs(factory(User::class)->create(['name' => 'Admin User']));
+
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create(['name' => 'root']);
         $user->roles()->attach($role);
         $this->actingAs($user);
         factory(Shift::class)->create();
 
-        //$this->withoutMiddleware();
         $response = $this->post('/admin/bidding-schedule', [
             'name' => 'Test Schedule',
             'start_date' => '2020-4-3',
@@ -290,5 +286,26 @@ class BiddingScheduleControllerTest extends TestCase
 
         //Deleted in Bidding Schedule Table
         $this->assertCount(0, BiddingScheduleModel::all());
+    }
+
+    /**
+     * Test bidding schedule edit method that return the correct key.
+     *
+     * @return void
+     **/
+    public function testBiddingScheduleEditReturnKey()
+    {
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create(['name' => 'root']);
+        $user->roles()->attach($role);
+        $this->actingAs($user);
+        $biddingSchedule = factory(BiddingScheduleModel::class)->create();
+        $shift = factory(Shift::class)->create();
+        $biddingSchedule->shift()->attach($shift);
+
+
+        $responce = $this->get(route('admin.bidding-schedule.edit', 1));
+
+        $responce->assertViewHasAll(['shifts', 'biddingschedule', 'users']);
     }
 }
