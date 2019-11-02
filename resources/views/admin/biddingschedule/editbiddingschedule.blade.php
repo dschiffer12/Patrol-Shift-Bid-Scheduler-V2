@@ -98,9 +98,9 @@
                                             <td>{{ $shift->name }}</td>
                                             <td>{{ $shift->start_time }}</td>
                                             <td>{{ $shift->end_time }}</td>
-                                            <td>{{ !empty($shift->early_shift) ?  $shift->early_shift->early_start_time:'' }}</td>
-                                            <td>{{ !empty($shift->early_shift) ? $shift->early_shift->early_end_time:'' }}</td>
-                                            <td>{{ !empty($shift->early_shift) ? $shift->early_shift->num_early_spot:'' }}</td>
+                                            <td>{{ !empty($shift->earlyShift) ?  $shift->earlyShift->early_start_time:'' }}</td>
+                                            <td>{{ !empty($shift->earlyShift) ? $shift->earlyShift->early_end_time:'' }}</td>
+                                            <td>{{ !empty($shift->earlyShift) ? $shift->earlyShift->num_early_spot:'' }}</td>
                                             <td>{{ $shift->minimun_staff }}</td>
                                             <td><input id="shift_{{ $index }}" type="checkbox" class="form-control shift-queue-array" name="shift_{{ $index }}" value="checked"/></td>
                                             <input id="shift_hidden_{{ $index }}" type="hidden"  name="shiftQueue[]" value="{{ $shift->id}}:" >

@@ -18,7 +18,7 @@ class Shift extends Model
     /**
      * EarlyShift belongs to Shift
      */
-    public function early_shift()
+    public function earlyShift()
     {
         return $this->hasOne('App\Models\EarlyShift');
     }

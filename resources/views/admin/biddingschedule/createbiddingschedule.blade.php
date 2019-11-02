@@ -97,9 +97,9 @@
                                             <td>{{ $shift->name }}</td>
                                             <td>{{ $shift->start_time }}</td>
                                             <td>{{ $shift->end_time }}</td>
-                                            <td>{{ !empty($shift->early_shift) ?  $shift->early_shift->early_start_time:'' }}</td>
-                                            <td>{{ !empty($shift->early_shift) ? $shift->early_shift->early_end_time:'' }}</td>
-                                            <td>{{ !empty($shift->early_shift) ? $shift->early_shift->num_early_spot:'' }}</td>
+                                            <td>{{ !empty($shift->earlyShift) ?  $shift->earlyShift->early_start_time:'' }}</td>
+                                            <td>{{ !empty($shift->earlyShift) ? $shift->earlyShift->early_end_time:'' }}</td>
+                                            <td>{{ !empty($shift->earlyShift) ? $shift->earlyShift->num_early_spot:'' }}</td>
                                             <td>{{ $shift->minimun_staff }}</td>
                                             <td><input id="shift_{{ $index }}" type="checkbox" class="form-control shift-queue-array" name="shift_{{ $index }}" ></td>
                                             <input id="shift_hidden_{{ $index }}" type="hidden"  name="shiftQueue[]" value="{{ $shift->id}}:" >
@@ -107,6 +107,13 @@
                                     @endforeach
                                     </tbody>
                                 </table>
+                                <div class="container">
+                                    <div class="row mt-3 mb-3 d-flex justify-content-end">
+                                        <div class="col-md-4 d-flex justify-content-end">
+                                            <a href="{{ route('admin.shift.createFromSchedule') }}"><button type="button" class="btn btn-success">Create New Shift</button></a>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 @error('shiftQueue')
                                 <span class="invalid-feedback" role="alert">

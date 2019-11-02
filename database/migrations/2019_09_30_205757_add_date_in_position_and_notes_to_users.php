@@ -14,8 +14,8 @@ class AddDateInPositionAndNotesToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('date_in_position')->default('default_value');;
-            $table->string('notes')->default('default_value');;
+            $table->date('date_in_position')->default('default_value');
+            $table->string('notes')->default('default_value');
         });
     }
 
