@@ -75,6 +75,28 @@ class User extends Authenticatable
     }
 
     /**
+     * For the User/Bid relationship
+     */
+    public function bids() {
+        return $this->hasMany('App\Models\Bid');
+    }
+
+    /**
+     * To test if User has any bids
+     */
+    public function hasAnyBids() {
+        return null !== $this->bids()->first();
+    }
+
+    /**
+     * To test if User has a specific bid
+     */
+    public function alreadyBid($schedule_id) {
+        return null !== $this->bids()->where('bidding_schedule_id', $schedule_id)->first();
+    }
+
+
+    /**
      * For the User/Officer relation (officer belongs to one user)
      */
     public function officer()
