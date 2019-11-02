@@ -27,7 +27,7 @@ class BiddingQueue extends Model
     /**
      * Get the bidding schedule for the bidding queue.
      */
-    public function biddingschedure()
+    public function bidding_schedures()
     {
         return $this->hasMany('App\Models\BiddingSchedule');
     }

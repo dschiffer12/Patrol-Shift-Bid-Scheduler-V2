@@ -139,17 +139,6 @@ class BiddingSchedule extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -183,7 +172,7 @@ class BiddingSchedule extends Controller
             'end_date' => ['required', 'after:today'],
             'response_time' => ['required', 'numeric'],
             'shiftQueue' => ['array'],
-            'officerQueue' => ['array']
+            'officerQueue' => ['array'],
         ]);
 
         $bidding_schedule = NewBiddingSchedule::find($id);
@@ -205,12 +194,14 @@ class BiddingSchedule extends Controller
 
         $bidding_schedule->shift()->detach();
 
+        $biddingObject = NewBiddingSchedule::findOrFail($id);
+
         foreach ($validatedData['shiftQueue'] as $shift){
             $arrayString = explode(":", $shift);
-            if ($arrayString[1] == "on")
+            if ($arrayString[1] == "checked")
             {
                 $shiftID = (int)$arrayString[0];
-                $bidding_schedule->shift()->attach($shiftID);
+                $biddingObject->shift()->attach($shiftID);
             }
 
         }

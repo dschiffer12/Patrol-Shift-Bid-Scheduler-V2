@@ -29,6 +29,11 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
 
     //Route for the Bidding Schedule actions.
     Route::resource('/bidding-schedule', 'BiddingSchedule');
+
+    //Route for the Shift actions.
+    Route::get('/shift/createFromSchedule', 'ShiftController@createFromSchedule')->name('shift.createFromSchedule');
+    Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
+    Route::resource('/shift', 'ShiftController');
 });
 
 
