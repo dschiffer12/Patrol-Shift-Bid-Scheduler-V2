@@ -85,6 +85,13 @@ class BiddingController extends Controller
         ]);
 
         
+        if(isset($validatedData['schedule_id'])) {
+            if(auth()->user()->alreadyBid($validatedData['schedule_id'])) {
+                return redirect()->route('user.biddingschedule.index')
+                    ->with('warning', 'You already bit on this schedule.');
+            }
+        }
+        
         $bid = new Bid;
 
         $bid->user_id = auth()->user()->id;
@@ -122,18 +129,15 @@ class BiddingController extends Controller
         //dd(auth()->user()->id);
         //$user = User::findOrFail($id);
 
+        return redirect()->route('user.biddingschedule.bids')->with('success', 'Your bit has been submitted');
 
+   
     }
 
     /** 
      * 
     */
     public function bids(Request $request) {
-
-        // $bids = Bid::where('user_id', auth()->user()->id)->first();
-        // dd($bids->id);
-
-        //$bids = new Bid;
 
         /**
          * Validate the form data
@@ -142,10 +146,10 @@ class BiddingController extends Controller
             'bid_id' => ['integer', 'gte:0'],
         ]);
 
+      
+        if(auth()->user()->hasAnyBids()) {
 
-        if($bids = Bid::where('user_id', auth()->user()->id)) {
-
-            //$schedules = BiddingSchedule::where('id', $bids->id);
+            // $bids = Bid::where('user_id', auth()->user()->id);
 
             $schedules = DB::table('bids')
                 ->join('bidding_schedules', 'bids.bidding_schedule_id', '=', 'bidding_schedules.id')
@@ -154,20 +158,11 @@ class BiddingController extends Controller
                 ->get();
 
             if(isset($validatedData['bid_id'])) {
-    
                 if($bid = Bid::where('id', $validatedData['bid_id'])->first()) {
-
                     if($schedule = BiddingSchedule::where('id', $bid->bidding_schedule_id)->first()) {
                         if($shift = Shift::where('id', $bid->shift_id)->first()) {
-
                             if($bid_early_shift = BidEarlyShift::where('bid_id', $bid->id)->first()) {   
-
                                 $early_shift = EarlyShift::where('shift_id', $shift->id)->first();
-
-                                //dd($bid_early_shift);
-
-                                // dd($early_shift->early_start);
-
                                 return view('user.bids')->with([
                                     'schedules' => $schedules,
                                     'bid' => $bid,
@@ -176,7 +171,6 @@ class BiddingController extends Controller
                                     'bid_early_shift' => $bid_early_shift,
                                     'early_shift' => $early_shift,
                                 ]);
-
                             } else {
                                 return view('user.bids')->with([
                                     'schedules' => $schedules,
@@ -185,21 +179,29 @@ class BiddingController extends Controller
                                     'shift' => $shift,
                                 ]);
                             }
+                        } else {
+                            return view('user.bids')->with([
+                                'schedules' => $schedules,
+                            ])->with('warning', 'There was an error retrieving the Shift information');
                         }
+                    } else {
+                        return view('user.bids')->with([
+                            'schedules' => $schedules,
+                        ])->with('warning', 'There was an error retrieving the Schedule information');
                     }
                 }
-
             }
 
+        } else {
+
             return view('user.bids')->with([
-                'schedules' => $schedules,
-            ]);
+                'warning' => "You have no active Bids",
+            ]);           
+            
         }
 
-
-        
         return view('user.bids')->with([
-            'bids' => $bids,
+            'schedules' => $schedules,
         ]);
 
     }

@@ -4,28 +4,23 @@
 
 
 <div class="container">
-    <div class="row justify-content-start">
+    <div class="row justify-content-start mt-5">
         <div class="col col-md">
             <h1>My Bids </h1>
-            <form action="{{ route('user.biddingschedule.bids') }}" method="GET" class="delete">
-           
+            <form action="{{ route('user.biddingschedule.bids') }}" method="GET" class="form-inline">        
             @csrf
-                <div class="form-row align-items-center mt-5">
-                    <div class="col-auto my-1">
-                        <label class="mr-sm-2 sr-only" for="bid_id">Select bid</label>
-                        <select class="custom-select mr-sm-2" id="bid_id" name="bid_id">
-                            <!-- <option selected>Select a Schedule</option> -->
-                            @isset($schedules)
-                                @foreach ($schedules as $sched)
-                                <option value="{{ $sched->id }}">{{ $sched->name }}</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-                    <div class="col-auto my-1">
-                        <button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
-                    </div>
-                </div>
+				<label class="my-1 mr-2" for="bid_id">Select a Schedule</label>	
+				<select required class="custom-select mr-sm-2" id="bid_id" name="bid_id">
+					<option value="">Schedules...</option>
+					@isset($schedules)
+						@foreach ($schedules as $sched)
+							<option required value="{{ $sched->id }}">{{ $sched->name }}</option>
+						@endforeach
+					@endisset
+				</select>
+				<div class="col-auto my-1">
+					<button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
+				</div>    
             </form>
         </div>
     </div>

@@ -15,32 +15,28 @@
 </div> -->
 
 <div class="container">
-    <div class="row justify-content-start">
+    <div class="row justify-content-start mt-5">
         <div class="col col-md">
-            <h1>Bid on Schedule </h1>
-            <form action="{{ route('user.biddingschedule.show', 'schedule_id') }}" method="GET" class="delete">
-           
+            <h1>{{ __('Bid on Schedule') }}</h1>
+            <form action="{{ route('user.biddingschedule.show', 'schedule_id') }}" method="GET" class="form-inline">        
             @csrf
-                <div class="form-row align-items-center mt-5">
-                    <div class="col-auto my-1">
-                        <label class="mr-sm-2 sr-only" for="schedule_id">Select Schedule</label>
-                        <select class="custom-select mr-sm-2" id="schedule_id" name="schedule_id">
-                            <!-- <option selected>Select a Schedule</option> -->
-                            @isset($schedules)
-                                @foreach ($schedules as $sched)
-                                <option value="{{ $sched->id }}">{{ $sched->name }}</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-                    <div class="col-auto my-1">
-                        <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
-                    </div>
-                </div>
+				<label class="my-1 mr-2" for="bid_id">{{ __('Select a Schedule') }}</label>	
+				<select required class="custom-select mr-sm-2" id="bid_id" name="schedule_id">
+					<option value="">Schedules...</option>
+					@isset($schedules)
+						@foreach ($schedules as $sched)
+						<option value="{{ $sched->id }}">{{ $sched->name }}</option>
+						@endforeach
+					@endisset
+				</select>
+				<div class="col-auto my-1">
+					<button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
+				</div>    
             </form>
         </div>
     </div>
 </div>
+
 
 @isset($shifts)
 
@@ -123,8 +119,8 @@
             <tbody>
                 <tr>
                 <th scope="row"> 
-                    <select class="custom-select mr-sm-1" id="shift_id" name="shift_id">
-                        <option selected>Shift</option>
+                    <select required class="custom-select mr-sm-1" id="shift_id" name="shift_id">
+                        <option value="">Shift</option>
 
                         @foreach($shifts as $shift)
                             <option value={{ $shift->shift_id }}>{{ $shift->name }}</option>
@@ -232,7 +228,7 @@
             </tbody>
         </table>
         <div class="col-auto my-1">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" onclick="return confirm('Submit Bit?')" class="btn btn-primary">Submit</button>
         </div>
     </div>
 </form>
@@ -249,7 +245,10 @@
     </div>
     <div class="row mt-3">
         <div class="col-auto">
-            <h5>See your bid? </strong></h5>   
+            <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
+            <button type="button" class="btn ">
+                <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
+            </button>
         </div>
     </div>
 </div>
