@@ -95,6 +95,27 @@ class User extends Authenticatable
         return null !== $this->bids()->where('bidding_schedule_id', $schedule_id)->first();
     }
 
+    /**
+     * For the User/BiddingQueue relationship
+     */
+    public function biddingQueue() {
+        return $this->hasMany('App\Models\BiddingQueue');
+    }
+
+    /**
+     * To test if User has any BiddingQueue
+     */
+    public function hasAnyBiddingQueue() {
+        return null !== $this->biddingQueue()->first();
+    }
+
+    /**
+     * To test if User has a specific Schedule in the BiddingQueue
+     */
+    public function hasBiddingQueue($schedule_id) {
+        return null !== $this->biddingQueue()->where('bidding_schedule_id', $schedule_id)->first();
+    }
+
 
     /**
      * For the User/Officer relation (officer belongs to one user)

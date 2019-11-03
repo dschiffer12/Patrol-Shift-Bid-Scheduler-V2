@@ -29,6 +29,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
 
     //Route for the Bidding Schedule actions.
     Route::resource('/bidding-schedule', 'BiddingSchedule');
+    Route::resource('/bidding-queue', 'BiddingQueueController');
 });
 
 

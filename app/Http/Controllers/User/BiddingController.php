@@ -11,8 +11,11 @@ use App\Models\EarlyShift;
 use App\Models\Bid;
 use App\Models\BidEarlyShift;
 use App\Models\BidShift;
+use App\Models\BiddingQueue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailNotification;
 
 class BiddingController extends Controller
 {
@@ -23,23 +26,97 @@ class BiddingController extends Controller
      */
     public function index()
     {
-        $schedules = BiddingSchedule::all();
-        //$schedules = \App\Models\BiddingSchedule::where('currently_active', '1')->orderBy('start_day', 'desc')->get();
-        //$schedule1 = $schedules[0]->shift;
-        //$shifts = Shift::where('name', 'A')->first();
-        // $ar = array();
-        // foreach($schedules as $schedule) {
-        //     array_push($ar, $schedule->name);      
-        // }
+      
+        if(auth()->user()->hasAnyBiddingQueue()) {
+            $schedules = DB::table('bidding_schedules')
+                ->join('bidding_queues', 'bidding_schedules.id', '=', 'bidding_queues.bidding_schedule_id')
+                ->where('bidding_queues.user_id', '=', auth()->user()->id)
+                ->select('bidding_schedules.id', 'bidding_schedules.name')
+                ->get();
 
-        //dd($schedules[0]->shift());
+            return view('user.bidding', compact('schedules'));
+        } else {
+            return view('user.bidding');
+        }
 
-        // return view('user.bidding')->with([
-        //     'schedules' => $schedules
-        // ]);
+    }
 
-        return view('user.bidding', compact('schedules'));
-   
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request)
+    {
+
+        //dd($request);
+        //$schedule = BiddingSchedule::where('id', $request->schedule_id);
+        //$user = User::findOrFail($id);
+
+         /**
+         * Validate the form data
+         */
+        $validatedData = $request->validate([
+            'schedule_id' => ['required', 'integer', 'gt:0'],
+        ]);
+
+        $schedules = DB::table('bidding_schedules')
+                ->join('bidding_queues', 'bidding_schedules.id', '=', 'bidding_queues.bidding_schedule_id')
+                ->where('bidding_queues.user_id', '=', auth()->user()->id)
+                ->select('bidding_schedules.*')
+                ->get();
+
+        $schedule = BiddingSchedule::findOrFail($request->schedule_id);
+
+        $biddingQueue = DB::table('bidding_queues')
+            ->where('user_id', auth()->user()->id)
+            ->where('bidding_schedule_id', $validatedData['schedule_id'])
+            ->first();
+
+        $numInQueue = DB::table('bidding_queues')
+            ->where('bidding_schedule_id', $validatedData['schedule_id'])
+            ->where('bid_submitted', '<', 1)
+            ->where('bidding_spot', '<', $biddingQueue->bidding_spot)
+            ->count();
+
+
+        if($numInQueue > 0) {
+            return view('user.bidding')->with([
+                'schedules' => $schedules,
+                'numInQueue' => $numInQueue,
+            ]);
+        }
+
+
+        if(auth()->user()->alreadyBid($request->schedule_id)) {
+            return view('user.bidding')->with([
+                'schedule' => $schedule,
+                'schedules' => $schedules,
+                'already_bid' => "true"
+            ]);
+        }
+ 
+        //$shifts = $schedule->shifts()->get();
+
+        $shifts = DB::table('bidding_schedule_shift')
+            ->join('shifts', 'bidding_schedule_shift.shift_id', '=', 'shifts.id')
+            ->join('early_shifts', 'shifts.id', '=', 'early_shifts.shift_id')
+            ->where('bidding_schedule_id', '=', $request->schedule_id)
+            ->get();
+
+
+        // dd($testShifts);
+        return view('user.bidding')->with([
+            'schedule' => $schedule,
+            'shifts' => $shifts,
+            'schedules' => $schedules
+        ]);
+
+        //dd($shifts[0]->early_shift);
+        //dd($request->schedule_id);
+        //dd($request);
+        //dd($id);
     }
 
     /**
@@ -124,14 +201,53 @@ class BiddingController extends Controller
 
         }
 
-        //dd($validatedData);
-        //dd($bid->id);   
-        //dd(auth()->user()->id);
-        //$user = User::findOrFail($id);
+
+        if(auth()->user()->hasBiddingQueue($validatedData['schedule_id'])) {
+            $affected = DB::table('bidding_queues')
+              ->where('user_id', auth()->user()->id)
+              ->where('bidding_schedule_id', $validatedData['schedule_id'])
+              ->update([
+                  'waiting_to_bid' => 0,
+                  'bidding' => 0,
+                  'bid_submitted' => 1,
+                ]);
+
+            $nextQueue = DB::table('bidding_queues')
+                ->where('bidding_schedule_id', $validatedData['schedule_id'])
+                ->where('bid_submitted', 0)
+                ->orderBy('bidding_spot', 'asc')
+                ->limit(1)
+                ->update([
+                    'waiting_to_bid' => 0,
+                    'bidding' => 1,
+                    'bid_submitted' => 0,
+                ]);
+        }
+
+        $nextUserToBid = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
+                ->where('bidding', 1)
+                ->orderBy('bidding_spot', 'asc')
+                ->first()
+                ->user;
+        
+
+        //Comment because email credentials are not live yet
+
+        // if($nextUserToBid) {
+        //     $schedule = BiddingSchedule::where(['id' => $validatedData['schedule_id']])->first();
+
+        //     Mail::to($nextUserToBid)->send(new EmailNotification($nextUserToBid, $schedule));
+    
+        //     if (Mail::failures()) {
+        //         //return response()->Fail('Sorry! Please try again latter');
+        //         return false;
+        //     }else{
+        //         //return response()->success('Great! Successfully send in your mail');
+        //         return true;
+        //     }
+        // }
 
         return redirect()->route('user.biddingschedule.bids')->with('success', 'Your bit has been submitted');
-
-   
     }
 
     /** 
@@ -206,51 +322,7 @@ class BiddingController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
-        //$schedule = BiddingSchedule::where('id', $request->schedule_id);
-        //$user = User::findOrFail($id);
-
-        $schedules = BiddingSchedule::all();
-        $schedule = BiddingSchedule::findOrFail($request->schedule_id);
-
-        if(auth()->user()->alreadyBid($request->schedule_id)) {
-
-            return view('user.bidding')->with([
-                'schedule' => $schedule,
-                'schedules' => $schedules,
-                'already_bid' => "true"
-            ]);
-        }
-
-        
-        //$shifts = $schedule->shifts()->get();
-
-        $shifts = DB::table('bidding_schedule_shift')
-        ->join('shifts', 'bidding_schedule_shift.shift_id', '=', 'shifts.id')
-        ->join('early_shifts', 'shifts.id', '=', 'early_shifts.shift_id')
-        ->where('bidding_schedule_id', '=', $request->schedule_id)
-        ->get();
-
-
-        // dd($testShifts);
-        return view('user.bidding')->with([
-            'schedule' => $schedule,
-            'shifts' => $shifts,
-            'schedules' => $schedules
-        ]);
-
-        //dd($shifts[0]->early_shift);
-        //dd($request->schedule_id);
-        //dd($request);
-        //dd($id);
-    }
+    
 
   
     /**

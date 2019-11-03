@@ -45,8 +45,8 @@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="/register">Add New User</a>
                                         <a class="dropdown-item" href="/admin/users">Users Management</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
+                                        <!-- <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a> -->
                                     </div>
                                 </li>
                             @endif
@@ -111,13 +111,23 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col border pt-2">
-                                <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('admin.bidding-schedule.index') }}"><h5>{{ __('Bidding Schedule Management') }}</h5></a>
-                                </button>
+
+                        @if(Auth::user()->hasAnyRoles(['root', 'admin']))
+                            <div class="row">
+                                <div class="col border pt-2">
+                                    <button type="button" class="btn btn-block text-left">
+                                        <a class="nav-link" href="{{ route('admin.bidding-schedule.index') }}"><h5>{{ __('Bidding Schedule Management') }}</h5></a>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col border pt-2">
+                                    <button type="button" class="btn btn-block text-left">
+                                        <a class="nav-link" href="{{ route('admin.bidding-queue.index') }}"><h5>{{ __('Bidding Queue') }}</h5></a>
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="row">
                             <div class="col border pt-2">

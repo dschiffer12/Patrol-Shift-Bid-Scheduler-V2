@@ -14,28 +14,62 @@
     </div>
 </div> -->
 
-<div class="container">
-    <div class="row justify-content-start mt-5">
-        <div class="col col-md">
-            <h1>{{ __('Bid on Schedule') }}</h1>
-            <form action="{{ route('user.biddingschedule.show', 'schedule_id') }}" method="GET" class="form-inline">        
-            @csrf
-				<label class="my-1 mr-2" for="bid_id">{{ __('Select a Schedule') }}</label>	
-				<select required class="custom-select mr-sm-2" id="bid_id" name="schedule_id">
-					<option value="">Schedules...</option>
-					@isset($schedules)
-						@foreach ($schedules as $sched)
-						<option value="{{ $sched->id }}">{{ $sched->name }}</option>
-						@endforeach
-					@endisset
-				</select>
-				<div class="col-auto my-1">
-					<button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
-				</div>    
-            </form>
+@isset($schedules)
+    <div class="container">
+        <div class="row justify-content-start mt-5">
+            <div class="col col-md">
+                <h1>{{ __('Bid on Schedule') }}</h1>
+                <form action="{{ route('user.biddingschedule.show', 'schedule_id') }}" method="GET" class="form-inline">        
+                @csrf
+                    <label class="my-1 mr-2" for="bid_id">{{ __('Select a Schedule') }}</label>	
+                    <select required class="custom-select mr-sm-2" id="bid_id" name="schedule_id">
+                        <option value="">Schedules...</option>
+                        @isset($schedules)
+                            @foreach ($schedules as $sched)
+                            <option value="{{ $sched->id }}">{{ $sched->name }}</option>
+                            @endforeach
+                        @endisset
+                    </select>
+                    <div class="col-auto my-1">
+                        <button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
+                    </div>    
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+@else
+    <div class="container overflow-auto shadow mt-3 p-3">
+        <div class="row mt-3">
+            <div class="col-auto">
+                <h5>There is no Bidding Schedule for you to bid on.</h5>   
+            </div>
+        </div>
+        <!-- <div class="row mt-3">
+            <div class="col-auto">
+                <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
+                <button type="button" class="btn ">
+                    <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
+                </button>
+            </div>
+        </div> -->
+    </div>
+@endisset
+
+@isset($numInQueue)
+    <div class="container overflow-auto shadow mt-3 p-3">
+        <div class="row mt-3">
+            <div class="col-auto">
+            @if($numInQueue > 1)
+                <h5>You are number {{ $numInQueue }} in line to bid.</h5>
+            @else
+                <h5>You are next in line to bid.</h5>
+            @endif   
+            </div>
+        </div>
+    </div>
+@endisset
+
 
 
 @isset($shifts)
