@@ -14,35 +14,65 @@
     </div>
 </div> -->
 
-<div class="container">
-    <div class="row justify-content-start">
-        <div class="col col-md">
-            <h1>Bid on Schedule </h1>
-            <!-- <form action="{{ route('user.biddingschedule.show', ['biddingschedule' => '16']) }}" method="GET" class="delete"> -->
-            <form action="#" method="GET" class="delete">
-            @csrf
-                <div class="form-row align-items-center mt-5">
+@isset($schedules)
+    <div class="container">
+        <div class="row justify-content-start mt-5">
+            <div class="col col-md">
+                <h1>{{ __('Bid on Schedule') }}</h1>
+                <form action="{{ route('user.biddingschedule.show', 'schedule_id') }}" method="GET" class="form-inline">        
+                @csrf
+                    <label class="my-1 mr-2" for="bid_id">{{ __('Select a Schedule') }}</label>	
+                    <select required class="custom-select mr-sm-2" id="bid_id" name="schedule_id">
+                        <option value="">Schedules...</option>
+                        @isset($schedules)
+                            @foreach ($schedules as $sched)
+                            <option value="{{ $sched->id }}">{{ $sched->name }}</option>
+                            @endforeach
+                        @endisset
+                    </select>
                     <div class="col-auto my-1">
-                        <label class="mr-sm-2 sr-only" for="schedule_id">Select Schedule</label>
-                        <select class="custom-select mr-sm-2" id="schedule_id" name="schedule_id">
-                            <!-- <option selected>Select a Schedule</option> -->
-                            @isset($schedules)
-                                @foreach ($schedules as $schedule)
-                                <option value="{{ $schedule->id }}">{{ $schedule->name }}</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                    </div>
-                    <div class="col-auto my-1">
-                        <button type="submit" class="btn btn-primary">{{ __('Update') }}</button>
-                    </div>
-                </div>
-            </form>
+                        <button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
+                    </div>    
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+@else
+    <div class="container overflow-auto shadow mt-3 p-3">
+        <div class="row mt-3">
+            <div class="col-auto">
+                <h5>There is no Bidding Schedule for you to bid on.</h5>   
+            </div>
+        </div>
+        <!-- <div class="row mt-3">
+            <div class="col-auto">
+                <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
+                <button type="button" class="btn ">
+                    <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
+                </button>
+            </div>
+        </div> -->
+    </div>
+@endisset
+
+@isset($numInQueue)
+    <div class="container overflow-auto shadow mt-3 p-3">
+        <div class="row mt-3">
+            <div class="col-auto">
+            @if($numInQueue > 1)
+                <h5>You are number {{ $numInQueue }} in line to bid.</h5>
+            @else
+                <h5>You are next in line to bid.</h5>
+            @endif   
+            </div>
+        </div>
+    </div>
+@endisset
 
 
+
+@isset($shifts)
 
 <div class="container overflow-auto shadow mt-3 p-3">
     <div class="row mt-3">
@@ -50,7 +80,7 @@
             <h5>Schedule Name:</h5>
         </div>
         <div class="col-auto">
-            <h5>Schedule 1</h5>
+            <h5>{{ $schedule->name }}</h5>
         </div>
     </div>
     <div class="row mt-3">
@@ -58,7 +88,7 @@
             <h5>Start Date:</h5>
         </div>
         <div class="col-auto">
-            <h5>01/01/2020</h5>
+            <h5>{{ $schedule->start_day }}</h5>
         </div>
     </div>
     <div class="row">
@@ -66,7 +96,7 @@
             <h5>End Date:</h5>
         </div>
         <div class="col-auto">
-            <h5>03/31/2020</h5>
+            <h5>{{ $schedule->end_day }}</h5>
         </div>
     </div>
     <div class="row mt-3 ml-2 mr-2">
@@ -83,36 +113,29 @@
                 </tr>
             </thead>
             <tbody>
+                
+                @foreach($shifts as $shift)
                 <tr>
-                <th scope="row">A</th>
-                <td>6:00</td>
-                <td>14:00</td>
-                <td>5:00</td>
-                <td>13:00</td>
-                <td>3</td>
-                <td>5</td>
-                </tr>
+                    <th scope="row">{{ $shift->name }}</th>
+                    <td>{{ $shift->start_time }}</td>
+                    <td>{{ $shift->end_time }}</td>
+                    <td>{{ $shift->early_start_time }}</td>
+                    <td>{{ $shift->early_end_time }}</td>
+                    <td>{{ $shift->num_early_spot }}</td>
+                    <td>{{ $shift->minimun_staff }}</td>
+                    </tr>
+                @endforeach
+
                 <tr>
-                <th scope="row">B</th>
-                <td>14:00</td>
-                <td>22:00</td>
-                <td>13:00</td>
-                <td>21:00</td>
-                <td>3</td>
-                <td>5</td>
-                </tr>
-                <tr>
-                <th scope="row">C</th>
-                <td>22:00</td>
-                <td>6:00</td>
-                <td>21:00</td>
-                <td>5:00</td>
-                <td>3</td>
-                <td>5</td>
                 </tr>
             </tbody>
         </table>
     </div>
+<form action="{{ route('user.biddingschedule.store') }}" method="POST" class="delete">
+<!-- <form action="#" method="POST" class="delete"> -->
+@csrf
+
+    <input type="hidden" id="schedule" name="schedule_id" value={{ $schedule->id }}>
     <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
@@ -122,7 +145,7 @@
                 <th scope="col">Saturday</th>
                 <th scope="col">Sunday</th>
                 <th scope="col">Monday</th>
-                <th scope="col">Tuestday</th>
+                <th scope="col">Tuesday</th>
                 <th scope="col">Wednesday</th>
                 <th scope="col">Thursday</th>
                 </tr>
@@ -130,46 +153,48 @@
             <tbody>
                 <tr>
                 <th scope="row"> 
-                    <select class="custom-select mr-sm-1" id="selectSchedule2">
-                        <option selected>Shift</option>
-                        <option value="1">A</option>
-                        <option value="2">B</option>
-                        <option value="3">C</option>
+                    <select required class="custom-select mr-sm-1" id="shift_id" name="shift_id">
+                        <option value="">Shift</option>
+
+                        @foreach($shifts as $shift)
+                            <option value={{ $shift->shift_id }}>{{ $shift->name }}</option>
+                        @endforeach
+
                     </select>
                 </th>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="friday">
+                        <input class="form-check-input" type="checkbox" id="friday" name="friday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="saturday">
+                        <input class="form-check-input" type="checkbox" id="saturday" name="saturday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="sunday">
+                        <input class="form-check-input" type="checkbox" id="sunday" name="sunday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="monday">
+                        <input class="form-check-input" type="checkbox" id="monday" name="monday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="tuesday">
+                        <input class="form-check-input" type="checkbox" id="tuesday" name="tuesday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="wednesday">
+                        <input class="form-check-input" type="checkbox" id="wednesday" name="wednesday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="thursday">
+                        <input class="form-check-input" type="checkbox" id="thursday" name="thursday" value="1">
                     </div>
                 </td>
                 </tr>
@@ -195,54 +220,74 @@
                 <tr>
                 <th scope="row">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="friday">
+                        <input class="form-check-input" type="checkbox" id="early_shift" name="early_shift" value="1">
                     </div>
                 </th>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="friday">
+                        <input class="form-check-input" type="checkbox" id="friday" name="e_friday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="saturday">
+                        <input class="form-check-input" type="checkbox" id="saturday" name="e_saturday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="sunday">
+                        <input class="form-check-input" type="checkbox" id="sunday" name="e_sunday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="monday">
+                        <input class="form-check-input" type="checkbox" id="monday" name="e_monday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="tuesday">
+                        <input class="form-check-input" type="checkbox" id="tuesday" name="e_tuesday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="wednesday">
+                        <input class="form-check-input" type="checkbox" id="wednesday" name="e_wednesday" value="1">
                     </div>
                 </td>
                 <td>
                     <div class="form-check pb-4">
-                        <input class="form-check-input" type="checkbox" id="thursday">
+                        <input class="form-check-input" type="checkbox" id="thursday" name="e_thursday" value="1">
                     </div>
                 </td>
                 </tr>      
             </tbody>
         </table>
         <div class="col-auto my-1">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" onclick="return confirm('Submit Bit?')" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+</div>
+
+@endisset
+
+@isset($already_bid)
+<div class="container overflow-auto shadow mt-3 p-3">
+    <div class="row mt-3">
+        <div class="col-auto">
+            <h5>You already bid on <strong>{{ $schedule->name }}</strong></h5>   
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-auto">
+            <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
+            <button type="button" class="btn ">
+                <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
+            </button>
         </div>
     </div>
 </div>
 
-
+@endisset
 
 
 <!-- <div style="height: 500px" class="container">

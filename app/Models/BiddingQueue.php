@@ -31,4 +31,12 @@ class BiddingQueue extends Model
     {
         return $this->hasMany('App\Models\BiddingSchedule');
     }
+
+    /**
+     * Get the bidding schedule for the bidding queue.
+     */
+    public function biddingSchedule()
+    {
+        return $this->hasOne('App\Models\BiddingSchedule');
+    }
 }

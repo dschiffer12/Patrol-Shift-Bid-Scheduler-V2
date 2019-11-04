@@ -34,10 +34,12 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::get('/shift/createFromSchedule', 'ShiftController@createFromSchedule')->name('shift.createFromSchedule');
     Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
     Route::resource('/shift', 'ShiftController');
+    Route::resource('/bidding-queue', 'BiddingQueueController');
 });
 
 
 Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
+    Route::get('/biddingschedule/bids', 'BiddingController@bids')->name('biddingschedule.bids');
     Route::resource('/profile', 'ProfileController');
     Route::resource('/psheet', 'PSheetController');
     Route::resource('/biddingschedule', 'BiddingController');
