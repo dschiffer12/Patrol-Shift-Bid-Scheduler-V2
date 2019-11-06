@@ -8,6 +8,12 @@
     </div>
 @endif
 
+@if (session('successful_exception'))
+    <div class="alert alert-warning" role="alert">
+        {{ session('successful_exception') }}
+    </div>
+@endif
+
 @if (session('updated'))
     <div class="alert alert-success" role="alert">
         {{ session('updated') }}
@@ -89,7 +95,7 @@
                                     <td>
                                         <div class="row">
                                             <div class="col">
-                                                <a href="{{ route('admin.bidding-schedule.edit', $biddingschedules) }}"><button type="button" class="btn btn-primary float-left">View</button></a>
+                                                <a href="{{ route('admin.bidding-schedule.edit', $biddingschedules) }}"><button type="button" class="btn btn-primary float-left">Edit</button></a>
                                             </div>
                                         </div>
                                     <td>
