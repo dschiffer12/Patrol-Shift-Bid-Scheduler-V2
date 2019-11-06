@@ -97,44 +97,63 @@ class BiddingSchedule extends Controller
 
         }
 
-        $bidding_spot_index = 1;  //Index to define the position in the bidding user queue.
+        $positionAndOfficerIDArray = array();  //Key and Value array where key = position in queue and value = user id
+        $positionInQueueArrayToSort = array(); //Array of position not sorted yet
 
-        foreach ($validatedData['officerQueue'] as $officer){
+        foreach ($validatedData['officerQueue'] as $index => $officer){
 
             $arrayString = explode(":", $officer);
 
             if (!$arrayString[1] == "" || !$arrayString[1] == "0"){
 
                 $officerIDInt = (int)$arrayString[0];
+                $positionQueueInt = (int)$arrayString[1];
 
-                $bidding_queue = new BiddingQueue();
-                $officerObject = User::where(['id'=>$officerIDInt])->firstOrFail();
-                $bidding_queue->user_id = $officerIDInt;
-                $bidding_queue->bidding_schedule_id = $biddingID;
-                $bidding_queue->bidding_spot = $bidding_spot_index;
-                $bidding_spot_index = $bidding_spot_index + 1;
-                if ($arrayString[1] == 1){
-                    $bidding_queue->bidding = true;
-                    $bidding_queue->waiting_to_bid = false;
-                    $bidding_queue->bid_submitted = false;
-                    $bidding_queue->start_time_bidding = null;
-                    $bidding_queue->end_time_bidding = null;
-                }
-                else{
-                    $bidding_queue->bidding = false;
-                    $bidding_queue->waiting_to_bid = true;
-                    $bidding_queue->bid_submitted = false;
-                    $bidding_queue->start_time_bidding = null;
-                    $bidding_queue->end_time_bidding = null;
-                }
-                $bidding_queue->save();
+                $positionAndOfficerIDArray[$positionQueueInt] = $officerIDInt;
+                $positionInQueueArrayToSort[$index] = $positionQueueInt;
             }
         }
 
-        $firstUser = BiddingQueue::where('bidding_schedule_id', $biddingID)->first()->user;
-        // $emailSend = $this->sendEmail($firstUser, $biddingObject);
+        $positionQueueSorted = $this->quick_sort($positionInQueueArrayToSort);
 
-        return redirect()->route('admin.bidding-schedule.index')->with('successful', 'Bidding Schedule created successfully!');
+        foreach ($positionQueueSorted as $index => $item){
+            if($index == 0){
+                $bidding_queue = new BiddingQueue();
+                $bidding_queue->user_id = $positionAndOfficerIDArray[$item];
+                $bidding_queue->bidding_schedule_id = $biddingID;
+                $bidding_queue->bidding_spot = $index + 1;
+                $bidding_queue->bidding = true;
+                $bidding_queue->waiting_to_bid = false;
+                $bidding_queue->bid_submitted = false;
+                $bidding_queue->start_time_bidding = null;
+                $bidding_queue->end_time_bidding = null;
+            }
+            else{
+                $bidding_queue = new BiddingQueue();
+                $bidding_queue->user_id = $positionAndOfficerIDArray[$item];
+                $bidding_queue->bidding_schedule_id = $biddingID;
+                $bidding_queue->bidding_spot = $index + 1;
+                $bidding_queue->bidding = false;
+                $bidding_queue->waiting_to_bid = true;
+                $bidding_queue->bid_submitted = false;
+                $bidding_queue->start_time_bidding = null;
+                $bidding_queue->end_time_bidding = null;
+            }
+            $bidding_queue->save();
+
+        }
+
+        $biddingQueueObject = BiddingQueue::where([['bidding_schedule_id', $biddingID],['bidding', true]])->first();
+        $userId = $biddingQueueObject->user_id;
+        $firstUser = User::find($userId);
+        $emailSend = $this->sendEmail($firstUser, $biddingObject);
+
+        if($emailSend == true){
+            return redirect()->route('admin.bidding-schedule.index')->with('successful', 'Bidding Schedule created successfully!');
+        }
+        else{
+            return redirect()->route('admin.bidding-schedule.index')->with('successful_exception', 'Bidding Schedule created successfully, but email notification was not sent due an error!');
+        }
 
     }
 
@@ -279,5 +298,33 @@ class BiddingSchedule extends Controller
         }else{
             return true;
         }
+    }
+
+    /**
+     * Quick Sort function. sort a int array from lowest to highest.
+     *
+     * @param array to sort
+     * @return array sorted
+    **/
+    public function quick_sort($my_array)
+    {
+        $loe = $gt = array();
+        if(count($my_array) < 2)
+        {
+            return $my_array;
+        }
+        $pivot_key = key($my_array);
+        $pivot = array_shift($my_array);
+        foreach($my_array as $val)
+        {
+            if($val <= $pivot)
+            {
+                $loe[] = $val;
+            }elseif ($val > $pivot)
+            {
+                $gt[] = $val;
+            }
+        }
+        return array_merge($this->quick_sort($loe),array($pivot_key=>$pivot),$this->quick_sort($gt));
     }
 }
