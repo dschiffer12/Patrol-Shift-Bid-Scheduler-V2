@@ -101,6 +101,15 @@ class User extends Authenticatable
     public function biddingQueue() {
         return $this->hasMany('App\Models\BiddingQueue');
     }
+    
+
+    /**
+     * For the User/BiddingQueue relationship
+     */
+    public function biddingQueues() {
+        return $this->hasMany('App\Models\BiddingQueue');
+    }
+
 
     /**
      * To test if User has any BiddingQueue

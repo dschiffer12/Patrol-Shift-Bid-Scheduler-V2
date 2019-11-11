@@ -224,11 +224,18 @@ class BiddingController extends Controller
                 ]);
         }
 
-        $nextUserToBid = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
-                ->where('bidding', 1)
-                ->orderBy('bidding_spot', 'asc')
-                ->first()
-                ->user;
+        // $nextUserToBid = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
+        //         ->where('bidding', 1)
+        //         ->orderBy('bidding_spot', 'asc')
+        //         ->first()
+        //         ->user;
+
+        $nextUserToBid = BiddingQueue::find(1)->where('bidding_schedule_id', $validatedData['schedule_id'])
+            ->where('bidding', 1)
+            ->orderBy('bidding_spot', 'asc')
+            ->first()
+            ->find(1)
+            ->user;
         
 
         //Comment because email credentials are not live yet
@@ -246,6 +253,12 @@ class BiddingController extends Controller
         //         return true;
         //     }
         // }
+
+        if($nextUserToBid) {
+            $schedule = BiddingSchedule::where(['id' => $validatedData['schedule_id']])->first();
+
+            $emailSend = $this->sendEmail($nextUserToBid, $schedule);
+        }
 
         return redirect()->route('user.biddingschedule.bids')->with('success', 'Your bit has been submitted');
     }
@@ -357,5 +370,22 @@ class BiddingController extends Controller
     public function destroy(User $user)
     {
         //
+    }
+
+    /**
+     * Send Email to an user
+     *
+     * @param int $id User Id
+     * @return boolean email sent result
+    **/
+    public function sendEmail(User $user, BiddingSchedule $schedule)
+    {
+        Mail::to($user)->send(new EmailNotification($user, $schedule));
+
+        if (Mail::failures()) {
+            return false;
+        }else{
+            return true;
+        }
     }
 }

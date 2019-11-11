@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\BiddingSchedule;
 use Illuminate\Support\Facades\DB;
+use App\Models\BiddingQueue;
 
 class BiddingQueueController extends Controller
 {
