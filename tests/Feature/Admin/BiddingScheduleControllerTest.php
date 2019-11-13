@@ -7,6 +7,7 @@ use App\User;
 use App\Models\Shift;
 use App\Models\BiddingQueue;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Event;
 use App\Http\Controllers\Admin\BiddingSchedule;
 use App\Models\BiddingSchedule as BiddingScheduleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -86,6 +87,7 @@ class BiddingScheduleControllerTest extends TestCase
     **/
     public function testStoreScheduleInDatabaseCountOne()
     {
+        Event::fake();
 
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create(['name' => 'root']);
