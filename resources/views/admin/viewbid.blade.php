@@ -239,6 +239,7 @@
                 </tr>    
             </tbody>
         </table>
+		<a href="{{ URL::previous() }}" class="btn btn-secondary">{{__('< Back')}}</a>
     </div>
 </div>
 
