@@ -103,37 +103,37 @@
                 </th>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="friday" name="friday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="friday" name="friday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="saturday" name="saturday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="saturday" name="saturday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="sunday" name="sunday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="sunday" name="sunday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="monday" name="monday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="monday" name="monday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="tuesday" name="tuesday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="tuesday" name="tuesday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="wednesday" name="wednesday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="wednesday" name="wednesday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="thursday" name="thursday" value="1">
+                        <input class="day form-check-input" type="checkbox" id="thursday" name="thursday" value="1" onclick="toggleEarly()">
                     </div>
                 </td>
                 </tr>
@@ -159,7 +159,7 @@
                 <tr>
                 <th scope="row">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="early_shift" name="early_shift" value="1" onclick="toggleEarly('early')">
+                        <input class="form-check-input" type="checkbox" id="early_shift" name="early_shift" value="1" onclick="toggleEarly()">
                     </div>
                 </th>
                 <td>
@@ -210,12 +210,19 @@
 @endisset
 
 <script type="text/javascript">
-	function toggleEarly(id) {
-		var elems = document.getElementsByClassName(id);
+	function toggleEarly() {
+		var early = document.getElementById('early_shift');
+		var elems = document.getElementsByClassName('early');
+		var days = document.getElementsByClassName('day');
+		
 		for(i=0; i<elems.length; i++) {
-			elems[i].disabled = !elems[i].disabled;
+			if(early.checked && days[i].checked) {
+				elems[i].disabled = false;
+			} else {
+				elems[i].disabled = true;
+			}
 			elems[i].checked = false;
-		}
+		}	
 	}
 </script>
 

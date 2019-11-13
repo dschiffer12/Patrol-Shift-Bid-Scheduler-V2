@@ -9,6 +9,8 @@ use App\Models\BiddingSchedule;
 use Illuminate\Support\Facades\DB;
 use App\Models\BiddingQueue;
 use App\Models\Bid;
+use App\Models\EarlyShift;
+use App\Models\BidEarlyShift;
 
 class BiddingQueueController extends Controller
 {
@@ -152,19 +154,20 @@ class BiddingQueueController extends Controller
         $user = $bid->user;
         $shift = $bid->shift;
 
-        $bidEarlyShift = $bid->hasAnyBidEarlyShift();
+        // $bid_early_shift = $bid->hasAnyBidEarlyShift();
+        $bid_early_shift = BidEarlyShift::where('bid_id', $bid->id)->first();
 
 
-        if($bidEarlyShift) {
-            $earlyShift = $shift->earlyShift;
+        if($bid_early_shift) {
+            $early_shift = $shift->earlyShift;
 
             return view('admin.viewbid')->with([
                 'bid' => $bid,
                 'schedule' => $schedule,
                 'user' => $user,
                 'shift' => $shift,
-                'bidEarlyShift' => $bidEarlyShift,
-                'earlyShift' => $earlyShift
+                'bid_early_shift' => $bid_early_shift,
+                'early_shift' => $early_shift
             ]);
         }
 
@@ -174,6 +177,8 @@ class BiddingQueueController extends Controller
             'user' => $user,
             'shift' => $shift,
         ]);
+        
+
     }
 
 

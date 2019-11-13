@@ -163,6 +163,7 @@ class BiddingController extends Controller
         ]);
 
         
+        
 
         // Get the current user
         $user = Auth::user();
@@ -176,7 +177,7 @@ class BiddingController extends Controller
 
         
         if(isset($validatedData['schedule_id'])) {
-            if(auth()->user()->alreadyBid($validatedData['schedule_id'])) {
+            if($user->alreadyBid($validatedData['schedule_id'])) {
                 return redirect()->route('user.biddingschedule.index')
                     ->with('warning', 'You already bit on this schedule.');
             }
@@ -237,18 +238,21 @@ class BiddingController extends Controller
         }
 
 
-        $nextUserToBid = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
+        $next = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
             ->where('bidding', 1)
             ->orderBy('bidding_spot', 'asc')
-            ->first()
-            ->user;
+            ->first();
         
-
-        if($nextUserToBid) {
+        if($next) {
+            $nextUserToBid = $next->user;
             $schedule = BiddingSchedule::where(['id' => $validatedData['schedule_id']])->first();
-
             $emailSend = $this->sendEmail($nextUserToBid, $schedule);
         }
+
+        // if($nextUserToBid) {
+        //     $schedule = BiddingSchedule::where(['id' => $validatedData['schedule_id']])->first();
+        //     $emailSend = $this->sendEmail($nextUserToBid, $schedule);
+        // }
 
         // if it's an admin bidding for user, redirect back admin controls
         if(isset($validatedData['user_id'])) {

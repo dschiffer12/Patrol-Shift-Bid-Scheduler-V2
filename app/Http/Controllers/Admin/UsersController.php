@@ -22,8 +22,6 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::paginate(2);
-
-        dd($users);
  
         return view('admin.users.index')->with('users', User::paginate(5));
 
