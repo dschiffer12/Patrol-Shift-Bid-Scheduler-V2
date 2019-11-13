@@ -36,7 +36,7 @@ class BiddingQueueControllerTest extends TestCase
      * Assert that the Show method return a view with the following parameters schedules and biddingQueue
      *
      * @return void
-    **/
+
     public function testShowReturnValuesView()
     {
         $this->withoutExceptionHandling();
@@ -57,5 +57,5 @@ class BiddingQueueControllerTest extends TestCase
 
         //$response->assertViewIs('admin.queue');
         $response->assertViewHasAll(['schedules', 'biddingQueue']);
-    }
+    }**/
 }
