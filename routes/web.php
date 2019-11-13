@@ -13,6 +13,7 @@
 
 
 Route::get('/', 'HomeController@index')->name('home')->middleware(['auth']);
+Route::get('/home', 'HomeController@index')->name('home')->middleware(['auth']);
 
 
 Auth::routes();
@@ -35,6 +36,8 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
     Route::resource('/shift', 'ShiftController');
     Route::resource('/bidding-queue', 'BiddingQueueController');
+    Route::get('/bidding-queue/view/{id}', 'BiddingQueueController@view')->name('bidding-queue.view');
+    Route::get('/bidding-queue/bid/{id}', 'BiddingQueueController@bid')->name('bidding-queue.bid');
 });
 
 

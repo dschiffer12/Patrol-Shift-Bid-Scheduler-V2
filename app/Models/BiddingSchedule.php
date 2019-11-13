@@ -39,8 +39,8 @@ class BiddingSchedule extends Model
     /**
      * Get the bidding queue that owns the bidding schedule.
      */
-    public function bid()
+    public function bids()
     {
-        return $this->belongsTo('App\Models\Bid');
+        return $this->hasMany('App\Models\Bid');
     }
 }

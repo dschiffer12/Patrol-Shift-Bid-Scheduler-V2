@@ -20,10 +20,10 @@ class Bid extends Model
     }
 
     public function biddingSchedule() {
-        return $this->hasOne('App\Models\BiddingSchedule');
+        return $this->belongsTo('App\Models\BiddingSchedule');
     }
 
     public function shift() {
-        return $this->hasOne('App\Models\Shift');
+        return $this->belongsTo('App\Models\Shift');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\User;
 
 class BiddingQueue extends Model
 {
@@ -22,6 +23,15 @@ class BiddingQueue extends Model
     {
         //return $this->hasMany('App\User');
         return $this->belongsTo('App\User');
+    }
+
+    /**
+     * Get the users for the bidding queue.
+     */
+    public function hasUser()
+    {
+        //return $this->hasMany('App\User');
+        return $this->hasOne('App\User');
     }
 
     /**
