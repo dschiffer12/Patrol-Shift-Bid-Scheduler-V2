@@ -38,7 +38,34 @@
 
 @isset($biddingQueue)
 <div class="container overflow-auto shadow mt-3 p-3">
+    <div class="row mt-3">
+        <div class="col-auto">
+            <h5>Schedule Name:</h5>
+        </div>
+        <div class="col-auto">
+            <h5>{{ $schedule->name }}</h5>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-auto">
+            <h5>Start Date:</h5>
+        </div>
+        <div class="col-auto">
+            <h5>{{ $schedule->start_day }}</h5>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-auto">
+            <h5>End Date:</h5>
+        </div>
+        <div class="col-auto">
+            <h5>{{ $schedule->end_day }}</h5>
+        </div>
+    </div>
+
 <!-- <div class="row mt-3 ml-2 mr-2"> -->
+
+    <div class="table-responsive-md"> 
         <table class="table text-center table-bordered">
             <thead>
                 <tr>
@@ -50,12 +77,14 @@
                 </tr>
             </thead>
             <tbody>
-
+                <?php $count = 1; ?>
 				@foreach($biddingQueue as $queue)
 					<tr>
-						<th scope="row"><h6><strong>{{ $loop->iteration }}</strong></h6></th>
+						<th scope="row"><h6><strong>
+                            {{$biddingQueue ->perPage()*($biddingQueue->currentPage()-1)+$count}}
+                        </strong></h6></th>
 						<td>{{ $queue->name }}</td>
-						<td>{{ $queue-> role_name}}</td>
+						<td>{{ $queue->role_name}}</td>
 						<td>
 							@if($queue->bid_submitted == 1)
 								Submitted
@@ -65,12 +94,44 @@
 								Waiting to Bid
 							@endif
 						</td>
-						<td>Action goes here</td>
+						<td>
+                            <div class="row text-center">
+                                @if($queue->bid_submitted == 1)
+                                <div class="col">
+                                    <form action="{{ route('admin.bidding-queue.view', $queue->user_id) }}" method="GET">
+                                        <input type="hidden" name="user_id" value={{ $queue->user_id }}>
+                                        <input type="hidden" name="bidding_schedule_id" value={{ $queue->bidding_schedule_id }}>
+                                        <button type="submit" class="btn btn-success">{{ __('View') }}</button>
+                                    </form>
+                                </div>
+
+                                @elseif($queue->bidding == 1)
+                                    <div class="col">
+                                    <form action="{{ route('admin.bidding-queue.bid', $queue->user_id) }}" method="GET">
+                                        <input type="hidden" name="user_id" value={{ $queue->user_id }}>
+                                        <input type="hidden" name="bidding_schedule_id" value={{ $queue->bidding_schedule_id }}>
+                                        <button type="submit" class="btn btn-primary">{{ __('Bid for user') }}</button>
+                                    </form>
+                                    </div>
+                                @else
+                                    <div class="col">
+                                        {{ __('No action available')}}
+                                    </div>
+                                @endif
+                            </div>
+                        </td>
 					</tr>
+                    <?php $count++; ?>
 				@endforeach
+                </div>
             </tbody>
         </table>
-    </div>
+    </div> 
+       
+        {{ $biddingQueue->appends(Request::all())->links() }}
+            
+</div>
+    
 
 @endisset
 

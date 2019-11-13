@@ -3,76 +3,15 @@
 @section('content')
 
 
-<!-- Badge Logo -->
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col">
-            
-            <img src='img/badge.gif' class="rounded mx-auto d-block img-fluid" alt='Badge' >
-                <br>
-        </div>
-    </div>
-</div> -->
-
-@isset($schedules)
-    <div class="container">
-        <div class="row justify-content-start mt-5">
-            <div class="col col-md">
-                <h1>{{ __('Bid on Schedule') }}</h1>
-                <form action="{{ route('user.biddingschedule.show', 'schedule_id') }}" method="GET" class="form-inline">        
-                @csrf
-                    <label class="my-1 mr-2" for="bid_id">{{ __('Select a Schedule') }}</label>	
-                    <select required class="custom-select mr-sm-2" id="bid_id" name="schedule_id">
-                        <option value="">Schedules...</option>
-                        @isset($schedules)
-                            @foreach ($schedules as $sched)
-                            <option value="{{ $sched->id }}">{{ $sched->name }}</option>
-                            @endforeach
-                        @endisset
-                    </select>
-                    <div class="col-auto my-1">
-                        <button type="submit" class="btn btn-primary">{{ __('Display') }}</button>
-                    </div>    
-                </form>
-            </div>
-        </div>
-    </div>
-
-@else
-    <div class="container overflow-auto shadow mt-3 p-3">
-        <div class="row mt-3">
-            <div class="col-auto">
-                <h5>There is no Bidding Schedule for you to bid on.</h5>   
-            </div>
-        </div>
-        <!-- <div class="row mt-3">
-            <div class="col-auto">
-                <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
-                <button type="button" class="btn ">
-                    <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
-                </button>
-            </div>
-        </div> -->
-    </div>
-@endisset
-
-@isset($numInQueue)
-    <div class="container overflow-auto shadow mt-3 p-3">
-        <div class="row mt-3">
-            <div class="col-auto">
-            @if($numInQueue > 1)
-                <h5>You are number {{ $numInQueue }} in line to bid.</h5>
-            @else
-                <h5>You are next in line to bid.</h5>
-            @endif   
-            </div>
-        </div>
-    </div>
-@endisset
-
-
-
 @isset($shifts)
+
+<div class="container">
+    <div class="row justify-content-start mt-5">
+        <div class="col col-md">
+            <h2>You are bidding for: <strong>{{ $user->name }} </strong></h2>     
+        </div>
+    </div>
+</div>
 
 <div class="container overflow-auto shadow mt-3 p-3">
     <div class="row mt-3">
@@ -132,10 +71,10 @@
         </table>
     </div>
 <form action="{{ route('user.biddingschedule.store') }}" method="POST" class="delete">
-<!-- <form action="#" method="POST" class="delete"> -->
 @csrf
 
     <input type="hidden" id="schedule" name="schedule_id" value={{ $schedule->id }}>
+	<input type="hidden" name="user_id" value={{ $user->id }}>
     <div class="row mt-3 ml-2 mr-2">
         <table class="table text-center table-bordered">
             <thead>
@@ -217,7 +156,7 @@
                 </tr>
             </thead>
             <tbody>
-            <tr>
+                <tr>
                 <th scope="row">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="early_shift" name="early_shift" value="1" onclick="toggleEarly('early')">
@@ -270,25 +209,6 @@
 
 @endisset
 
-@isset($already_bid)
-<div class="container overflow-auto shadow mt-3 p-3">
-    <div class="row mt-3">
-        <div class="col-auto">
-            <h5>You already bid on <strong>{{ $schedule->name }}</strong></h5>   
-        </div>
-    </div>
-    <div class="row mt-3">
-        <div class="col-auto">
-            <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
-            <button type="button" class="btn ">
-                <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
-            </button>
-        </div>
-    </div>
-</div>
-
-@endisset
-
 <script type="text/javascript">
 	function toggleEarly(id) {
 		var elems = document.getElementsByClassName(id);
@@ -299,13 +219,4 @@
 	}
 </script>
 
-
-<!-- <div style="height: 500px" class="container">
-    <div class="row justify-content-center border border-primary h-100">
-        <div class="col col-md-8 align-self-center">
-
-        <h5>Select available schedule to bid on.</h5>
-        
-    </div>
-</div> -->
 @endsection

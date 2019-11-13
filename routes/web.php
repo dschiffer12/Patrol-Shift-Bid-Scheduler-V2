@@ -35,6 +35,8 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
     Route::resource('/shift', 'ShiftController');
     Route::resource('/bidding-queue', 'BiddingQueueController');
+    Route::get('/bidding-queue/view/{id}', 'BiddingQueueController@view')->name('bidding-queue.view');
+    Route::get('/bidding-queue/bid/{id}', 'BiddingQueueController@bid')->name('bidding-queue.bid');
 });
 
 

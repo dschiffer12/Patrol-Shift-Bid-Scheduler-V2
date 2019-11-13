@@ -159,7 +159,20 @@ class BiddingController extends Controller
             'e_wednesday' => ['integer', 'gt:0', 'lt:2'],
             'e_thursday' => ['integer', 'gt:0', 'lt:2'],
             'schedule_id' => ['required', 'integer', 'gt:0'],
+            'user_id' => ['integer', 'gt:0'],
         ]);
+
+        
+
+        // Get the current user
+        $user = Auth::user();
+
+        // if user_id is passed, then an admin is bidding for a user
+        if(isset($validatedData['user_id'])) {
+            if($user->hasAnyRoles(['root', 'admin'])) {
+                $user = User::findOrFail($validatedData['user_id']);
+            }
+        }
 
         
         if(isset($validatedData['schedule_id'])) {
@@ -171,7 +184,7 @@ class BiddingController extends Controller
         
         $bid = new Bid;
 
-        $bid->user_id = auth()->user()->id;
+        $bid->user_id = $user->id;
         $bid->bidding_schedule_id = $validatedData['schedule_id'];
         $bid->shift_id = $validatedData['shift_id'];
         $bid->friday = isset($validatedData['friday']) ? $validatedData['friday'] : 0;
@@ -198,13 +211,12 @@ class BiddingController extends Controller
             $bid_early_shift->thursday = isset($validatedData['e_thursday']) ? $validatedData['e_thursday'] : 0;
 
             $bid_early_shift->save();
-
         }
 
 
-        if(auth()->user()->hasBiddingQueue($validatedData['schedule_id'])) {
+        if($user->hasBiddingQueue($validatedData['schedule_id'])) {
             $affected = DB::table('bidding_queues')
-              ->where('user_id', auth()->user()->id)
+              ->where('user_id', $user->id)
               ->where('bidding_schedule_id', $validatedData['schedule_id'])
               ->update([
                   'waiting_to_bid' => 0,
@@ -224,35 +236,13 @@ class BiddingController extends Controller
                 ]);
         }
 
-        // $nextUserToBid = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
-        //         ->where('bidding', 1)
-        //         ->orderBy('bidding_spot', 'asc')
-        //         ->first()
-        //         ->user;
 
-        $nextUserToBid = BiddingQueue::find(1)->where('bidding_schedule_id', $validatedData['schedule_id'])
+        $nextUserToBid = BiddingQueue::where('bidding_schedule_id', $validatedData['schedule_id'])
             ->where('bidding', 1)
             ->orderBy('bidding_spot', 'asc')
             ->first()
-            ->find(1)
             ->user;
         
-
-        //Comment because email credentials are not live yet
-
-        // if($nextUserToBid) {
-        //     $schedule = BiddingSchedule::where(['id' => $validatedData['schedule_id']])->first();
-
-        //     Mail::to($nextUserToBid)->send(new EmailNotification($nextUserToBid, $schedule));
-    
-        //     if (Mail::failures()) {
-        //         //return response()->Fail('Sorry! Please try again latter');
-        //         return false;
-        //     }else{
-        //         //return response()->success('Great! Successfully send in your mail');
-        //         return true;
-        //     }
-        // }
 
         if($nextUserToBid) {
             $schedule = BiddingSchedule::where(['id' => $validatedData['schedule_id']])->first();
@@ -260,7 +250,13 @@ class BiddingController extends Controller
             $emailSend = $this->sendEmail($nextUserToBid, $schedule);
         }
 
-        return redirect()->route('user.biddingschedule.bids')->with('success', 'Your bit has been submitted');
+        // if it's an admin bidding for user, redirect back admin controls
+        if(isset($validatedData['user_id'])) {
+            return redirect()->route('admin.bidding-queue.index')->with('success', 'The bid for user: ' . $user->name . ' successfully submitted.');
+        } else {
+            return redirect()->route('user.biddingschedule.bids')->with('success', 'Your bit has been submitted');
+        }
+
     }
 
     /** 
