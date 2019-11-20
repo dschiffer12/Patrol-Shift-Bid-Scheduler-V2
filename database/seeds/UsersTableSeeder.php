@@ -5,8 +5,8 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\Role;
 use App\Specialty;
-use App\Models\Bid;
-use App\Models\BidEarlyShift;
+//use App\Models\Bid;
+//use App\Models\BidEarlyShift;
 
 
 class UsersTableSeeder extends Seeder
@@ -98,24 +98,24 @@ class UsersTableSeeder extends Seeder
 
         // create bids
         // Truncate the specialty_user table too
-        DB::table('bid_early_shifts')->delete();
-        DB::table('bids')->delete();
+        // DB::table('bid_early_shifts')->delete();
+        // DB::table('bids')->delete();
 
-        $bid1 = Bid::create([
-            'user_id' => '103',
-            'bidding_schedule_id' => '22',
-            'shift_id' => '7',
-            'friday' => '1',
-            'saturday' => '1'
-        ]);
+        // $bid1 = Bid::create([
+        //     'user_id' => '103',
+        //     'bidding_schedule_id' => '22',
+        //     'shift_id' => '7',
+        //     'friday' => '1',
+        //     'saturday' => '1'
+        // ]);
 
-        $bid2 = Bid::create([
-            'user_id' => '105',
-            'bidding_schedule_id' => '23',
-            'shift_id' => '8',
-            'monday' => '1',
-            'tuesday' => '1'
-        ]);
+        // $bid2 = Bid::create([
+        //     'user_id' => '105',
+        //     'bidding_schedule_id' => '23',
+        //     'shift_id' => '8',
+        //     'monday' => '1',
+        //     'tuesday' => '1'
+        // ]);
 
         // $early1 = BidEarlyShift::create([
         //     'bid_id' => '1',

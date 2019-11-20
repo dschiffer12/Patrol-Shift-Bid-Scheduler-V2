@@ -25,28 +25,13 @@ class BiddingQueue extends Model
         return $this->belongsTo('App\User');
     }
 
+    
+    
     /**
-     * Get the users for the bidding queue.
+     * Get the schedule for the bidding queue.
      */
-    public function hasUser()
+    public function schedule()
     {
-        //return $this->hasMany('App\User');
-        return $this->hasOne('App\User');
-    }
-
-    /**
-     * Get the bidding schedule for the bidding queue.
-     */
-    public function bidding_schedures()
-    {
-        return $this->hasMany('App\Models\BiddingSchedule');
-    }
-
-    /**
-     * Get the bidding schedule for the bidding queue.
-     */
-    public function biddingSchedule()
-    {
-        return $this->hasOne('App\Models\BiddingSchedule');
+        return $this->belongsTo('App\Schedule');
     }
 }

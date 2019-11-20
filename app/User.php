@@ -131,7 +131,7 @@ class User extends Authenticatable
      */
     public function officer()
     {
-        $this->belongsTo('App\Models\Officer');
+        return $this->hasOne('App\Models\Officer');
     }
 
     /**

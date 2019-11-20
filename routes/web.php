@@ -38,6 +38,21 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::resource('/bidding-queue', 'BiddingQueueController');
     Route::get('/bidding-queue/view/{id}', 'BiddingQueueController@view')->name('bidding-queue.view');
     Route::get('/bidding-queue/bid/{id}', 'BiddingQueueController@bid')->name('bidding-queue.bid');
+
+    //Route for the Schedule controller.
+    Route::resource('/schedules', 'ScheduleController');
+    Route::resource('/schedules/{id}/edit', 'ScheduleController@edit');
+    Route::post('/schedules/{id}/addShift', 'ScheduleController@addShift')->name('schedules.addShift');
+    Route::post('/schedules/{id}/addSpot', 'ScheduleController@addSpot')->name('schedules.addSpot');
+    Route::post('/schedules/{id}/deleteSpot', 'ScheduleController@deleteSpot')->name('schedules.deleteSpot');
+    Route::post('/schedules/{id}/deleteShift', 'ScheduleController@deleteShift')->name('schedules.deleteShift');
+    Route::get('/schedules/{id}/addUsers', 'ScheduleController@addUsers')->name('schedules.addUsers');
+    Route::get('/schedules/{id}/addUsers', 'ScheduleController@addUsers')->name('schedules.addUsers');
+    Route::post('/schedules/{id}/storeQueue', 'ScheduleController@storeQueue')->name('schedules.storeQueue');
+    Route::get('/schedules/{id}/activateSchedule', 'ScheduleController@activateSchedule')->name('schedules.activateSchedule');
+    Route::get('/schedules/{id}/approveSchedule', 'ScheduleController@approveSchedule')->name('schedules.approveSchedule');
+
+
 });
 
 

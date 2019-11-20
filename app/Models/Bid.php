@@ -11,19 +11,10 @@ class Bid extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function bidEarlyShift() {
-        return $this->hasOne('App\Models\BidEarlyShift');
+    
+    public function schedule() {
+        return $this->belongsTo('App\Schedule');
     }
 
-    public function hasAnyBidEarlyShift() {
-        return null !== $this->bidEarlyShift()->first();
-    }
-
-    public function biddingSchedule() {
-        return $this->belongsTo('App\Models\BiddingSchedule');
-    }
-
-    public function shift() {
-        return $this->belongsTo('App\Models\Shift');
-    }
+    
 }

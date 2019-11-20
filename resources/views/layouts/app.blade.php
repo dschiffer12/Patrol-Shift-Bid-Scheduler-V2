@@ -152,6 +152,13 @@
                                 </button>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col border pt-2">
+                                <button type="button" class="btn btn-block text-left">
+                                    <a class="nav-link" href="{{ route('admin.schedules.index') }}"><h5>{{ __('Schedules') }}</h5></a>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 @endguest
 
