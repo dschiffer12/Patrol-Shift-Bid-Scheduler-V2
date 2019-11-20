@@ -21,7 +21,7 @@
     <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+    <div class="overlay" id="app">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background-color: #e3f2fd;">
             <!-- <div class="container border"> -->
                 <a class="navbar-brand ml-3" href="{{ url('/') }}">
@@ -117,17 +117,11 @@
                             <div class="row">
                                 <div class="col border pt-2">
                                     <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.bidding-schedule.index') }}"><h5>{{ __('Bidding Schedule Management') }}</h5></a>
+                                        <a class="nav-link" href="{{ route('admin.schedules.index') }}"><h5>{{ __('Schedule Management') }}</h5></a>
                                     </button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col border pt-2">
-                                    <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.shift.index') }}"><h5>{{ __('Shift Management') }}</h5></a>
-                                    </button>
-                                </div>
-                            </div>
+                            
                             <div class="row">
                                 <div class="col border pt-2">
                                     <button type="button" class="btn btn-block text-left">
@@ -152,13 +146,6 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col border pt-2">
-                                <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('admin.schedules.index') }}"><h5>{{ __('Schedules') }}</h5></a>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 @endguest
 
@@ -171,7 +158,9 @@
                 </div>
             </div>
         </div>
-
+    </div>
+        
+        @include('layouts.footer')
         <!--JQuery hosted-->
     <script
         src="https://code.jquery.com/jquery-3.4.1.js"
