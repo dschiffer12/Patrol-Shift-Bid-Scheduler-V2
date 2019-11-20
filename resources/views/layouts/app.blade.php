@@ -125,7 +125,7 @@
                             <div class="row">
                                 <div class="col border pt-2">
                                     <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.bidding-queue.index') }}"><h5>{{ __('Bidding Queue') }}</h5></a>
+                                        <a class="nav-link" href="#"><h5>{{ __('Bidding Queue') }}</h5></a>
                                     </button>
                                 </div>
                             </div>

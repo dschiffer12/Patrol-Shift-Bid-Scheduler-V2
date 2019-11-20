@@ -57,8 +57,9 @@
 										<div class="row">
 											<div class="col text-center">
                                                 @if ($schedule->currently_active == 1)
+                                                    <a href="{{ route('admin.schedules.biddingQueue', $schedule->id) }}"><button type="button" class="btn btn-primary">Queue</button></a>
                                                 @else
-                                                <a href="{{ route('admin.schedules.edit', $schedule->id) }}"><button type="button" class="btn btn-primary">Edit</button></a>
+                                                    <a href="{{ route('admin.schedules.edit', $schedule->id) }}"><button type="button" class="btn btn-primary">Edit</button></a>
                                                 @endif
                                             </div>
 

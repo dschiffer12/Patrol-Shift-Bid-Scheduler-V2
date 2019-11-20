@@ -10,6 +10,7 @@ use App\Shift;
 use App\Spot;
 use App\User;
 use App\Models\BiddingQueue;
+use DateTime;
 
 class ScheduleController extends Controller
 {
@@ -144,7 +145,10 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Schedule::destroy($id);
+
+        return redirect('/admin/schedules/')->with('success', 'Schedule deleted.');
+
     }
 
 
@@ -297,12 +301,13 @@ class ScheduleController extends Controller
             }
         }
 
-        return redirect('/admin/schedules/'. $id . '/activateSchedule/');
+        return redirect('/admin/schedules/'. $id . '/reviewSchedule/');
 
     }
 
 
-    public function activateSchedule($id) { 
+    public function reviewSchedule($id) { 
+
         $schedule = Schedule::find($id);
         $bidding_queue = $schedule->biddingQueues;
         $shifts = $schedule->shifts;
@@ -344,7 +349,7 @@ class ScheduleController extends Controller
 
         // dd($bidding_queue);
 
-        return view('admin.schedules.activateschedule')->with([
+        return view('admin.schedules.reviewschedule')->with([
             'bidding_queue'=> $bidding_queue,
             'specialties'=> $specialties,
             'schedule'=> $schedule,
@@ -352,14 +357,27 @@ class ScheduleController extends Controller
 
     }
 
+
+
     /**
      * set schedule to active
      */
-    public function approveSchedule($id) {
+    public function activateSchedule($id) {
 
         $schedule = Schedule::find($id);
         $schedule->currently_active = true;
         $schedule->save();
+        
+        $bidding_queue = $schedule->biddingQueues;
+
+        foreach($bidding_queue as $queue) {
+            if($queue->waiting_to_bid == $queue->bidding) {
+                $date = new DateTime();
+                $queue->waiting_to_bid = 0;
+                $queue->start_time_bidding = $date;
+                $queue->save();
+            }
+        }
 
         return redirect('/admin/schedules/')->with('successful', 'Schedule activated!');
 
