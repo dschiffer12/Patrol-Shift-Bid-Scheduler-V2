@@ -231,20 +231,17 @@ class ScheduleController extends Controller
         $users = User::orderBy('date_in_position', 'asc')
             ->get();
 
-        // foreach($specialties as $specialty) {
-        //     foreach($shifts as $shift){
-        //         $spots = $shift->spots;
-        //         $shift->push($spots);
-        //         $specialty->push($shift);   
-        //     }    
-        // }
-
         foreach($users as $user) {
             $specialties = $user->specialties;
             $user->push($specialties);
         }
 
-        // dd($users);
+        $bidding_queue = $schedule->biddingQueues;
+        // Remove any bidding queue in case user is comming back, prevent suplicate
+        foreach($bidding_queue as $queue) {
+            BiddingQueue::destroy($queue->id);
+        }
+
 
         $specialties = Specialty::all();
 
@@ -382,6 +379,9 @@ class ScheduleController extends Controller
                 // notify my email
                 $user = $queue->user;
                 $emailSend = $this->sendEmail($user, $schedule);
+                
+                // sleep for 1 seconds for mailtrap limitations
+                 sleep(1);
             }
         }
 

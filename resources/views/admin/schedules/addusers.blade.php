@@ -127,7 +127,7 @@
 	<div class="row mt-3">
 		<div class="col ml-3">
 				
-				<button type="submit"  class="btn btn-primary float-right">Add Users ></button>
+				<button type="submit"  class="btn btn-primary float-right">Review Schedule ></button>
 			
 		</div>
 	</div>

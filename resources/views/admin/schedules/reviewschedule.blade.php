@@ -243,43 +243,49 @@
 						
 						@endif
 						@endforeach
-
+						<div class="container mt-3">
+							<div class="roll">
+								<div class="col">
+									<h4><strong>{{__("Bidding Order")}}</strong></h4>
+								</div>
+							</div>
+						</div>
 
 						<!-- users start here -->
 					<div class="container">
 						<div class="row justify-content-center">
 									<div class="col-md-12"> 
 										<div class="table-responsive-md">      
-											<table class="table">
+											<table class="table text-center table-bordered">
 												<thead>
 													<tr>
-													<th style="width: 5%" scope="col">Line</th>
+													<th style="width: 5%" scope="col">Order</th>
 													<th style="width: 18%" class="text-center" scope="col">Name</th>
 													<th style="width: 18%" class="text-center" scope="col">Email</th>
 													<th style="width: 18%" class="text-center" scope="col">Role</th>
 													<th style="width: 18%" class="text-center" scope="col">Date in Position</th>
 													<th style="width: 18%" class="text-center" scope="col">Specialties</th>
-													<th style="width: 15%" class="text-center" scope="col">Order</th>
+													
 													</tr>
 												</thead>
 												<tbody>
-													@php ($j = 0)
+													
 													@foreach($bidding_queue as $queue)
 														@php ($user = $queue->user)
 														@foreach($user->specialties as $userSpecialty)
 															@if ($userSpecialty->id == $specialty->id)
-															@php ($j++)
+															
 																<tr>
-																<th scope="row">{{$j}}</th>
+																<td class="text-center">{{ $queue->bidding_spot }}</td>
+																
 																<td class="text-center">{{ $user->name }}</td>
 																<td class="text-center">{{ $user->email }}</td>
 																<td class="text-center">{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
 																<td class="text-center">{{ date('m-d-Y', strtotime($user->date_in_position)) }}</td>
 																<td class="text-center">{{ implode(', ', $user->specialties->pluck('name')->toArray()) }}</td>
-																<td class="text-center">{{ $queue->bidding_spot }}</td>
 																
-																<td>     
-																</td>
+																
+																
 																</tr>
 															@endif
 														@endforeach
