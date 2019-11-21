@@ -45,14 +45,6 @@
                 <h5>There is no Bidding Schedule for you to bid on.</h5>   
             </div>
         </div>
-        <!-- <div class="row mt-3">
-            <div class="col-auto">
-                <h5 class="d-inline-block">{{ __('See your bids here: ') }}</h5>
-                <button type="button" class="btn ">
-                    <a href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
-                </button>
-            </div>
-        </div> -->
     </div>
 @endisset
 

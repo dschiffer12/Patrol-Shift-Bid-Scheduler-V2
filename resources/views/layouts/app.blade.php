@@ -134,7 +134,7 @@
                         <div class="row">
                             <div class="col border pt-2">
                                 <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('user.biddingschedule.index') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
+                                    <a class="nav-link" href="{{ route('user.schedules.view') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
                                 </button>
                             </div>
                         </div>

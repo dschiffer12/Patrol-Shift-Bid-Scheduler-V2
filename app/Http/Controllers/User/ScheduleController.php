@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EmailNotification;
+use App\Schedule;
+use App\Models\BiddingQueue;
+use Illuminate\Support\Facades\Auth;
+use App\User;
+use App\Models\Bid;
 
-class BidController extends Controller
+class ScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +21,51 @@ class BidController extends Controller
      */
     public function index()
     {
-        //
+        // get all schedules
+        $user = Auth::user();
+        $bids = $user->bids;
+
+        // $schedules = new Schedule;
+
+        // foreach($bids as $bid) {
+        //     $sche = $bid->schedule;
+        //     $sche->already_bid = true;
+        //     $schedules->push($sche);      
+        // }
+        
+        
+        // $bidding_queues = $user->biddingQueues;
+
+        // $bidding_queues = BiddingQueue::where('user_id', $user->id)
+        //     ->where('bid_submitted', '<', 1)
+        //     ->get();
+
+        $bidding_queues = $user->biddingQueues;
+                    
+        // foreach($bidding_queues as $queue) {
+        //     // dd($queue->schedule->name);
+        //     // $sche = $queue->schedule;
+        //     // $sche->queue = $queue;
+        //     // $sche->test = true;
+        //     // // $schedules->push($sche);
+        //     // $schedules->ok = $sche;
+        //     // dd($schedules);    
+        // }
+
+        // dd($bidding_queues);
+        
+        // dd($schedules);
+
+        // foreach($schedules as $schedule) {
+        //     dd($schedule);
+        // }
+
+    
+
+        return view('user.schedules.index')->with([
+            'bidding_queues' => $bidding_queues,
+        ]);
+
     }
 
     /**
@@ -84,12 +133,6 @@ class BidController extends Controller
     {
         //
     }
-
-    public function view(Request $request, $id) {
-
-
-    }
-
 
 
     public function bid($schedule) {

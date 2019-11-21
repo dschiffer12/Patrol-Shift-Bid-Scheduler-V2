@@ -228,6 +228,7 @@ class ScheduleController extends Controller
     public function addUsers($id) {
         
         $schedule = Schedule::find($id);
+
         $users = User::orderBy('date_in_position', 'asc')
             ->get();
 
@@ -241,8 +242,7 @@ class ScheduleController extends Controller
         foreach($bidding_queue as $queue) {
             BiddingQueue::destroy($queue->id);
         }
-
-
+        
         $specialties = Specialty::all();
 
         return view('admin.schedules.addusers')->with([
@@ -315,6 +315,20 @@ class ScheduleController extends Controller
 
         $specialties = Specialty::all();
 
+        // remove all the specialties that do not have a shift
+        foreach($specialties as $key => $specialty) {
+            $j = 0;
+            foreach($shifts as $shift) {
+                if($shift->specialty_id == $specialty->id) {
+                    $j++;
+                }
+            }
+            if($j < 1) {
+                $specialties->forget($key);
+            }
+            $j=0;
+        }
+
         foreach($shifts as $shift) {
             $spots = $shift->spots;
             $shift->push($spots);
@@ -331,22 +345,8 @@ class ScheduleController extends Controller
             $queue->push($user);
         }
 
-        // remove all the specialties that do not have a shift
-        foreach($specialties as $specialty) {
-            $i = 0;
-            foreach($shifts as $shift) {
-                if($shift->specialty_id == $specialty->id) {
-                    $i++;
-                }
-            }
-            if($i < 1) {
-                $specialties->pop($specialty);
-            }
-            $i=0;
-        }
-
-
-        // dd($bidding_queue);
+        
+        // dd($specialties);
 
         return view('admin.schedules.reviewschedule')->with([
             'bidding_queue'=> $bidding_queue,

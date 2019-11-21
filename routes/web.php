@@ -47,7 +47,6 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::post('/schedules/{id}/deleteSpot', 'ScheduleController@deleteSpot')->name('schedules.deleteSpot');
     Route::post('/schedules/{id}/deleteShift', 'ScheduleController@deleteShift')->name('schedules.deleteShift');
     Route::get('/schedules/{id}/addUsers', 'ScheduleController@addUsers')->name('schedules.addUsers');
-    Route::get('/schedules/{id}/addUsers', 'ScheduleController@addUsers')->name('schedules.addUsers');
     Route::post('/schedules/{id}/storeQueue', 'ScheduleController@storeQueue')->name('schedules.storeQueue');
     Route::get('/schedules/{id}/reviewSchedule', 'ScheduleController@reviewSchedule')->name('schedules.reviewSchedule');
     Route::get('/schedules/{id}/activateSchedule', 'ScheduleController@activateSchedule')->name('schedules.activateSchedule');
@@ -65,4 +64,6 @@ Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->g
 
     // Routes for the bids
     Route::post('/bid/{id}/view', 'BidController@view')->name('bid.view');
+
+    Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
 });
