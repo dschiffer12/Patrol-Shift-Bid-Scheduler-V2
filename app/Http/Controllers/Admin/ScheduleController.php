@@ -11,6 +11,8 @@ use App\Spot;
 use App\User;
 use App\Models\BiddingQueue;
 use DateTime;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EmailNotification;
 
 class ScheduleController extends Controller
 {
@@ -376,11 +378,33 @@ class ScheduleController extends Controller
                 $queue->waiting_to_bid = 0;
                 $queue->start_time_bidding = $date;
                 $queue->save();
+
+                // notify my email
+                $user = $queue->user;
+                $emailSend = $this->sendEmail($user, $schedule);
             }
         }
 
         return redirect('/admin/schedules/')->with('successful', 'Schedule activated!');
 
+    }
+
+
+    /**
+     * Send Email to an user
+     *
+     * @param int $id User Id
+     * @return boolean email sent result
+    **/
+    public function sendEmail(User $user, Schedule $schedule)
+    {
+        Mail::to($user)->send(new EmailNotification($user, $schedule));
+
+        if (Mail::failures()) {
+            return false;
+        }else{
+            return true;
+        }
     }
 
 

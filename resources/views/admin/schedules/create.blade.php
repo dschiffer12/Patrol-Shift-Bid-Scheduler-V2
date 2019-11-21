@@ -58,7 +58,7 @@
                             <label for="response_time" class="col-md-4 col-form-label text-md-right">{{ __('Response Time (hours)') }}</label>
 
                             <div class="form-group col-md-6">
-                                <input id="response_time" class="form-control @error('response_time') is-invalid @enderror" type="number" name="response_time" value="{{ old('response_time') ? old('response_time') : ''}}" required>
+                                <input id="response_time" class="form-control @error('response_time') is-invalid @enderror" type="number" min="1" max="9999" name="response_time" value="{{ old('response_time') ? old('response_time') : ''}}" required>
 
                                 @error('response_time')
                                     <span class="invalid-feedback" role="alert">

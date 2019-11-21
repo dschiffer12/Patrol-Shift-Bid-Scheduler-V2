@@ -99,7 +99,7 @@
 												<div class="col"> 
 													<!-- <input type="hidden" name="allSpecialties[{{$specialty->id}}][{{$user->id}}]" id="{{ $specialty->id }}"/> -->
 													<!-- <input type="hidden" name="specialties[]" id="{{ $specialty->id }}" value="{{ $specialty->id }}" /> -->
-													<input type="number" name="allSpecialties[{{$specialty->id}}][{{$user->id}}]" id="{{ $specialty->id }}"  min="0" max="100" value=0>
+													<input type="number" name="allSpecialties[{{$specialty->id}}][{{$user->id}}]" id="{{ $specialty->id }}"  min="0" max="9999" value=0>
 												</div>	
 											</div>
 
