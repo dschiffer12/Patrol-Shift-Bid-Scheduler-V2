@@ -105,7 +105,7 @@
                     <div class="auto col-md-auto menu">
 
                         <div class="row top15">
-                            <div class="col border pt-2">
+                            <div class="col pt-2">
                                 <button type="button" class="btn btn-block text-left">
                                     <a class="nav-link" href="{{ route('user.psheet.index') }}"><h5>{{ __('Daily Roster') }}</h5></a>
                                 </button>
@@ -115,7 +115,7 @@
                         
                         @if(Auth::user()->hasAnyRoles(['root', 'admin']))
                             <div class="row">
-                                <div class="col border pt-2">
+                                <div class="col pt-2">
                                     <button type="button" class="btn btn-block text-left">
                                         <a class="nav-link" href="{{ route('admin.schedules.index') }}"><h5>{{ __('Schedule Management') }}</h5></a>
                                     </button>
@@ -124,20 +124,14 @@
                         @endif
 
                         <div class="row">
-                            <div class="col border pt-2">
+                            <div class="col pt-2">
                                 <button type="button" class="btn btn-block text-left">
                                     <a class="nav-link" href="{{ route('user.schedules.view') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col border pt-2">
-                                <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                 @endguest
 
@@ -147,12 +141,12 @@
                         @include('partials.alerts')
                         @yield('content')
                     </main>
-                </div>
-            </div>
+                </div>  
+            </div> 
+            @include('layouts.footer')
         </div>
     </div>
         
-        @include('layouts.footer')
         <!--JQuery hosted-->
     <script
         src="https://code.jquery.com/jquery-3.4.1.js"

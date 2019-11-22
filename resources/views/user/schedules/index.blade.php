@@ -51,9 +51,12 @@
 												@if ($queue->waiting_to_bid == 1)
 													{{__('Waiting to bid')}}
                                                 @elseif ($queue->bidding == 1)
-                                                    <a href="#"><button type="button" class="btn btn-primary">Bid</button></a>
-												@elseif ($queue->bid_submitted == 1)
-													<a href="#"><button type="button" class="btn btn-primary">View Bid</button></a>
+                                                    <a href="{{ route('user.schedules.bid', $queue->schedule->id) }}" ><button type="button" class="btn btn-primary">Bid</button></a>
+                                                @elseif ($queue->bid_submitted == 1) 
+                                                    <form action="{{ route('user.schedules.viewbid', $queue->bid_id) }}" method="GET">
+                                                        <button type="submit" class="btn btn-primary">{{ __('View Bid') }}</button>
+                                                    </form>
+													
                                                 @endif
                                             </div>		
                                         </div>

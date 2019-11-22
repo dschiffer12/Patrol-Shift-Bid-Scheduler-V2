@@ -109,118 +109,28 @@
 													@php ($i = $loop->iteration)
 													@php ($spot_id[$i] = $spot->id)
 														<th scope="row">{{ $loop->iteration }}</th>
-														<td>
-															<div class="row">
-															@isset($spot->friday_s)
-																<div class="col">
-																	{{ $spot->friday_s }}
+														
+														@foreach($days_s as $start_time)
+															<td>
+																<div class="row">
+																@isset($spot->$start_time)
+																@php($end_time = $days_e[$loop->index])
+																	<div class="col">
+																		{{ $spot->$start_time }}
+																	</div>
+																	<div class="col">
+																		{{ $spot->$end_time }}
+																	</div>
+																@else
+																	<div class="col">
+																		<h5><strong>OFF</strong></h5>
+																	</div>
+																@endif
 																</div>
-																<div class="col">
-																	{{ $spot->friday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
-														<td>
-															<div class="row">
-															@isset($spot->saturday_s)
-																<div class="col">
-																	{{$spot->saturday_s }}
-																</div>
-																<div class="col">
-																	{{$spot->saturday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
-														<td>
-															<div class="row">
-															@isset($spot->sunday_s)
-																<div class="col">
-																	<h6>{{$spot->sunday_s }}
-																</div>
-																<div class="col">
-																	<h6>{{$spot->sunday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
-														<td>
-															<div class="row">
-															@isset($spot->monday_s)
-																<div class="col">
-																	<h6>{{$spot->monday_s }}
-																</div>
-																<div class="col">
-																	<h6>{{$spot->monday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
-														<td>
-															<div class="row">
-															@isset($spot->tuesday_s)
-																<div class="col">
-																	<h6>{{$spot->tuesday_s }}
-																</div>
-																<div class="col">
-																	<h6>{{$spot->tuesday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
-														<td>
-															<div class="row">
-															@isset($spot->wednesday_s)
-																<div class="col">
-																	<h6>{{$spot->wednesday_s }}
-																</div>
-																<div class="col">
-																	<h6>{{$spot->wednesday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
-														<td>
-															<div class="row">
-															@isset($spot->thursday_s)
-																<div class="col">
-																	<h6>{{$spot->thursday_s }}
-																</div>
-																<div class="col">
-																	<h6>{{$spot->thursday_e }}
-																</div>
-															@else
-																<div class="col">
-																	<h5><strong>OFF</strong></h5>
-																</div>
-															@endif
-															</div>
-														</td>
+															</td>
+
+														@endforeach
+														
 														<td>
 															<div class="row">
 																<div class="col">

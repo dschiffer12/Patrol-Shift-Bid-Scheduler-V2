@@ -5,13 +5,24 @@
 
 @isset($schedule)
 
-<div class="container overflow-auto shadow mt-3 p-3">
+<div class="container overflow-auto shadow mt-3 p-4">
+	@isset($user)	
+		<div class="row mt-3">
+			<div class="col-auto">
+				<h5>Bidding for user:</h5>
+			</div>
+			<div class="col-auto">
+				<h2></strong>{{ $user->name }}</strong></h2>
+			</div>
+		</div>
+	@endisset
+
     <div class="row mt-3">
         <div class="col-auto">
             <h5>Schedule Name:</h5>
         </div>
         <div class="col-auto">
-            <h5>{{ $schedule->name }}</h5>
+            <h5><strong>{{ $schedule->name }}</strong></h5>
         </div>
     </div>
     <div class="row mt-3">
@@ -19,7 +30,7 @@
             <h5>Start Date:</h5>
         </div>
         <div class="col-auto">
-            <h5>{{ $schedule->start_date }}</h5>
+            <h5><strong>{{ $schedule->start_date }}</strong></h5>
         </div>
     </div>
     <div class="row">
@@ -27,7 +38,7 @@
             <h5>End Date:</h5>
         </div>
         <div class="col-auto">
-            <h5>{{ $schedule->end_date }}</h5>
+            <h5><strong>{{ $schedule->end_date }}</strong></h5>
         </div>
     </div>
 	<div class="row">
@@ -35,7 +46,7 @@
             <h5>Response Time (hours):</h5>
         </div>
         <div class="col-auto">
-            <h5>{{ $schedule->response_time }}</h5>
+            <h5><strong>{{ $schedule->response_time }}</strong></h5>
         </div>
     </div>
 	<div class="row">
@@ -43,7 +54,7 @@
             <h5>Status:</h5>
         </div>
         <div class="col-auto">
-            <h5>{{ $schedule->currently_active == 1 ? "Active" : "Inactive"}} </h5>
+            <h5><strong>{{ $schedule->currently_active == 1 ? "Active" : "Inactive"}} </strong></h5>
         </div>
     </div>
 
@@ -58,6 +69,13 @@
     </div>
 		@php ($i=0)
 		@php ($allSpecialties = array('specialties'))
+		@isset($user)
+		<form action="{{ route('admin.schedules.bidforuser') }}" method="POST">
+		<input type="hidden" id="shift" name="user_id" value={{ $user->id }}>
+		@endisset
+		<form action="{{ route('user.schedules.store') }}" method="POST">
+		
+		@csrf
 		@foreach($specialties as $specialty)
 		<div class="container border mb-4">
 			<div class="row mt-3">
@@ -76,9 +94,7 @@
 								</div>
 								<div class="col-auto">
 									<h5><strong>{{ __($shift->name) }}</strong></h5>
-								</div>
-								
-								
+								</div>		
 							</div>
 							
 <!-- start of the shifts table -->
@@ -96,6 +112,7 @@
 												<th style="width: 12.86%" scope="col">Wednesday</th>
 												<th style="width: 12.86%" scope="col">Thursday</th>
 												<th style="width: 5%" scope="col">Available</th>
+												<th style="width: 5%" scope="col">Select</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -226,7 +243,17 @@
 																</div>
 															</div>
 														</td>
-														
+														<td>
+															@if ($spot->qty_available > 0)
+																<div class="form-check">
+																	<input class="form-check-input" type="radio" id="spot_id" name="spot_id" value={{$spot->id}}>
+																</div>
+															@else
+																<div class="form-check">
+																	<input class="form-check-input" disabled type="radio" id="spot_id" name="spot_id" value=0>
+																</div>
+															@endif
+														</td>	
 													</tr>
 												
 												@endforeach
@@ -241,89 +268,6 @@
 						
 						@endif
 						@endforeach
-
-					<div class="container mt-3">
-						<div class="roll">
-							<div class="col">
-								<h4><strong>{{__("Bidding Progress")}}</strong></h4>
-							</div>
-						</div>
-					</div>
-
-						<!-- users start here -->
-					<div class="container">
-						<div class="row justify-content-center">
-									<div class="col-md-12"> 
-										<div class="table-responsive-md">      
-											<table class="table text-center table-bordered">
-												<thead>
-													<tr>
-													<th style="width: 5%" scope="col">Line</th>
-													<th style="width: 18%" class="text-center" scope="col">Name</th>
-													<th style="width: 18%" class="text-center" scope="col">Email</th>
-													<th style="width: 18%" class="text-center" scope="col">Status</th>
-													<th style="width: 18%" class="text-center" scope="col">Action</th>
-													
-													</tr>
-												</thead>
-												<tbody>
-													@php ($j = 0)
-													@foreach($bidding_queue as $queue)
-													@php ($user = $queue->user)
-													@foreach($user->specialties as $userSpecialty)
-													@if ($userSpecialty->id == $specialty->id)
-													@php ($j++)
-														<tr>
-														<th scope="row">{{$j}}</th>
-														<td class="text-center">{{ $user->name }}</td>
-														<td class="text-center">{{ $user->email }}</td>
-														<td class="text-center">
-															@if($queue->waiting_to_bid == 1)
-																{{__('Waiting')}}
-															@elseif($queue->bidding == 1)
-																{{__('Bidding')}}
-															@else
-																{{__('Submitted')}}
-															@endif
-														</td>
-														<td class="text-center">
-															<div class="row text-center">
-																@if($queue->bid_submitted == 1)
-																<div class="col">
-																	<form action="{{ route('admin.schedules.viewbid', $queue->id) }}" method="GET">
-																		<button type="submit" class="btn btn-success">{{ __('View') }}</button>
-																	</form>
-																</div>
-
-																@elseif($queue->bidding == 1)
-																	<div class="col">
-																	<form action="{{ route('admin.schedules.bid', $queue->schedule_id) }}" method="POST">
-																	@csrf
-																		<input type="hidden" name="user_id" value={{ $queue->user_id }}>
-																		<input type="hidden" name="schedule_id" value={{ $queue->schedule_id }}>
-																		<button type="submit" class="btn btn-primary">{{ __('Bid for user') }}</button>
-																	</form>
-																	</div>
-																@else
-																	<div class="col">
-																		{{ __('No action available')}}
-																	</div>
-																@endif
-															</div>
-														</td>
-									
-														</tr>
-														@endif
-														@endforeach
-														@endforeach
-													@php ($i=0)					
-												</tbody>
-											</table>
-											
-										</div>
-									</div>
-								</div>
-					</div>
 					
 				</div>
 			</div>
@@ -337,14 +281,21 @@
 
 		</div>				
 		@endforeach
+		
 
 		<div class="form-group row mb-0">
-			<div class="col-md-2 ml-4">
+			<div class="col-md-2 offset-md-1">
 				<a  class="btn btn-secondary float-start" href="{{ URL::previous() }}">
 					{{ __('< Back') }}
 				</a>     
-			</div>  
+			</div>
+			<div class="col">
+				<button type="submit" class="btn btn-primary float-right">
+					{{ __('Submit') }}
+				</button>
+			</div>   
 		</div>
+	</form>
 </div>
 
 

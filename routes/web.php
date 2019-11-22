@@ -53,6 +53,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
 
     // bidding queue
     Route::get('/schedule/{id}/biddingQueue', 'BidQueueController@view')->name('schedules.biddingQueue');
+    Route::get('/schedule/{id}/viewbid', 'BidQueueController@viewbid')->name('schedules.viewbid');
+    Route::post('/schedules/{id}/bid', 'BidQueueController@bid')->name('schedules.bid');
+    Route::post('/schedules/bidforuser', 'BidQueueController@bidforuser')->name('schedules.bidforuser');
 });
 
 
@@ -63,7 +66,12 @@ Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->g
     Route::resource('/biddingschedule', 'BiddingController');
 
     // Routes for the bids
-    Route::post('/bid/{id}/view', 'BidController@view')->name('bid.view');
+    // Route::resource('/schedules', 'ScheduleController');
+    // Route::post('/bid/{id}/view', 'BidController@view')->name('bid.view');
 
     Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
+    Route::get('/schedules/{id}/bid', 'ScheduleController@bid')->name('schedules.bid');
+    Route::post('/schedules/store', 'ScheduleController@store')->name('schedules.store');
+    Route::get('/schedules/{id}/viewbid', 'ScheduleController@viewBid')->name('schedules.viewbid');
+
 });
