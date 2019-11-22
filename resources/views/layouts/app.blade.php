@@ -21,7 +21,7 @@
     <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
+    <div class="overlay" id="app">
         <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background-color: #e3f2fd;">
             <!-- <div class="container border"> -->
                 <a class="navbar-brand ml-3" href="{{ url('/') }}">
@@ -105,7 +105,7 @@
                     <div class="auto col-md-auto menu">
 
                         <div class="row top15">
-                            <div class="col border pt-2">
+                            <div class="col pt-2">
                                 <button type="button" class="btn btn-block text-left">
                                     <a class="nav-link" href="{{ route('user.psheet.index') }}"><h5>{{ __('Daily Roster') }}</h5></a>
                                 </button>
@@ -115,43 +115,23 @@
                         
                         @if(Auth::user()->hasAnyRoles(['root', 'admin']))
                             <div class="row">
-                                <div class="col border pt-2">
+                                <div class="col pt-2">
                                     <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.bidding-schedule.index') }}"><h5>{{ __('Bidding Schedule Management') }}</h5></a>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border pt-2">
-                                    <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.shift.index') }}"><h5>{{ __('Shift Management') }}</h5></a>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col border pt-2">
-                                    <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.bidding-queue.index') }}"><h5>{{ __('Bidding Queue') }}</h5></a>
+                                        <a class="nav-link" href="{{ route('admin.schedules.index') }}"><h5>{{ __('Schedule Management') }}</h5></a>
                                     </button>
                                 </div>
                             </div>
                         @endif
 
                         <div class="row">
-                            <div class="col border pt-2">
+                            <div class="col pt-2">
                                 <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('user.biddingschedule.index') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
+                                    <a class="nav-link" href="{{ route('user.schedules.view') }}"><h5>{{ __('Bid on Schedule') }}</h5></a>
                                 </button>
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col border pt-2">
-                                <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('user.biddingschedule.bids') }}"><h5>{{ __('My Bids') }}</h5></a>
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                 @endguest
 
@@ -161,10 +141,12 @@
                         @include('partials.alerts')
                         @yield('content')
                     </main>
-                </div>
-            </div>
+                </div>  
+            </div> 
+            @include('layouts.footer')
         </div>
-
+    </div>
+        
         <!--JQuery hosted-->
     <script
         src="https://code.jquery.com/jquery-3.4.1.js"

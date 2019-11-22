@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use App\User;
-use App\Models\BiddingSchedule;
+use App\Schedule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -20,7 +20,7 @@ class EmailNotification extends Mailable
      *
      * @return void
      */
-    public function __construct(User $user, BiddingSchedule $biddingSchedule)
+    public function __construct(User $user, Schedule $biddingSchedule)
     {
         $this->user = $user;
         $this->biddingSchedule = $biddingSchedule;

@@ -13,13 +13,23 @@ class CreateShiftsTable extends Migration
      */
     public function up()
     {
+        
+        Schema::dropIfExists('bid_early_shifts');
+        Schema::dropIfExists('bids');
+        Schema::dropIfExists('early_shifts');
+        Schema::dropIfExists('bidding_schedule_shift');
+        Schema::dropIfExists('shifts');
+        
+
         Schema::create('shifts', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('schedule_id');
+            $table->unsignedBigInteger('specialty_id');
             $table->string('name');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->integer('minimun_staff');
             $table->timestamps();
+
+            $table->foreign('schedule_id')->references('id')->on('schedules')->onDelete('cascade');
+            $table->foreign('specialty_id')->references('id')->on('specialties')->onDelete('cascade');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddApprovedColumnToBidsTable extends Migration
+class AddBiddingQueueIdToBidsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,15 @@ class AddApprovedColumnToBidsTable extends Migration
      */
     public function up()
     {
+        
         Schema::table('bids', function (Blueprint $table) {
-            $table->tinyInteger('approved')->nullable();
+            
+            $table->unsignedBigInteger('bidding_queue_id');
+
+            $table->foreign('bidding_queue_id')->references('id')->on('bidding_queues');
         });
+
+        
     }
 
     /**
@@ -26,7 +32,7 @@ class AddApprovedColumnToBidsTable extends Migration
     public function down()
     {
         Schema::table('bids', function (Blueprint $table) {
-            $table->dropColumn('approved');
+            $table->dropColumn(['bidding_queue_id']);
         });
     }
 }
