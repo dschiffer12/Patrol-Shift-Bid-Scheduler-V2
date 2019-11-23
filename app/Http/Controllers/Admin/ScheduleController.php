@@ -183,6 +183,11 @@ class ScheduleController extends Controller
         // dd($request);
         // $schedule = Schedule::findOrFail($id);
 
+        /**
+         * Validate the request
+         */
+
+    
         $spot = new Spot;
 
         $spot->shift_id = $request->shift_id;
@@ -376,12 +381,12 @@ class ScheduleController extends Controller
                 $queue->start_time_bidding = $date;
                 $queue->save();
 
-                // notify my email
-                $user = $queue->user;
-                $emailSend = $this->sendEmail($user, $schedule);
+                // // notify my email - disables for now
+                // $user = $queue->user;
+                // $emailSend = $this->sendEmail($user, $schedule);
                 
-                // sleep for 1 seconds for mailtrap limitations
-                 sleep(1);
+                // // sleep for 1 seconds for mailtrap limitations
+                //  sleep(1);
             }
         }
 

@@ -16,5 +16,12 @@ class Bid extends Model
         return $this->belongsTo('App\Schedule');
     }
 
+    public function spot() {
+        return $this->belongsTo('App\Spot');
+    }
+
+    public function biddingQueue() {
+        return $this->belongsTo('App\BiddingQueue');
+    }
     
 }
