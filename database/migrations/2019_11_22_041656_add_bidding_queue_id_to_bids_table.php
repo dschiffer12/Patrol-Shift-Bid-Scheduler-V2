@@ -18,7 +18,7 @@ class AddBiddingQueueIdToBidsTable extends Migration
             
             $table->unsignedBigInteger('bidding_queue_id');
 
-            $table->foreign('bidding_queue_id')->references('id')->on('bidding_queues');
+            $table->foreign('bidding_queue_id')->references('id')->on('bidding_queues')->onDelete('cascade');
         });
 
         
@@ -32,6 +32,7 @@ class AddBiddingQueueIdToBidsTable extends Migration
     public function down()
     {
         Schema::table('bids', function (Blueprint $table) {
+            $table->dropForeign(['bidding_queue_id']);
             $table->dropColumn(['bidding_queue_id']);
         });
     }
