@@ -180,6 +180,7 @@ class ScheduleController extends Controller
         
         $bidding_queue->bidding = false;
         $bidding_queue->bid_submitted = true;
+        $bidding_queue->end_time_bidding = $date;
         $bidding_queue->save();
 
 
@@ -218,8 +219,8 @@ class ScheduleController extends Controller
 
         // echo('bid submitted');
 
-        return view('user.schedules.index')->with('success', 'Bid submitted!!');
-
+        return redirect('/users/schedules/index')->with('success', 'Bid submitted!!');
+        
     }
 
 

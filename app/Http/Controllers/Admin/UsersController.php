@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Officer;
 
 class UsersController extends Controller
 {
@@ -75,11 +76,17 @@ class UsersController extends Controller
         //dd($user);
         $roles = Role::all();
         $specialties = Specialty::all();
+        $officer = $user->officer;
+
+        if(!$officer) {
+            $officer = new Officer;
+        }
 
         return view('admin.users.edit')->with([
             'user' => $user,
             'roles' => $roles,
-            'specialties' => $specialties
+            'specialties' => $specialties,
+            'officer' => $officer
         ]);
     }
 
@@ -108,6 +115,10 @@ class UsersController extends Controller
             'specialtiess' => ['array'],
             'specialtiess.*' => ['max:255'],
             'notes' => ['max:255'],
+            'unit_number' => ['nullable', 'numeric', 'min:0'],
+            'emergency_number' => ['nullable', 'numeric', 'min:0'],
+            'vehicle_number' => ['nullable', 'numeric', 'min:0'],
+            'zone' => ['nullable', 'string', 'max:255'],
         ]);
 
         if($request->email != $user->email){
@@ -147,6 +158,28 @@ class UsersController extends Controller
                     'notes' => $validatedData['notes'],
                 ]);
         }
+
+        // check if user had a record in the officers table
+        if($validatedData['unit_number'] || $validatedData['emergency_number'] || $validatedData['vehicle_number']) {    
+            $officer = $user->officer;
+
+            if(!$officer) {
+                $officer = new Officer;
+                $offcier->unit_number = $validatedData['unit_number'];
+                $offcier->emergency_number = $validatedData['emergency_number'];
+                $offcier->vehicle_number = $validatedData['vehicle_number'];
+                $officer->zone = $validatedData['zone'];
+                $officer->save();
+            } else {
+                $officer->update([
+                    'unit_number'=> $validatedData['unit_number'],
+                    'emergency_number'=> $validatedData['emergency_number'],
+                    'vehicle_number'=> $validatedData['vehicle_number'],
+                    'zone'=> $validatedData['zone']
+                ]);
+            }   
+        }
+
 
         $user->roles()->sync($validatedData['role']);
 

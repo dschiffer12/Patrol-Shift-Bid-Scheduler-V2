@@ -246,7 +246,7 @@
 														<td>
 															@if ($spot->qty_available > 0)
 																<div class="form-check">
-																	<input class="form-check-input" type="radio" id="spot_id" name="spot_id" value={{$spot->id}}>
+																	<input class="form-check-input" type="radio" id="spot_id" name="spot_id" onclick="toggleSubmit()" value={{$spot->id}}>
 																</div>
 															@else
 																<div class="form-check">
@@ -290,7 +290,7 @@
 				</a>     
 			</div>
 			<div class="col">
-				<button type="submit" class="btn btn-primary float-right">
+				<button type="submit" disabled id="submit_btn" class="btn btn-primary float-right">
 					{{ __('Submit') }}
 				</button>
 			</div>   
@@ -300,5 +300,12 @@
 
 
 @endisset
+
+<script type="text/javascript">
+	function toggleSubmit() {
+		var button = document.getElementById('submit_btn');
+		button.disabled = false;	
+	}
+</script>
 
 @endsection
