@@ -218,8 +218,8 @@ class ScheduleController extends Controller
 
         // echo('bid submitted');
 
-        return view('user.schedules.index')->with('success', 'Bid submitted!!');
-
+        return redirect('/users/schedules/index')->with('success', 'Bid submitted!!');
+        
     }
 
 

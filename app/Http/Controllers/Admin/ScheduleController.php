@@ -234,12 +234,34 @@ class ScheduleController extends Controller
         
         $schedule = Schedule::find($id);
 
+        // get all the shidts for this schedule
+        $shifts = $schedule->shifts;
+
+        $specialties = Specialty::all();
+       
+        // remove all the specialties that do not have a shift
+        foreach($specialties as $key => $specialty) {
+            $j = 0;
+            foreach($shifts as $shift) {
+                if($shift->specialty_id == $specialty->id) {
+                    $j++;
+                }
+            }
+            if($j < 1) {
+                $specialties->forget($key);
+            }
+
+            $j=0;
+        }
+
+
+
         $users = User::orderBy('date_in_position', 'asc')
             ->get();
 
         foreach($users as $user) {
-            $specialties = $user->specialties;
-            $user->push($specialties);
+            $specialtiesU = $user->specialties;
+            $user->push($specialtiesU);
         }
 
         $bidding_queue = $schedule->biddingQueues;
@@ -248,8 +270,7 @@ class ScheduleController extends Controller
             BiddingQueue::destroy($queue->id);
         }
         
-        $specialties = Specialty::all();
-
+        
         return view('admin.schedules.addusers')->with([
             'users'=> $users,
             'specialties'=> $specialties,
