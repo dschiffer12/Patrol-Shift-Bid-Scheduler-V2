@@ -39,12 +39,14 @@
                         @auth
                             @if(Auth::user()->hasAnyRoles(['root', 'admin']))
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Admin Control
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/register">Add New User</a>
-                                        <a class="dropdown-item" href="/admin/users">Users Management</a>
+                                        <!-- <a class="dropdown-item" href="/register">Add New User</a> -->
+                                        <a class="dropdown-item text-danger" href="/admin/users">Users Management</a>
+                                        <a class="dropdown-item text-danger" href="/admin/specialties">Specialties Management</a>
+                                        <a class="dropdown-item text-danger" href="/admin/roles">Roles Management</a>
                                         <!-- <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#">Something else here</a> -->
                                     </div>

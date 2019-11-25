@@ -12,7 +12,7 @@ class Officer extends Model
      * @var array
      */
     protected $fillable = [
-        'emergency_number', 'vehicle_number'
+        'user_id', 'unit_number', 'emergency_number', 'vehicle_number'
     ];
 
     /**

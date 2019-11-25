@@ -56,6 +56,16 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::get('/schedule/{id}/viewbid', 'BidQueueController@viewbid')->name('schedules.viewbid');
     Route::post('/schedules/{id}/bid', 'BidQueueController@bid')->name('schedules.bid');
     Route::post('/schedules/bidforuser', 'BidQueueController@bidforuser')->name('schedules.bidforuser');
+
+    // specialties
+    Route::get('/specialties', 'SpecialtyController@index')->name('specialties');
+    Route::post('/specialties/add', 'SpecialtyController@add')->name('specialties.add');
+    Route::get('/specialties/{id}/delete', 'SpecialtyController@delete')->name('specialties.delete');
+
+    // roles
+    Route::get('/roles', 'RoleController@index')->name('roles');
+    Route::post('/roles/add', 'RoleController@add')->name('roles.add');
+    Route::get('/roles/{id}/delete', 'RoleController@delete')->name('roles.delete');
 });
 
 
