@@ -21,6 +21,7 @@ Auth::routes();
 // // Disable the register controller
 // Auth::routes(['register' => false]);
 
+// Note to self: When cleaning up, I need to disable/except unused function from resource routes
 
 Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
 
@@ -35,9 +36,6 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::get('/shift/createFromSchedule', 'ShiftController@createFromSchedule')->name('shift.createFromSchedule');
     Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
     Route::resource('/shift', 'ShiftController');
-    // Route::resource('/bidding-queue', 'BiddingQueueController');
-    // Route::get('/bidding-queue/view/{id}', 'BiddingQueueController@view')->name('bidding-queue.view');
-    // Route::get('/bidding-queue/bid/{id}', 'BiddingQueueController@bid')->name('bidding-queue.bid');
 
     //Route for the Schedule controller.
     Route::resource('/schedules', 'ScheduleController');
@@ -85,3 +83,6 @@ Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->g
     Route::get('/schedules/{id}/viewbid', 'ScheduleController@viewBid')->name('schedules.viewbid');
 
 });
+
+// The catch-all will match anything except the previous defined routes.
+Route::any('{catchall}', 'CatchAllController@handle')->where('catchall', '.*');
