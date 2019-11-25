@@ -44,10 +44,10 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <!-- <a class="dropdown-item" href="/register">Add New User</a> -->
-                                        <a class="dropdown-item text-danger" href="/admin/schedules">{{ __('Schedule Management') }}</a>
-                                        <a class="dropdown-item text-danger" href="/admin/users">{{__('Users Management')}}</a>
-                                        <a class="dropdown-item text-danger" href="/admin/specialties">{{__('Specialties Management')}}</a>
-                                        <a class="dropdown-item text-danger" href="/admin/roles">{{__('Roles Management')}}</a>
+                                        <a class="dropdown-item text-danger" href="/admin/schedules"><h5>{{ __('Schedule Management') }}</h5></a>
+                                        <a class="dropdown-item text-danger" href="/admin/users"><h5>{{__('Users Management')}}</h5></a>
+                                        <a class="dropdown-item text-danger" href="/admin/specialties"><h5>{{__('Specialties Management')}}</h5></a>
+                                        <a class="dropdown-item text-danger" href="/admin/roles"><h5>{{__('Roles Management')}}</h5></a>
                                         <!-- <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#">Something else here</a> -->
                                     </div>

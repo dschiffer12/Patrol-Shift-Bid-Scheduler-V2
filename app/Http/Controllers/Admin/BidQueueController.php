@@ -248,6 +248,7 @@ class BidQueueController extends Controller
         
         $bidding_queue->bidding = false;
         $bidding_queue->bid_submitted = true;
+        $bidding_queue->end_time_bidding = $date;
         $bidding_queue->save();
 
 
