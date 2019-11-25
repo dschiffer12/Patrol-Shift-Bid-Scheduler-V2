@@ -21,6 +21,7 @@ class ModifyOfficersTable extends Migration
             $table->integer('unit_number')->nullable();
             $table->integer('emergency_number')->nullable();
             $table->integer('vehicle_number')->nullable();
+            $table->string('zone')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

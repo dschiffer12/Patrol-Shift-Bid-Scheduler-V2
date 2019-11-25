@@ -66,6 +66,7 @@ class RegisterController extends Controller
             'unit_number' => ['nullable', 'numeric', 'min:0'],
             'emergency_number' => ['nullable', 'numeric', 'min:0'],
             'vehicle_number' => ['nullable', 'numeric', 'min:0'],
+            'zone' => ['nullable', 'string', 'max:255'],
         ]);
     }
 
@@ -86,12 +87,13 @@ class RegisterController extends Controller
         ]);
 
                 
-        if($data['unit_number'] || $data['emergency_number'] || $data['vehicle_number']) {      
+        if($data['unit_number'] || $data['emergency_number'] || $data['vehicle_number'] || $data['zone']) {      
             $officer = Officer::create([
                 'user_id' => $user->id,
                 'unit_number' => $data['unit_number'],
                 'emergency_number' => $data['emergency_number'],
                 'vehicle_number' => $data['vehicle_number'],
+                'zone' => $data['zone']
             ]);
         }
 

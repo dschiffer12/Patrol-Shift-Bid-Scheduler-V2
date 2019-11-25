@@ -131,6 +131,19 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="zone" class="col-md-4 col-form-label text-md-right">{{ __('Zone') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="zone" type="text" class="form-control @error('zone') is-invalid @enderror" name="zone" value="{{ old('zone') ? old('zone') : $officer->zone }}" autocomplete="zone" autofocus>
+
+                                @error('zone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <label for="notes" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>

@@ -117,7 +117,8 @@ class UsersController extends Controller
             'notes' => ['max:255'],
             'unit_number' => ['nullable', 'numeric', 'min:0'],
             'emergency_number' => ['nullable', 'numeric', 'min:0'],
-            'vehicle_number' => ['nullable', 'numeric', 'min:0']
+            'vehicle_number' => ['nullable', 'numeric', 'min:0'],
+            'zone' => ['nullable', 'string', 'max:255'],
         ]);
 
         if($request->email != $user->email){
@@ -167,12 +168,14 @@ class UsersController extends Controller
                 $offcier->unit_number = $validatedData['unit_number'];
                 $offcier->emergency_number = $validatedData['emergency_number'];
                 $offcier->vehicle_number = $validatedData['vehicle_number'];
+                $officer->zone = $validatedData['zone'];
                 $officer->save();
             } else {
                 $officer->update([
                     'unit_number'=> $validatedData['unit_number'],
                     'emergency_number'=> $validatedData['emergency_number'],
-                    'vehicle_number'=> $validatedData['vehicle_number']
+                    'vehicle_number'=> $validatedData['vehicle_number'],
+                    'zone'=> $validatedData['zone']
                 ]);
             }   
         }
