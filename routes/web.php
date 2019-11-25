@@ -29,13 +29,6 @@ Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->name('admin.')->group(function() {
     Route::resource('/users', 'UsersController');
 
-    //Route for the Bidding Schedule actions.
-    Route::resource('/bidding-schedule', 'BiddingSchedule');
-
-    //Route for the Shift actions.
-    Route::get('/shift/createFromSchedule', 'ShiftController@createFromSchedule')->name('shift.createFromSchedule');
-    Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
-    Route::resource('/shift', 'ShiftController');
 
     //Route for the Schedule controller.
     Route::resource('/schedules', 'ScheduleController');
@@ -48,6 +41,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::post('/schedules/{id}/storeQueue', 'ScheduleController@storeQueue')->name('schedules.storeQueue');
     Route::get('/schedules/{id}/reviewSchedule', 'ScheduleController@reviewSchedule')->name('schedules.reviewSchedule');
     Route::get('/schedules/{id}/activateSchedule', 'ScheduleController@activateSchedule')->name('schedules.activateSchedule');
+    Route::get('/schedules/{id}/approveSchedule', 'ScheduleController@approveSchedule')->name('schedules.approveSchedule');
+    Route::post('/schedules/saveApproval', 'ScheduleController@saveApproval')->name('schedules.saveApproval');
+    Route::get('/schedules/{id}/viewApproved', 'ScheduleController@viewApproved')->name('schedules.viewApproved');
 
     // bidding queue
     Route::get('/schedule/{id}/biddingQueue', 'BidQueueController@view')->name('schedules.biddingQueue');
@@ -68,14 +64,8 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
 
 
 Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
-    Route::get('/biddingschedule/bids', 'BiddingController@bids')->name('biddingschedule.bids');
     Route::resource('/profile', 'ProfileController');
     Route::resource('/psheet', 'PSheetController');
-    Route::resource('/biddingschedule', 'BiddingController');
-
-    // Routes for the bids
-    // Route::resource('/schedules', 'ScheduleController');
-    // Route::post('/bid/{id}/view', 'BidController@view')->name('bid.view');
 
     Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
     Route::get('/schedules/{id}/bid', 'ScheduleController@bid')->name('schedules.bid');
