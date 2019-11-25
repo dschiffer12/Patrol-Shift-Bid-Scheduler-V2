@@ -59,7 +59,7 @@
 </div>
 
 <div style="height: 500px" class="container">
-    <div class="row border border-primary h-100">
+    <div class="row border border-primary ">
         <div class="col col-md-12 p-2">
             @foreach( $shifts as $shift )
                 <table class="table">
