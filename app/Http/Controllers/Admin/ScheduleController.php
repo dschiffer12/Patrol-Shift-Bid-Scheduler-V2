@@ -417,6 +417,135 @@ class ScheduleController extends Controller
 
 
     /**
+     * Approve the schedule/bids after all bids
+     */
+    public function approveSchedule($id) {
+
+        $schedule = Schedule::find($id);
+        // $bidding_queue = $schedule->biddingQueues;
+        $shifts = $schedule->shifts;
+
+        // dd($shifts);
+
+        $specialties = Specialty::all();
+        
+        foreach($shifts as $shift) {
+            $spots = $shift->spots;
+            foreach($spots as $spot) {
+                $bids = $spot->bids;
+                foreach($bids as $bid) {
+                    $user = $bid->user;
+                    $bid->push($user);
+                    $spot->push($bid);
+                }
+                
+            }
+            $shift->push($spots);
+        }
+
+        
+        // remove all the specialties that do not have a shift
+        foreach($specialties as $specialty) {
+            $i = 0;
+            foreach($shifts as $shift) {
+                if($shift->specialty_id == $specialty->id) {
+                    $i++;
+                }
+            }
+            if($i < 1) {
+                $specialties->pop($specialty);
+            }
+            $i=0;
+        }
+
+        return view('admin.schedules.approveschedule')->with([
+            'specialties'=> $specialties,
+            'schedule'=> $schedule,
+        ]);
+
+
+    }
+
+
+    public function saveApproval(Request $request) {
+
+        /**
+         * Validate the request
+         */
+        $validatedData = $request->validate([
+            'schedule_id' => ['required', 'integer'],
+        ]);
+
+        $schedule = Schedule::find($validatedData['schedule_id']);
+
+        $schedule->approved = true;
+        $schedule->currently_active = false;
+        $schedule->save();
+
+        $shifts = $schedule->shifts;
+        
+        foreach($shifts as $shift) {
+            $spots = $shift->spots;
+            foreach($spots as $spot) {
+                $bids = $spot->bids;
+                foreach($bids as $bid) {
+                    $bid->approved = true;
+                    $bid->save();
+                }   
+            }
+        }
+
+        return redirect('/admin/schedules/')->with('successful', 'Schedule approved!!');        
+    }
+
+
+    public function viewApproved($id) {
+        $schedule = Schedule::find($id);
+        // $bidding_queue = $schedule->biddingQueues;
+        $shifts = $schedule->shifts;
+
+        // dd($shifts);
+
+        $specialties = Specialty::all();
+        
+        foreach($shifts as $shift) {
+            $spots = $shift->spots;
+            foreach($spots as $spot) {
+                $bids = $spot->bids;
+                foreach($bids as $bid) {
+                    $user = $bid->user;
+                    $bid->push($user);
+                    $spot->push($bid);
+                }
+                
+            }
+            $shift->push($spots);
+        }
+
+        
+        // remove all the specialties that do not have a shift
+        foreach($specialties as $specialty) {
+            $i = 0;
+            foreach($shifts as $shift) {
+                if($shift->specialty_id == $specialty->id) {
+                    $i++;
+                }
+            }
+            if($i < 1) {
+                $specialties->pop($specialty);
+            }
+            $i=0;
+        }
+
+        return view('admin.schedules.approveschedule')->with([
+            'specialties'=> $specialties,
+            'schedule'=> $schedule,
+            'view_approval'=> true,
+        ]);
+    }
+
+
+    /**
      * Send Email to an user
      *
      * @param int $id User Id

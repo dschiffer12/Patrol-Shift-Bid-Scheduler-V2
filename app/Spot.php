@@ -13,4 +13,9 @@ class Spot extends Model
     {
         return $this->belongsTo('App\Shift');
     }
+
+
+    public function bids() {
+        return $this->hasMany('App\Models\Bid');
+    }
 }

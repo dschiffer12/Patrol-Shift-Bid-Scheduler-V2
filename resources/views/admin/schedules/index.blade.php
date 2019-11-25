@@ -37,7 +37,7 @@
                             <th class="text-center" scope="col">End Date</th>
                             <th class="text-center" scope="col">Response Time</th>
                             <th class="text-center" scope="col">Satatus</th>
-                            <th class="text-center" scope="col">Action</th>
+                            <th style="width: 10%" class="text-center" scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,31 +48,32 @@
 									<td class="text-center">{{ date('m-d-Y', strtotime($schedule->end_date)) }}</td>  
                                     <td class="text-center">{{ $schedule->response_time }} hours</td>
                                     <td class="text-center">@if ($schedule->currently_active == 1)
-                                                                Active
+                                                                {{__('Active')}}
+                                                            @elseif ($schedule->approved == true)
+                                                                {{__('Approved')}}
                                                             @else
-                                                                Inactive
+                                                                {{__('Inactive')}}
                                                             @endif
                                     </td>
                                     <td>
 										<div class="row">
 											<div class="col text-center">
+                                                <div class="btn-group" role="group" aria-label="Basic example">
                                                 @if ($schedule->currently_active == 1)
                                                     <a href="{{ route('admin.schedules.biddingQueue', $schedule->id) }}"><button type="button" class="btn btn-primary">Queue</button></a>
-                                                @else
+                                                    <a href="{{ route('admin.schedules.approveSchedule', $schedule->id) }}"><button type="button" class="btn btn-success ml-3">Approve</button></a>
+                                                @elseif($schedule->approved = false)
                                                     <a href="{{ route('admin.schedules.edit', $schedule->id) }}"><button type="button" class="btn btn-primary">Edit</button></a>
                                                 @endif
-                                            </div>
-
-											@if($schedule->active == 0)
-												<div class="col text-center">
-													<form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST" class="delete">
+                                                    <a href="{{ route('admin.schedules.viewApproved', $schedule->id) }}"><button type="button" class="btn btn-primary ml-3">View</button></a>
+                                                    <form action="{{ route('admin.schedules.destroy', $schedule->id) }}" method="POST" class="delete">
 														<input type="hidden" name="_method" value="DELETE">
 														@csrf
 														@method("DELETE")
-														<button type="submit" onclick="return confirm('Delete {{$schedule->name}}?')" class="btn btn-danger">Delete</button>
+														<button type="submit" onclick="return confirm('Delete {{$schedule->name}}?')" class="btn btn-danger ml-3">Delete</button>
 													</form>
-												</div>
-											@endif
+                                                </div>
+                                            </div>		
                                         </div>
                                     </td>
                                     
