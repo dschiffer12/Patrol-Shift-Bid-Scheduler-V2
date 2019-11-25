@@ -7,7 +7,7 @@
 <!-- <div class="container">
     <div class="row justify-content-center">
         <div class="col">
-            
+
             <img src='img/badge.gif' class="rounded mx-auto d-block img-fluid" alt='Badge' >
                 <br>
         </div>
@@ -26,7 +26,7 @@
     <div class="row justify-content-start mt-3">
         <div class="col col-md-8">
             <form method="GET" action="{{ route('home') }}">
-                
+
                 <div class="form-group row">
                     <label for="calendar_date" class="col-md-2 col-form-label ">{{ __('Select Date') }}</label>
 
@@ -48,15 +48,54 @@
             </form>
 
         </div>
+
+        @if ( $editable ?? ''  )
+            <div class="col col-md-2"></div>
+            <div class="col col-md-2">
+                <button class="btn btn-primary float-right">Edit</button>
+            </div>
+        @endif
     </div>
 </div>
 
 <div style="height: 500px" class="container">
-    <div class="row justify-content-center border border-primary h-100">
-        <div class="col col-md-8 align-self-center">
+    <div class="row border border-primary h-100">
+        <div class="col col-md-12 p-2">
+            @foreach( $shifts as $shift )
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">{{ $shift }}</th>
+                            <th scope="col">Unit #</th>
+                            <th scope="col">Emgcy #</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Shift Start</th>
+                            <th scope="col">Shift End</th>
+                            <th scope="col">Zone</th>
+                            <th scope="col">Specialties</th>
+                            <th scope="col">Vehicle</th>
+                        </tr>
+                    </thead>
 
-        <h5>The Daily Roster will be displayed here</h5>
-        
+                    <tbody>
+                        @foreach( $spots as $index => $spot)
+                            @if($spot->shift->name == $shift)
+                            <tr>
+                                <td>{{ !empty($spot->shift->specialty) ? $spot->shift->specialty->name:'' }}</td>
+                                <td>{{ !empty($spot->shift->specialty->users[0]->officer) ? $spot->shift->specialty->users[0]->officer->unit_number:'' }}</td>
+                                <td>{{ !empty($spot->shift->specialty->users[0]->officer) ? $spot->shift->specialty->users[0]->officer->emergency_number:'' }}</td>
+                                <td>{{ !empty($spot->shift->specialty->users[0]) ? $spot->shift->specialty->users[0]->name:'' }}</td>
+                                <td>{{ $spot->{$weekday.'_s'} }}</td>
+                                <td>{{ $spot->{$weekday.'_e'} }}</td>
+                                <td></td>
+                                <td>{{ !empty($spot->shift->specialty) ? $spot->shift->specialty->name:'' }}</td>
+                                <td>{{ !empty($spot->shift->specialty->users[0]->officer) ? $spot->shift->specialty->users[0]->officer->vehicle_number:'' }}</td>
+                            </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            @endforeach
     </div>
 </div>
 @endsection
