@@ -30,6 +30,7 @@ class PSheetController extends Controller
         ];
         $dayOfTheWeek = Carbon::now()->dayOfWeek;
         $weekday = $weekMap[$dayOfTheWeek];
+        $daySelected = Carbon::now();
 
         $spots = Spot::join('shifts', 'spots.shift_id', '=', 'shifts.id')
             ->join('schedules', 'shifts.schedule_id', '=', 'schedules.id')
@@ -38,8 +39,6 @@ class PSheetController extends Controller
             ->groupBy('shift_id')
             ->get();
 
-        $test = $spots[5]->shift->specialty->users[0]->name;
-
         $shifts = array();
         foreach ($spots as $spot){
                 if(!in_array($spot->shift->name, $shifts)){
@@ -47,9 +46,87 @@ class PSheetController extends Controller
                 }
             }
 
+        $user = Auth::user();
+        if($user->hasAnyRoles(['root', 'admin'])){
+            return view('user.psheet')->with([
+                'editable' => true,
+                'spots' => $spots,
+                'weekday' => $weekday,
+                'shifts' => $shifts,
+                'daySelected' => $daySelected
+            ]);
+        }
 
-        //$test = $spots[0]->shift->specialty->user->officer->emergency_number;
-        //$test = $spots[0]->shift->specialty->users[0]->officer->emergency_number;
+        return view('user.psheet')->with([
+            'spots' => $spots,
+            'weekday' => $weekday,
+            'shifts' => $shifts,
+            'daySelected' => $daySelected
+        ]);
+    }
+
+    /**
+     * Return the schedule for an specific date coming for the view.
+     *
+     * @param \http\Env\Request
+     * @return view with the list for that specific date
+    **/
+    public function date(Request $request)
+    {
+        $dataValidated = $request->validate([
+            'calendar_date' => ['required', 'date']
+        ]);
+
+        $dayofweek = date('w', strtotime($dataValidated['calendar_date']));
+
+        $weekMap = [
+            0 => 'sunday',
+            1 => 'monday',
+            2 => 'tuesday',
+            3 => 'wednesday',
+            4 => 'thursday',
+            5 => 'friday',
+            6 => 'saturday',
+        ];
+        $weekday = $weekMap[$dayofweek];
+
+        $spots = Spot::join('shifts', 'spots.shift_id', '=', 'shifts.id')
+            ->join('schedules', 'shifts.schedule_id', '=', 'schedules.id')
+            ->join('bids', 'spots.id', '=', 'bids.spot_id')
+            ->where([['schedules.start_date', '<=', $dataValidated['calendar_date']], ['schedules.end_date', '>=', $dataValidated['calendar_date']], ['bids.approved', '=', 1], ['spots.'.$weekday.'_s', '<>', null], ['spots.'.$weekday.'_e', '<>', null]])
+            ->groupBy('shift_id')
+            ->get();
+
+        $shifts = array();
+        foreach ($spots as $spot){
+            if(!in_array($spot->shift->name, $shifts)){
+                array_push($shifts, $spot->shift->name);
+            }
+        }
+
+        $spotsItemsLenght = sizeof($spots);
+
+        if($spotsItemsLenght == 0){
+            $user = Auth::user();
+            if($user->hasAnyRoles(['root', 'admin'])){
+                return view('user.psheet')->with([
+                    'editable' => true,
+                    'spots' => $spots,
+                    'weekday' => $weekday,
+                    'shifts' => $shifts,
+                    'daySelected' => $dataValidated['calendar_date'],
+                    'noSpots' => 'No schedule available for this date'
+                ]);
+            }
+
+            return view('user.psheet')->with([
+                'spots' => $spots,
+                'weekday' => $weekday,
+                'shifts' => $shifts,
+                'daySelected' => $dataValidated['calendar_date'],
+                'noSpots' => 'No schedule available for this date'
+            ]);
+        }
 
         $user = Auth::user();
         if($user->hasAnyRoles(['root', 'admin'])){
@@ -57,14 +134,16 @@ class PSheetController extends Controller
                 'editable' => true,
                 'spots' => $spots,
                 'weekday' => $weekday,
-                'shifts' => $shifts
+                'shifts' => $shifts,
+                'daySelected' => $dataValidated['calendar_date']
             ]);
         }
 
         return view('user.psheet')->with([
             'spots' => $spots,
             'weekday' => $weekday,
-            'shifts' => $shifts
+            'shifts' => $shifts,
+            'daySelected' => $dataValidated['calendar_date']
         ]);
     }
 

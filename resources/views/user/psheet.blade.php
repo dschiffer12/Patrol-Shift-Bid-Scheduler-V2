@@ -25,13 +25,13 @@
 
     <div class="row justify-content-start mt-3">
         <div class="col col-md-8">
-            <form method="GET" action="{{ route('home') }}">
+            <form method="GET" action="{{ route('user.psheet.date') }}">
 
                 <div class="form-group row">
                     <label for="calendar_date" class="col-md-2 col-form-label ">{{ __('Select Date') }}</label>
 
                     <div class="form-group col-md-4">
-                        <input id="calendar_date" class="form-control" type="date" name="calendar_date" value={{date((now()))}} required>
+                        <input id="calendar_date" class="form-control" type="date" name="calendar_date" value={{ $daySelected }} required>
 
                         @error('date-in-position')
                             <span class="calendar_date" role="alert">
@@ -61,6 +61,11 @@
 <div style="height: 500px" class="container">
     <div class="row border border-primary ">
         <div class="col col-md-12 p-2">
+            @if ($noSpots ?? '')
+                <div class="alert alert-warning" role="alert">
+                    {{ $noSpots }}
+                </div>
+            @endif
             @foreach( $shifts as $shift )
                 <table class="table">
                     <thead class="thead-light">
