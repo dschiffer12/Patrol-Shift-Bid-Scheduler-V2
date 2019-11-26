@@ -27,11 +27,11 @@ Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth
 
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->name('admin.')->group(function() {
-    Route::resource('/users', 'UsersController');
+    Route::resource('/users', 'UsersController', ['except' => ['create', 'store']]);
 
 
     //Route for the Schedule controller.
-    Route::resource('/schedules', 'ScheduleController');
+    Route::resource('/schedules', 'ScheduleController', ['except' => ['show', 'update', 'show']]);
     Route::resource('/schedules/{id}/edit', 'ScheduleController@edit');
     Route::post('/schedules/{id}/addShift', 'ScheduleController@addShift')->name('schedules.addShift');
     Route::post('/schedules/{id}/addSpot', 'ScheduleController@addSpot')->name('schedules.addSpot');
@@ -75,4 +75,4 @@ Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->g
 });
 
 // The catch-all will match anything except the previous defined routes.
-Route::any('{catchall}', 'CatchAllController@handle')->where('catchall', '.*');
+// Route::any('{catchall}', 'CatchAllController@handle')->where('catchall', '.*');

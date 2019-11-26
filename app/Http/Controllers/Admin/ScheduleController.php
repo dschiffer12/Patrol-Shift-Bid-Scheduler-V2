@@ -23,19 +23,16 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-       /**
-        * Return the index view with all the schedules
-        */
-
+        // Return the index view with all the schedules
         $schedules = Schedule::paginate(7);
 
-        // dd($schedules);
         if($schedules) {
             return view('admin.schedules.index')->with([
                 'schedules'=> $schedules,
             ]);
-        }
-        
+        } else {
+            return redirect('/')->with('warning', 'Can\'t find schedule');
+        }  
     }
 
     /**
@@ -45,9 +42,9 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-       
         return view('admin.schedules.create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -67,32 +64,18 @@ class ScheduleController extends Controller
             'response_time' => ['required', 'integer', 'gt:0', 'lt:100'],
         ]);
 
+        // store the schedule parameters
         $schedule = new Schedule;
-
         $schedule->name = $request->schedule_name;
         $schedule->start_date = $request->start_date;
         $schedule->end_date = $request->end_date;
         $schedule->response_time = $request->response_time;
-
         $schedule->save();
       
-        
         return redirect('/admin/schedules/'. $schedule->id . '/edit/');
-
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-
-    }
-
+   
     /**
      * Show the form for editing the specified resource.
      *
@@ -100,24 +83,12 @@ class ScheduleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
-        
+    {        
+        // find the schedule, specialties, and shifts
         $schedule = Schedule::findOrFail($id);
         $specialties = Specialty::all();
-
-     
         $shifts = $schedule->shifts;
-
-        // foreach($specialties as $specialty) {
-        //     foreach($shifts as $shift){
-        //         $spots = $shift->spots;
-        //         $shift->push($spots);
-        //         $specialty->push($shift);   
-        //     }    
-        // }
-
-
+ 
         /**
          * Return view with the new schedule.
          */
@@ -127,116 +98,126 @@ class ScheduleController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
+   
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $id : schedule id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         Schedule::destroy($id);
-
         return redirect('/admin/schedules/')->with('success', 'Schedule deleted.');
-
     }
 
 
+    /**
+     * Add shifts to the schedule
+     * 
+     * @param  int  $id the schedule id
+     */
     public function addShift(Request $request, $id) {
         
-        /**
-         * Validate the request
-         */
+        // validate the request
         $validatedData = $request->validate([
             'shift_name' => ['required', 'string', 'max:255'],
             'schedule_id' => ['required', 'integer'],
             'specialty_id' => ['required', 'integer'],
         ]);
 
+        // store the shift parameters
         $shift = new Shift;
-
         $shift->name = $request->shift_name;
         $shift->schedule_id = $request->schedule_id;
         $shift->specialty_id = $request->specialty_id;
-
         $shift->save();
 
         return redirect('/admin/schedules/'. $id . '/edit/');
-
     }
 
 
+    /**
+     * Add spots to shifts
+     * 
+     * @param  int  $id
+     */
     public function addSpot(Request $request, $id) {
+
+        // remove the null argunements form the request
+        foreach($request->request as $key => $value) {
+            if(!$value) {
+                $request->offsetUnset($key);
+            }
+        }
+
+        // validate the request
+        $validatedData = $request->validate([
+            'shift_id' => ['required', 'integer'],
+            'qty_available' => ['required', 'integer'],
+            'friday_s' => ['nullable', 'date_format:H:i:s'],
+            'friday_e' => ['required_with:friday_s', 'date_format:H:i:s', 'different:friday_s'],
+            'saturday_s' => ['nullable', 'date_format:H:i:s'],
+            'saturday_e' => ['required_with:saturday_s', 'date_format:H:i:s', 'different:saturday_s'],
+            'sunday_s' => ['nullable', 'date_format:H:i:s'],
+            'sunday_e' => ['required_with:sunday_s', 'date_format:H:i:s', 'different:sunday_s'],
+            'monday_s' => ['nullable', 'date_format:H:i:s'],
+            'monday_e' => ['required_with:monday_s', 'date_format:H:i:s', 'different:monday_s'],
+            'tuesday_s' => ['nullable', 'date_format:H:i:s'],
+            'tuesday_e' => ['required_with:tuesday_s', 'date_format:H:i:s', 'different:tuesday_s'],
+            'wednesday_s' => ['nullable', 'date_format:H:i:s'],
+            'wednesday_e' => ['required_with:wednesday_s', 'date_format:H:i:s', 'different:wednesday_s'],
+            'thursday_s' => ['nullable', 'date_format:H:i:s'],
+            'thursday_e' => ['required_with:thursday_s', 'date_format:H:i:s', 'different:thursday_s'],     
+        ]);
         
-        // dd($request);
-        // $schedule = Schedule::findOrFail($id);
-
-        /**
-         * Validate the request
-         */
-
-    
+        // store the parameters ot the new request
         $spot = new Spot;
-
-        $spot->shift_id = $request->shift_id;
-        $spot->qty_available = $request->qty_available;
-        $spot->friday_s = $request->friday_s;
-        $spot->friday_e = $request->friday_e;
-        $spot->saturday_s = $request->saturday_s;
-        $spot->saturday_e = $request->saturday_e;
-        $spot->sunday_s = $request->sunday_s;
-        $spot->sunday_e = $request->sunday_e;
-        $spot->monday_s = $request->monday_s;
-        $spot->monday_e = $request->monday_e;
-        $spot->tuesday_s = $request->tuesday_s;
-        $spot->tuesday_e = $request->tuesday_e;
-        $spot->wednesday_s = $request->wednesday_s;
-        $spot->wednesday_e = $request->wednesday_e;
-        $spot->thursday_s = $request->thursday_s;
-        $spot->thursday_e = $request->thursday_e;
+        foreach($validatedData as $key => $data) {    
+            $spot->$key = $data;
+        }
 
         $spot->save();
 
         return redirect('/admin/schedules/'. $id . '/edit/');
-
     }
 
 
+    /**
+     * Delete a spot
+     */
     public function deleteSpot(Request $request, $id) {
 
-        // dd($request->spot_id);
-        Spot::destroy($request->spot_id);
+        $validatedData = $request->validate([
+            'spot_id' => ['required', 'integer'],    
+        ]);
 
+        Spot::destroy($validatedData['spot_id']);
         return redirect('/admin/schedules/'. $id . '/edit/');
-
     }
 
 
+    /**
+     * Delete a shift
+     */
     public function deleteShift(Request $request, $id) {
-        Shift::destroy($request->shift_id);
+
+        $validatedData = $request->validate([
+            'shift_id' => ['required', 'integer'],    
+        ]);
+        Shift::destroy($validatedData['shift_id']);
         return redirect('/admin/schedules/'. $id . '/edit/');
     }
 
-
+    /**
+     * Add an user
+     */
     public function addUsers($id) {
         
         $schedule = Schedule::find($id);
 
         // get all the shidts for this schedule
         $shifts = $schedule->shifts;
-
         $specialties = Specialty::all();
        
         // remove all the specialties that do not have a shift
@@ -250,15 +231,13 @@ class ScheduleController extends Controller
             if($j < 1) {
                 $specialties->forget($key);
             }
-
             $j=0;
         }
-
-
 
         $users = User::orderBy('date_in_position', 'asc')
             ->get();
 
+        // attach the specialties to the users
         foreach($users as $user) {
             $specialtiesU = $user->specialties;
             $user->push($specialtiesU);
@@ -270,14 +249,13 @@ class ScheduleController extends Controller
             BiddingQueue::destroy($queue->id);
         }
         
-        
         return view('admin.schedules.addusers')->with([
             'users'=> $users,
             'specialties'=> $specialties,
             'schedule'=> $schedule,
         ]);       
-
     }
+
 
     /**
      * Store the user bidding queues
@@ -285,24 +263,10 @@ class ScheduleController extends Controller
     public function storeQueue(Request $request, $id) {
 
         $input = $request->all();
-        // dd($input);
 
         foreach($input['allSpecialties'] as $specialtyID => $userID) {
             asort($input['allSpecialties'][$specialtyID]);
         }
-
-        // foreach($input['allSpecialties'] as $specialtyID => $userID) {
-            
-        //     echo ("specialty id: ". $specialtyID);
-        //     echo "<br>";
-        //     foreach($userID as $id => $order) {
-        //         echo (".     .".$id . " - " . $order);
-        //         echo "<br>";
-        //     }
-        //     // dd($key);
-        // }
-        // // dd($input);
-
 
         foreach($input['allSpecialties'] as $specialtyID => $userID) {
             $i = 1;
@@ -327,17 +291,16 @@ class ScheduleController extends Controller
         }
 
         return redirect('/admin/schedules/'. $id . '/reviewSchedule/');
-
     }
 
-
+    /**
+     * Admin review the schedule
+     */
     public function reviewSchedule($id) { 
 
         $schedule = Schedule::find($id);
         $bidding_queue = $schedule->biddingQueues;
         $shifts = $schedule->shifts;
-
-        // dd($shifts);
 
         $specialties = Specialty::all();
 
@@ -360,10 +323,6 @@ class ScheduleController extends Controller
             $shift->push($spots);
         }
 
-
-        // dd($specialties2->shift);
-        // dd($bidding_queue);
-
         foreach($bidding_queue as $queue) {
             $user = $queue->user;
             $specialties2 = $user->specialties;
@@ -371,17 +330,12 @@ class ScheduleController extends Controller
             $queue->push($user);
         }
 
-        
-        // dd($specialties);
-
         return view('admin.schedules.reviewschedule')->with([
             'bidding_queue'=> $bidding_queue,
             'specialties'=> $specialties,
             'schedule'=> $schedule,
         ]);
-
     }
-
 
 
     /**
@@ -401,18 +355,10 @@ class ScheduleController extends Controller
                 $queue->waiting_to_bid = 0;
                 $queue->start_time_bidding = $date;
                 $queue->save();
-
-                // // notify my email - disables for now
-                // $user = $queue->user;
-                // $emailSend = $this->sendEmail($user, $schedule);
-                
-                // // sleep for 1 seconds for mailtrap limitations
-                //  sleep(1);
             }
         }
 
         return redirect('/admin/schedules/')->with('successful', 'Schedule activated!');
-
     }
 
 
@@ -422,11 +368,7 @@ class ScheduleController extends Controller
     public function approveSchedule($id) {
 
         $schedule = Schedule::find($id);
-        // $bidding_queue = $schedule->biddingQueues;
         $shifts = $schedule->shifts;
-
-        // dd($shifts);
-
         $specialties = Specialty::all();
         
         foreach($shifts as $shift) {
@@ -443,7 +385,6 @@ class ScheduleController extends Controller
             $shift->push($spots);
         }
 
-        
         // remove all the specialties that do not have a shift
         foreach($specialties as $specialty) {
             $i = 0;
@@ -462,11 +403,11 @@ class ScheduleController extends Controller
             'specialties'=> $specialties,
             'schedule'=> $schedule,
         ]);
-
-
     }
 
-
+    /**
+     * store the appproval schedule
+     */
     public function saveApproval(Request $request) {
 
         /**
@@ -477,7 +418,6 @@ class ScheduleController extends Controller
         ]);
 
         $schedule = Schedule::find($validatedData['schedule_id']);
-
         $schedule->approved = true;
         $schedule->currently_active = false;
         $schedule->save();
@@ -499,13 +439,12 @@ class ScheduleController extends Controller
     }
 
 
+    /**
+     * View appred schedule
+     */
     public function viewApproved($id) {
         $schedule = Schedule::find($id);
-        // $bidding_queue = $schedule->biddingQueues;
         $shifts = $schedule->shifts;
-
-        // dd($shifts);
-
         $specialties = Specialty::all();
         
         foreach($shifts as $shift) {
@@ -522,7 +461,6 @@ class ScheduleController extends Controller
             $shift->push($spots);
         }
 
-        
         // remove all the specialties that do not have a shift
         foreach($specialties as $specialty) {
             $i = 0;
@@ -561,6 +499,4 @@ class ScheduleController extends Controller
             return true;
         }
     }
-
-
 }
