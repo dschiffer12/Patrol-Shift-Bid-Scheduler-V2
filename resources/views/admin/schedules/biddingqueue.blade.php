@@ -2,9 +2,7 @@
 
 @section('content')
 
-
 @isset($schedule)
-
 <div class="container overflow-auto shadow mt-3 p-3">
     <div class="row mt-3">
         <div class="col-auto">

@@ -16,7 +16,8 @@ class Officer extends Model
     ];
 
     /**
-     * One to One relation with User Model
+     * One to One relation with User Model.
+     * Returns the user associated witht this officer record.
      */
     public function user()
     {

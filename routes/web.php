@@ -21,14 +21,12 @@ Auth::routes();
 // // Disable the register controller
 // Auth::routes(['register' => false]);
 
-// Note to self: When cleaning up, I need to disable/except unused function from resource routes
-
+// API route
 Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
 
-
+// Admin routes
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->name('admin.')->group(function() {
     Route::resource('/users', 'UsersController', ['except' => ['create', 'store']]);
-
 
     //Route for the Schedule controller.
     Route::resource('/schedules', 'ScheduleController', ['except' => ['show', 'update', 'show']]);
@@ -62,17 +60,16 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::get('/roles/{id}/delete', 'RoleController@delete')->name('roles.delete');
 });
 
-
+// User controllers
 Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
-    Route::resource('/profile', 'ProfileController');
+    Route::resource('/profile', 'ProfileController', ['except' => ['create', 'store', 'show', 'destroy']]);
     Route::resource('/psheet', 'PSheetController');
 
     Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
     Route::get('/schedules/{id}/bid', 'ScheduleController@bid')->name('schedules.bid');
     Route::post('/schedules/store', 'ScheduleController@store')->name('schedules.store');
     Route::get('/schedules/{id}/viewbid', 'ScheduleController@viewBid')->name('schedules.viewbid');
-
 });
 
 // The catch-all will match anything except the previous defined routes.
-// Route::any('{catchall}', 'CatchAllController@handle')->where('catchall', '.*');
+Route::any('{catchall}', 'CatchAllController@handle')->where('catchall', '.*');

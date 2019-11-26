@@ -47,74 +47,14 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * User bid on schedule
      */
-    public function create()
-    {
-        //
-    }
-
-    
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
     public function bid($id) {
 
         $user = Auth::user();
         $specialties = $user->specialties;
         $schedule = Schedule::find($id);
-
         $shifts = $schedule->shifts;
-
-        // $bidding_queues = BiddingQueue::where('user_id', $user->id)
-        //     ->where('schedule_id', $schedule->id)
-        //     ->get();
 
         foreach($specialties as $key => $specialty) {
             $shifts = Shift::where('schedule_id', $id)
@@ -136,39 +76,41 @@ class ScheduleController extends Controller
         return view('user.schedules.bid')->with([
             'specialties'=> $specialties,
             'schedule'=> $schedule,
-        ]);
-
-       
+        ]); 
     }
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store the bid.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        
-        $spot = Spot::find($request->spot_id);
+        $validatedData = $request->validate([
+            'spot_id' => ['required', 'integer'],
+            'shift_id' => ['required', 'integer'],  
+        ]);
+
+        $spot = Spot::find($validatedData['spot_id']);
         if($spot->qty_available < 1) {
             // redirect out with an error.
             return back()->withInput();
         }
 
-        // dd($request);
         $bid = new Bid;
         $user = auth()->user();
 
-        //need to fix this
-        $shift = Shift::find($request->shift_id);
-        $bidding_queue = BiddingQueue::where('user_id', $user->id)->where('schedule_id', $shift->schedule_id)->first();
+        $shift = Shift::find($validatedData['shift_id']);
+        $bidding_queue = BiddingQueue::where('user_id', $user->id)
+            ->where('schedule_id', $shift->schedule_id)
+            ->first();
 
         $date = new DateTime();
         // store the bid
         $bid->user_id = $user->id;
-        $bid->spot_id = $request->spot_id;
+        $bid->spot_id = $validatedData['spot_id'];
         $bid->approved = false;
         $bid->created_at = $date;
         $bid->bidding_queue_id = $bidding_queue->id;
@@ -177,12 +119,10 @@ class ScheduleController extends Controller
         $spot->decrement('qty_available');
 
         // update the bidding queue
-        
         $bidding_queue->bidding = false;
         $bidding_queue->bid_submitted = true;
         $bidding_queue->end_time_bidding = $date;
         $bidding_queue->save();
-
 
         // update the next user to bid
         $next_queues = BiddingQueue::where('schedule_id', $shift->schedule_id)
@@ -190,7 +130,6 @@ class ScheduleController extends Controller
             ->where('waiting_to_bid', true)
             ->orderBy('bidding_spot', 'asc')
             ->get();
-        
         
         // find if there is another user waiting to bid on the same specialty
         foreach($next_queues as $queue) {
@@ -217,10 +156,7 @@ class ScheduleController extends Controller
             }  
         }
 
-        // echo('bid submitted');
-
-        return redirect('/users/schedules/index')->with('success', 'Bid submitted!!');
-        
+        return redirect('/users/schedules/index')->with('success', 'Bid submitted!!');    
     }
 
 
@@ -229,14 +165,8 @@ class ScheduleController extends Controller
      */
     public function viewBid($id) {
 
-        // dd($id);
-
         $bid = Bid::find($id);
-
-        // dd($bid);
-
         $spot = $bid->spot;
-        // dd($spot);
         $schedule = $spot->shift->schedule;
 
         return view('user.schedules.viewbid')->with([
@@ -245,9 +175,6 @@ class ScheduleController extends Controller
             'bid'=> $bid,
         ]);
     }
-
-
-
 
     /**
      * Send Email to an user
