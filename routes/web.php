@@ -65,6 +65,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
 
 Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
     Route::resource('/profile', 'ProfileController');
+    Route::get('/psheet/date', 'PSheetController@date')->name('psheet.date');
     Route::resource('/psheet', 'PSheetController');
 
     Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
