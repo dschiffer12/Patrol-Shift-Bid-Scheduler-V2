@@ -8,11 +8,11 @@ use Faker\Generator as Faker;
 
 $factory->define(BiddingQueue::class, function (Faker $faker) {
     return [
-        'bidding_spot' => $faker->numberBetween(1, 100),
-        'waiting_to_bid' => $faker->boolean,
-        'bidding' => $faker->boolean,
-        'bid_submitted' => $faker->boolean,
-        'start_time_bidding' => $faker->date('Y-m-d'),
-        'end_time_bidding' => $faker->date('Y-m-d'),
+        'user_id' => $faker->numberBetween(1, 5),
+        'schedule_id' => $faker->numberBetween(1, 5),
+        'bidding_spot' => $faker->numberBetween(1, 5),
+        'waiting_to_bid' => false,
+        'bidding' => true,
+        'bid_submitted' => false,
     ];
 });

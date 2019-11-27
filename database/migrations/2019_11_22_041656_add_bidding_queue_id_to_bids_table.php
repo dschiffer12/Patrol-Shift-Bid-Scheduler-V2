@@ -15,7 +15,6 @@ class AddBiddingQueueIdToBidsTable extends Migration
     {
 
         Schema::table('bids', function (Blueprint $table) {
-
             $table->unsignedBigInteger('bidding_queue_id')->nullable();
 
             $table->foreign('bidding_queue_id')->references('id')->on('bidding_queues')->onDelete('cascade');

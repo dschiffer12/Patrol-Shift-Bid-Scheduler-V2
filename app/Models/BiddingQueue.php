@@ -13,7 +13,7 @@ class BiddingQueue extends Model
  * @var array
  */
     protected $fillable = [
-        'bidding_spot', 'waiting_to_bid', 'bidding', 'bid_submitted', 'start_time_bidding', 'end_time_bidding'
+        'user_id', 'schedule_id', 'bidding_spot', 'waiting_to_bid', 'bidding', 'bid_submitted', 'start_time_bidding', 'end_time_bidding'
     ];
 
     /**
@@ -21,11 +21,9 @@ class BiddingQueue extends Model
      */
     public function user()
     {
-        //return $this->hasMany('App\User');
         return $this->belongsTo('App\User');
     }
 
-    
     /**
      * Get the schedule for the bidding queue.
      */
@@ -34,6 +32,9 @@ class BiddingQueue extends Model
         return $this->belongsTo('App\Schedule');
     }
 
+    /**
+     * Returns the bid associated witht this queue.
+     */
     public function bid() {
         return $this->hasOne('App\Bid');
     }

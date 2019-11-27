@@ -283,9 +283,7 @@
 																<td class="text-center">{{ implode(', ', $user->roles()->get()->pluck('name')->toArray()) }}</td>
 																<td class="text-center">{{ date('m-d-Y', strtotime($user->date_in_position)) }}</td>
 																<td class="text-center">{{ implode(', ', $user->specialties->pluck('name')->toArray()) }}</td>
-																
-																
-																
+																	
 																</tr>
 															@endif
 														@endforeach

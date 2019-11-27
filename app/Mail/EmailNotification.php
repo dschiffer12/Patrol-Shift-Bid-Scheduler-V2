@@ -33,7 +33,7 @@ class EmailNotification extends Mailable
      */
     public function build()
     {
-        return $this->view('admin.biddingschedule.bidnotification')->with([
+        return $this->view('bidnotification')->with([
             'user' => $this->user,
             'schedule' => $this->biddingSchedule
 

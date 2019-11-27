@@ -18,82 +18,8 @@ use DateTime;
 class BidQueueController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * to view the bidding queue
      */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
     public function view($id)
     {
         
@@ -101,17 +27,12 @@ class BidQueueController extends Controller
         $bidding_queue = $schedule->biddingQueues;
         $shifts = $schedule->shifts;
 
-        // dd($shifts);
-
         $specialties = Specialty::all();
 
         foreach($shifts as $shift) {
             $spots = $shift->spots;
             $shift->push($spots);
         }
-
-        // dd($specialties2->shift);
-        // dd($bidding_queue);
 
         foreach($bidding_queue as $queue) {
             $user = $queue->user;
@@ -134,9 +55,6 @@ class BidQueueController extends Controller
             $i=0;
         }
 
-
-        // dd($bidding_queue);
-
         return view('admin.schedules.biddingqueue')->with([
             'bidding_queue'=> $bidding_queue,
             'specialties'=> $specialties,
@@ -149,17 +67,11 @@ class BidQueueController extends Controller
      * View the bid
      */
     public function viewBid($id) {
-
-        // dd($id);
         
         $bid = Bid::where('bidding_queue_id', $id)->first();
         $user = User::where('id', $bid->user_id)->first();
         
-
-        // dd($bid);
-
         $spot = $bid->spot;
-        // dd($spot);
         $schedule = $spot->shift->schedule;
 
         return view('user.schedules.viewbid')->with([
@@ -176,16 +88,15 @@ class BidQueueController extends Controller
      */
     public function bid(Request $request, $id) {
 
-        
-        $user = User::find($request->user_id);
+        $validatedData = $request->validate([
+            'user_id' => ['required', 'integer'],    
+        ]);
+ 
+        $user = User::find($validatedData['user_id']);
         $specialties = $user->specialties;
         $schedule = Schedule::find($id);
 
         $shifts = $schedule->shifts;
-
-        // $bidding_queues = BiddingQueue::where('user_id', $user->id)
-        //     ->where('schedule_id', $schedule->id)
-        //     ->get();
 
         foreach($specialties as $key => $specialty) {
             $shifts = Shift::where('schedule_id', $id)
@@ -212,20 +123,25 @@ class BidQueueController extends Controller
        
     }
 
+    /**
+     * admin bid for user
+     */
     public function bidForUser(Request $request) {
 
-        // dd($request);
+        $validatedData = $request->validate([
+            'spot_id' => ['required', 'integer'],
+            'user_id' => ['required', 'integer'],
+            'shift_id' => ['required', 'integer'],  
+        ]);
 
-        $spot = Spot::find($request->spot_id);
+        $spot = Spot::find($validatedData['spot_id']);
         if($spot->qty_available < 1) {
             // redirect out with an error.
             return back()->withInput();
         }
 
-        // dd($request);
         $bid = new Bid;
-        // $user = auth()->user();
-        $user = User::find($request->user_id);
+        $user = User::find($validatedData['user_id']);
 
         //need to fix this
         $shift = Shift::find($request->shift_id);
@@ -244,13 +160,11 @@ class BidQueueController extends Controller
 
         $spot->decrement('qty_available');
 
-        // update the bidding queue
-        
+        // update the bidding queue  
         $bidding_queue->bidding = false;
         $bidding_queue->bid_submitted = true;
         $bidding_queue->end_time_bidding = $date;
         $bidding_queue->save();
-
 
         // update the next user to bid
         $next_queues = BiddingQueue::where('schedule_id', $shift->schedule_id)
@@ -258,7 +172,6 @@ class BidQueueController extends Controller
             ->where('waiting_to_bid', true)
             ->orderBy('bidding_spot', 'asc')
             ->get();
-        
         
         // find if there is another user waiting to bid on the same specialty
         foreach($next_queues as $queue) {
@@ -270,11 +183,6 @@ class BidQueueController extends Controller
                     $queue->bidding = true;
                     $queue->start_time_bidding = $date;
                     $queue->save();
-
-                    // // notify my email - disabled for now
-                    // $user = $queue->user;
-                    // $schedule = $queue->schedule;
-                    // $emailSend = $this->sendEmail($user, $schedule);
                     $i++;
                     break;
                 }
@@ -285,9 +193,7 @@ class BidQueueController extends Controller
             } 
         }
 
-        // echo('bid submitted'); 
         return redirect('/admin/schedule/'. $shift->schedule_id . '/biddingQueue/')->with('success', 'Bid submitted!!');
-
     }
 
     /**

@@ -39,14 +39,16 @@ class User extends Authenticatable
     ];
 
     /**
-     * For the User/Roles relation
+     * For the User/Roles relation.
+     * Returns the roles associated witht this user.
      */
     public function roles() {
         return $this->belongsToMany('App\Role');
     }
 
     /**
-     * To calidating user/roles level
+     * To calidating user/roles level.
+     * Returns the first role associated witht this user, or null if none.
      */
     public function hasAnyRoles($roles) {
         return null !== $this->roles()->whereIn('name', $roles)->first();
@@ -58,7 +60,6 @@ class User extends Authenticatable
     public function hasAnyRole($role) {
         return null !== $this->roles()->where('name', $role)->first();
     }
-
 
     /**
      * For the User/Specialty relation (user belongs to many roles)
@@ -102,14 +103,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\BiddingQueue');
     }
     
-
     /**
      * For the User/BiddingQueue relationship
      */
     public function biddingQueues() {
         return $this->hasMany('App\Models\BiddingQueue');
     }
-
 
     /**
      * To test if User has any BiddingQueue
@@ -125,7 +124,6 @@ class User extends Authenticatable
         return null !== $this->biddingQueue()->where('bidding_schedule_id', $schedule_id)->first();
     }
 
-
     /**
      * For the User/Officer relation (officer belongs to one user)
      */
@@ -139,7 +137,6 @@ class User extends Authenticatable
      */
     public function bidding_queue()
     {
-        //return $this->belongsTo('App\Models\BiddingQueue');
         return $this->hasMany('App\Models\BiddingQueue');
     }
 

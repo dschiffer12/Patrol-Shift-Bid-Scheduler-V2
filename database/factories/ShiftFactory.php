@@ -2,14 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
+use App\Shift;
 use Faker\Generator as Faker;
 
-$factory->define(App\Models\Shift::class, function (Faker $faker) {
+$factory->define(Shift::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'start_time' => $faker->time('H:i:s'),
-        'end_time' => $faker->time('H:i:s'),
-        'minimun_staff' => 5
+        'schedule_id' => $faker->numberBetween(1, 5),
+        'specialty_id' => $faker->numberBetween(1, 5),
     ];
 });
