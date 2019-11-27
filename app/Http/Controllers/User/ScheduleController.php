@@ -156,7 +156,7 @@ class ScheduleController extends Controller
             }  
         }
 
-        return redirect('/users/schedules/index')->with('success', 'Bid submitted!!');    
+        return redirect('/user/schedules')->with('success', 'Bid submitted!!');    
     }
 
 

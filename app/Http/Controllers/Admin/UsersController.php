@@ -131,12 +131,14 @@ class UsersController extends Controller
             $officer = $user->officer;
 
             if(!$officer) {
-                $officer = new Officer;
-                $offcier->unit_number = $validatedData['unit_number'];
-                $offcier->emergency_number = $validatedData['emergency_number'];
-                $offcier->vehicle_number = $validatedData['vehicle_number'];
-                $officer->zone = $validatedData['zone'];
-                $officer->save();
+                $officer = Officer::create([
+                    'user_id' => $user->id,
+                    'unit_number' => $validatedData['unit_number'],
+                    'emergency_number' => $validatedData['emergency_number'],
+                    'vehicle_number' => $validatedData['vehicle_number'],
+                    'zone' => $validatedData['zone'],
+                ]);
+
             } else {
                 $officer->update([
                     'unit_number'=> $validatedData['unit_number'],

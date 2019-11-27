@@ -126,7 +126,18 @@ class ScheduleTest extends TestCase
         $response->assertViewIs('user.schedules.index');
     }
 
-    public function testBid() {
+    public function testBid() {      
+        $response = $this->get(route('user.schedules.bid', $this->schedule->id));
+        $response->assertViewIs('user.schedules.bid');
+    }
+
+    public function testStore() {
         
+        $response = $this->post(route('user.schedules.store'), [
+            'spot_id' => $this->spot->id,
+            'shift_id' => $this->shift->id,
+        ]);
+
+        $response->assertRedirect(route('user.schedules.view'));
     }
 }
