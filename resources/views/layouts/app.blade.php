@@ -39,12 +39,15 @@
                         @auth
                             @if(Auth::user()->hasAnyRoles(['root', 'admin']))
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Admin Control
+                                    <a class="nav-link dropdown-toggle text-danger" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{__('Admin Control')}}
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="/register">Add New User</a>
-                                        <a class="dropdown-item" href="/admin/users">Users Management</a>
+                                        <!-- <a class="dropdown-item" href="/register">Add New User</a> -->
+                                        <a class="dropdown-item text-danger" href="/admin/schedules"><h5>{{ __('Schedule Management') }}</h5></a>
+                                        <a class="dropdown-item text-danger" href="/admin/users"><h5>{{__('Users Management')}}</h5></a>
+                                        <a class="dropdown-item text-danger" href="/admin/specialties"><h5>{{__('Specialties Management')}}</h5></a>
+                                        <a class="dropdown-item text-danger" href="/admin/roles"><h5>{{__('Roles Management')}}</h5></a>
                                         <!-- <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#">Something else here</a> -->
                                     </div>
@@ -111,18 +114,6 @@
                                 </button>
                             </div>
                         </div>
-
-                        
-                        @if(Auth::user()->hasAnyRoles(['root', 'admin']))
-                            <div class="row">
-                                <div class="col pt-2">
-                                    <button type="button" class="btn btn-block text-left">
-                                        <a class="nav-link" href="{{ route('admin.schedules.index') }}"><h5>{{ __('Schedule Management') }}</h5></a>
-                                    </button>
-                                </div>
-                            </div>
-                        @endif
-
                         <div class="row">
                             <div class="col pt-2">
                                 <button type="button" class="btn btn-block text-left">

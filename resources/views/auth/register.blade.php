@@ -99,6 +99,61 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Unit Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="unit_number" type="number" class="form-control @error('unit_number') is-invalid @enderror" name="unit_number" autocomplete="unit_number" value="{{ old('unit_number') }}" min="0" max="9999" autofocus>
+
+                                @error('unit')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Emergency Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="emergency_number" type="number" class="form-control @error('emergency_number') is-invalid @enderror" name="emergency_number" value="{{ old('emergency_number') }}"autocomplete="emergency_number" min="0" max="9999" autofocus>
+
+                                @error('emergency_number')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Vehicle Number') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="vehicle_number" type="number" class="form-control @error('vehicle_number') is-invalid @enderror" name="vehicle_number" value="{{ old('vehicle_number') }}" autocomplete="vehicle_number" min="0" max="9999" autofocus>
+
+                                @error('vehicle_number')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="zone" class="col-md-4 col-form-label text-md-right">{{ __('Zone') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="zone" type="text" class="form-control @error('zone') is-invalid @enderror" name="zone" value="{{ old('zone') }}" autocomplete="zone" autofocus>
+
+                                @error('zone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="notes" class="col-md-4 col-form-label text-md-right">{{ __('Notes') }}</label>
 
                             <div class="col-md-6">

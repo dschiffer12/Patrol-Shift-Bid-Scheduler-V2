@@ -21,6 +21,7 @@ Auth::routes();
 // // Disable the register controller
 // Auth::routes(['register' => false]);
 
+// Note to self: When cleaning up, I need to disable/except unused function from resource routes
 
 Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth', 'auth.admin']);
 
@@ -28,16 +29,6 @@ Route::get('/apimanagement', 'ApiManagementController@index')->middleware(['auth
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->name('admin.')->group(function() {
     Route::resource('/users', 'UsersController');
 
-    //Route for the Bidding Schedule actions.
-    Route::resource('/bidding-schedule', 'BiddingSchedule');
-
-    //Route for the Shift actions.
-    Route::get('/shift/createFromSchedule', 'ShiftController@createFromSchedule')->name('shift.createFromSchedule');
-    Route::post('/shift/storeFromSchedule', 'ShiftController@storeFromSchedule')->name('shift.storeFromSchedule');
-    Route::resource('/shift', 'ShiftController');
-    // Route::resource('/bidding-queue', 'BiddingQueueController');
-    // Route::get('/bidding-queue/view/{id}', 'BiddingQueueController@view')->name('bidding-queue.view');
-    // Route::get('/bidding-queue/bid/{id}', 'BiddingQueueController@bid')->name('bidding-queue.bid');
 
     //Route for the Schedule controller.
     Route::resource('/schedules', 'ScheduleController');
@@ -50,25 +41,32 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::post('/schedules/{id}/storeQueue', 'ScheduleController@storeQueue')->name('schedules.storeQueue');
     Route::get('/schedules/{id}/reviewSchedule', 'ScheduleController@reviewSchedule')->name('schedules.reviewSchedule');
     Route::get('/schedules/{id}/activateSchedule', 'ScheduleController@activateSchedule')->name('schedules.activateSchedule');
+    Route::get('/schedules/{id}/approveSchedule', 'ScheduleController@approveSchedule')->name('schedules.approveSchedule');
+    Route::post('/schedules/saveApproval', 'ScheduleController@saveApproval')->name('schedules.saveApproval');
+    Route::get('/schedules/{id}/viewApproved', 'ScheduleController@viewApproved')->name('schedules.viewApproved');
 
     // bidding queue
     Route::get('/schedule/{id}/biddingQueue', 'BidQueueController@view')->name('schedules.biddingQueue');
     Route::get('/schedule/{id}/viewbid', 'BidQueueController@viewbid')->name('schedules.viewbid');
     Route::post('/schedules/{id}/bid', 'BidQueueController@bid')->name('schedules.bid');
     Route::post('/schedules/bidforuser', 'BidQueueController@bidforuser')->name('schedules.bidforuser');
+
+    // specialties
+    Route::get('/specialties', 'SpecialtyController@index')->name('specialties');
+    Route::post('/specialties/add', 'SpecialtyController@add')->name('specialties.add');
+    Route::get('/specialties/{id}/delete', 'SpecialtyController@delete')->name('specialties.delete');
+
+    // roles
+    Route::get('/roles', 'RoleController@index')->name('roles');
+    Route::post('/roles/add', 'RoleController@add')->name('roles.add');
+    Route::get('/roles/{id}/delete', 'RoleController@delete')->name('roles.delete');
 });
 
 
 Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
-    Route::get('/biddingschedule/bids', 'BiddingController@bids')->name('biddingschedule.bids');
     Route::resource('/profile', 'ProfileController');
     Route::get('/psheet/date', 'PSheetController@date')->name('psheet.date');
     Route::resource('/psheet', 'PSheetController');
-    Route::resource('/biddingschedule', 'BiddingController');
-
-    // Routes for the bids
-    // Route::resource('/schedules', 'ScheduleController');
-    // Route::post('/bid/{id}/view', 'BidController@view')->name('bid.view');
 
     Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
     Route::get('/schedules/{id}/bid', 'ScheduleController@bid')->name('schedules.bid');
@@ -76,3 +74,6 @@ Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->g
     Route::get('/schedules/{id}/viewbid', 'ScheduleController@viewBid')->name('schedules.viewbid');
 
 });
+
+// The catch-all will match anything except the previous defined routes.
+Route::any('{catchall}', 'CatchAllController@handle')->where('catchall', '.*');

@@ -5,24 +5,13 @@
 
 @isset($schedule)
 
-<div class="container overflow-auto shadow mt-3 p-4">
-	@isset($user)	
-		<div class="row mt-3">
-			<div class="col-auto">
-				<h5>Bidding for user:</h5>
-			</div>
-			<div class="col-auto">
-				<h2></strong>{{ $user->name }}</strong></h2>
-			</div>
-		</div>
-	@endisset
-
+<div class="container overflow-auto shadow mt-3 p-3">
     <div class="row mt-3">
         <div class="col-auto">
             <h5>Schedule Name:</h5>
         </div>
         <div class="col-auto">
-            <h5><strong>{{ $schedule->name }}</strong></h5>
+            <h5>{{ $schedule->name }}</h5>
         </div>
     </div>
     <div class="row mt-3">
@@ -30,7 +19,7 @@
             <h5>Start Date:</h5>
         </div>
         <div class="col-auto">
-            <h5><strong>{{ $schedule->start_date }}</strong></h5>
+            <h5>{{ $schedule->start_date }}</h5>
         </div>
     </div>
     <div class="row">
@@ -38,7 +27,7 @@
             <h5>End Date:</h5>
         </div>
         <div class="col-auto">
-            <h5><strong>{{ $schedule->end_date }}</strong></h5>
+            <h5>{{ $schedule->end_date }}</h5>
         </div>
     </div>
 	<div class="row">
@@ -46,7 +35,7 @@
             <h5>Response Time (hours):</h5>
         </div>
         <div class="col-auto">
-            <h5><strong>{{ $schedule->response_time }}</strong></h5>
+            <h5>{{ $schedule->response_time }}</h5>
         </div>
     </div>
 	<div class="row">
@@ -54,7 +43,7 @@
             <h5>Status:</h5>
         </div>
         <div class="col-auto">
-            <h5><strong>{{ $schedule->currently_active == 1 ? "Active" : "Inactive"}} </strong></h5>
+            <h5>{{ $schedule->currently_active == 1 ? "Active" : "Inactive"}} </h5>
         </div>
     </div>
 
@@ -69,13 +58,6 @@
     </div>
 		@php ($i=0)
 		@php ($allSpecialties = array('specialties'))
-		@isset($user)
-		<form action="{{ route('admin.schedules.bidforuser') }}" method="POST">
-		<input type="hidden" id="shift" name="user_id" value={{ $user->id }}>
-		@endisset
-		<form action="{{ route('user.schedules.store') }}" method="POST">
-		
-		@csrf
 		@foreach($specialties as $specialty)
 		<div class="container border mb-4">
 			<div class="row mt-3">
@@ -94,7 +76,9 @@
 								</div>
 								<div class="col-auto">
 									<h5><strong>{{ __($shift->name) }}</strong></h5>
-								</div>		
+								</div>
+								
+								
 							</div>
 							
 <!-- start of the shifts table -->
@@ -104,15 +88,14 @@
 											<thead>
 												<tr>
 												<th style="width: 5%" scope="col">Spot</th>
-												<th style="width: 12.86%" scope="col">Friday</th>
-												<th style="width: 12.86%" scope="col">Saturday</th>
-												<th style="width: 12.86%" scope="col">Sunday</th>
-												<th style="width: 12.86%" scope="col">Monday</th>
-												<th style="width: 12.86%" scope="col">Tuesday</th>
-												<th style="width: 12.86%" scope="col">Wednesday</th>
-												<th style="width: 12.86%" scope="col">Thursday</th>
-												<th style="width: 5%" scope="col">Available</th>
-												<th style="width: 5%" scope="col">Select</th>
+												<th style="width: 10%" scope="col">Friday</th>
+												<th style="width: 10%" scope="col">Saturday</th>
+												<th style="width: 10%" scope="col">Sunday</th>
+												<th style="width: 10%" scope="col">Monday</th>
+												<th style="width: 10%" scope="col">Tuesday</th>
+												<th style="width: 10%" scope="col">Wednesday</th>
+												<th style="width: 10%" scope="col">Thursday</th>
+												<th style="width: 20%" scope="col">Users</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -237,23 +220,17 @@
 															</div>
 														</td>
 														<td>
+															
+															@foreach($spot->bids as $bid)
 															<div class="row">
 																<div class="col">
-																	<h6>{{$spot->qty_available }}
+																	<h6>{{$bid->user->name }}
 																</div>
 															</div>
+															@endforeach
+															
 														</td>
-														<td>
-															@if ($spot->qty_available > 0)
-																<div class="form-check">
-																	<input class="form-check-input" type="radio" id="spot_id" name="spot_id" onclick="toggleSubmit()" value={{$spot->id}}>
-																</div>
-															@else
-																<div class="form-check">
-																	<input class="form-check-input" disabled type="radio" id="spot_id" name="spot_id" value=0>
-																</div>
-															@endif
-														</td>	
+														
 													</tr>
 												
 												@endforeach
@@ -268,9 +245,6 @@
 						
 						@endif
 						@endforeach
-					
-				</div>
-			</div>
 		
 <!-- users table -->
 			
@@ -278,34 +252,37 @@
 								
 
 	<!-- end table -->
-
+				</div>
+			</div>
 		</div>				
 		@endforeach
 		
 
-		<div class="form-group row mb-0">
-			<div class="col-md-2 offset-md-1">
-				<a  class="btn btn-secondary float-start" href="{{ URL::previous() }}">
-					{{ __('< Back') }}
-				</a>     
+		<div class="row justify-content-md-center">
+			<div class="col">
+				
+				<a  class="btn btn-secondary float-start ml-5" href="{{ URL::previous() }}">
+					{{ __('Cancel') }}
+				</a>
 			</div>
 			<div class="col">
-				<button type="submit" disabled id="submit_btn" class="btn btn-primary float-right">
-					{{ __('Submit') }}
-				</button>
-			</div>   
+				@isset($view_approval)
+				@else
+				<form action="{{ route('admin.schedules.saveApproval')}}" method="POST">
+				@csrf
+					<input type="hidden" name="schedule_id" value={{$schedule->id}}>
+					<button type="submit" class="btn btn-success float-right mr-5">
+						{{ __('Approve') }}
+					</button>
+				</form>
+				@endisset
+				
+			</div>
+			  
 		</div>
-	</form>
 </div>
 
 
 @endisset
-
-<script type="text/javascript">
-	function toggleSubmit() {
-		var button = document.getElementById('submit_btn');
-		button.disabled = false;	
-	}
-</script>
 
 @endsection
