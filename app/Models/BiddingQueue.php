@@ -13,7 +13,7 @@ class BiddingQueue extends Model
  * @var array
  */
     protected $fillable = [
-        'bidding_spot', 'waiting_to_bid', 'bidding', 'bid_submitted', 'start_time_bidding', 'end_time_bidding'
+        'user_id', 'schedule_id', 'bidding_spot', 'waiting_to_bid', 'bidding', 'bid_submitted', 'start_time_bidding', 'end_time_bidding'
     ];
 
     /**

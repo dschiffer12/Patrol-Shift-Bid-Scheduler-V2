@@ -6,6 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shift extends Model
 {
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'schedule_id', 'specialty_id', 'name',
+    ];
+
     /**
      * Get the specialty that owns the shift.
      */
