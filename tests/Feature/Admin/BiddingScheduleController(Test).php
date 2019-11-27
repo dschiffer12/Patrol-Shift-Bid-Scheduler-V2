@@ -13,7 +13,7 @@ use App\Models\BiddingSchedule as BiddingScheduleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class BiddingScheduleControllerTest extends TestCase
+class Test extends TestCase
 {
     use RefreshDatabase;
 

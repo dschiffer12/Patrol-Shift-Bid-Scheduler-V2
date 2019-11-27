@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShiftControllerTest extends TestCase
+class Test extends TestCase
 {
     use RefreshDatabase;
 
