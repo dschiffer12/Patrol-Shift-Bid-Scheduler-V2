@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 class CatchAllController extends Controller
 {
     
-    public function handle() {
-        
+    public function handle() {    
         return redirect('/')->with('warning', 'Route not available.');
     }
 }

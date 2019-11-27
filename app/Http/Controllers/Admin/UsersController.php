@@ -28,38 +28,7 @@ class UsersController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
+ 
     /**
      * Show the form for editing the specified resource.
      *
@@ -99,13 +68,11 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //dd($request);
         $user = User::findOrFail($id);
 
         /**
          * Validate the form data
          */
-
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
@@ -164,12 +131,14 @@ class UsersController extends Controller
             $officer = $user->officer;
 
             if(!$officer) {
-                $officer = new Officer;
-                $offcier->unit_number = $validatedData['unit_number'];
-                $offcier->emergency_number = $validatedData['emergency_number'];
-                $offcier->vehicle_number = $validatedData['vehicle_number'];
-                $officer->zone = $validatedData['zone'];
-                $officer->save();
+                $officer = Officer::create([
+                    'user_id' => $user->id,
+                    'unit_number' => $validatedData['unit_number'],
+                    'emergency_number' => $validatedData['emergency_number'],
+                    'vehicle_number' => $validatedData['vehicle_number'],
+                    'zone' => $validatedData['zone'],
+                ]);
+
             } else {
                 $officer->update([
                     'unit_number'=> $validatedData['unit_number'],
@@ -179,7 +148,6 @@ class UsersController extends Controller
                 ]);
             }   
         }
-
 
         $user->roles()->sync($validatedData['role']);
 

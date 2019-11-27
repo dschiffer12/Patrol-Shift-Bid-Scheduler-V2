@@ -18,44 +18,11 @@ class ProfileController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         return view('user.profile.index')->with([
             'user' => $user
-        ]);
-        
+        ]);   
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -64,10 +31,8 @@ class ProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit(User $id)
-    {
-        
+    {  
         $user = Auth::user();
-
         return view('user.profile.edit')->with([
             'user' => $user
         ]);
@@ -82,14 +47,11 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $id)
     {
-        //dd($request);
-        //$user = User::findOrFail($id);
         $user = Auth::user();
         
         /**
          * Validate the form data
          */
-
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
@@ -114,20 +76,8 @@ class ProfileController extends Controller
       
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
-
         $user->save();
        
         return redirect()->route('user.profile.index')->with('success', 'Personal information successfully updated.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(User $user)
-    {
-        //
     }
 }
