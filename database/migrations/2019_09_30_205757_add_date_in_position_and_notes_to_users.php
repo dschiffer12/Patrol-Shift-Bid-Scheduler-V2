@@ -14,7 +14,7 @@ class AddDateInPositionAndNotesToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('date_in_position');
+            $table->date('date_in_position')->nullable();
             $table->string('notes')->nullable();
         });
     }

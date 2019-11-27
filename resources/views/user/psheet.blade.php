@@ -70,15 +70,15 @@
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col">{{ $shift }}</th>
-                            <th scope="col">Unit #</th>
-                            <th scope="col">Emgcy #</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Shift Start</th>
-                            <th scope="col">Shift End</th>
-                            <th scope="col">Zone</th>
-                            <th scope="col">Specialties</th>
-                            <th scope="col">Vehicle</th>
+                            <th style="width: 8%" scope="col">{{ $shift }}</th>
+                            <th style="width: 7%" scope="col">Unit #</th>
+                            <th style="width: 9%" scope="col">Emgcy #</th>
+                            <th style="width: 20%" scope="col">Name</th>
+                            <th style="width: 7%" scope="col">Shift Start</th>
+                            <th style="width: 7%" scope="col">Shift End</th>
+                            <th style="width: 7%" scope="col">Zone</th>
+                            <th style="width: 7%" scope="col">Specialties</th>
+                            <th style="width: 7%" scope="col">Vehicle</th>
                         </tr>
                     </thead>
 
