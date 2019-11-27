@@ -84,17 +84,17 @@
 
                     <tbody>
                         @foreach( $spots as $index => $spot)
-                            @if($spot->shift->name == $shift)
+                            @if($spot->spot->shift->name == $shift)
                             <tr>
-                                <td>{{ !empty($spot->shift->specialty) ? $spot->shift->specialty->name:'' }}</td>
-                                <td>{{ !empty($spot->shift->specialty->users[0]->officer) ? $spot->shift->specialty->users[0]->officer->unit_number:'' }}</td>
-                                <td>{{ !empty($spot->shift->specialty->users[0]->officer) ? $spot->shift->specialty->users[0]->officer->emergency_number:'' }}</td>
-                                <td>{{ !empty($spot->shift->specialty->users[0]) ? $spot->shift->specialty->users[0]->name:'' }}</td>
-                                <td>{{ $spot->{$weekday.'_s'} }}</td>
-                                <td>{{ $spot->{$weekday.'_e'} }}</td>
+                                <td>{{ implode(', ', $spot->user->roles()->get()->pluck('name')->toArray()) }}</td>
+                                <td>{{ !empty($spot->user->officer) ? $spot->user->officer->unit_number:'' }}</td>
+                                <td>{{ !empty($spot->user->officer) ? $spot->user->officer->emergency_number:'' }}</td>
+                                <td>{{ !empty($spot->user) ? $spot->user->name:'' }}</td>
+                                <td>{{ $spot->spot->{$weekday.'_s'} }}</td>
+                                <td>{{ $spot->spot->{$weekday.'_e'} }}</td>
                                 <td></td>
-                                <td>{{ !empty($spot->shift->specialty) ? $spot->shift->specialty->name:'' }}</td>
-                                <td>{{ !empty($spot->shift->specialty->users[0]->officer) ? $spot->shift->specialty->users[0]->officer->vehicle_number:'' }}</td>
+                                <td>{{ implode(', ', $spot->user->specialties()->get()->pluck('name')->toArray()) }}</td>
+                                <td>{{ !empty($spot->user->officer) ? $spot->user->officer->vehicle_number:'' }}</td>
                             </tr>
                             @endif
                         @endforeach

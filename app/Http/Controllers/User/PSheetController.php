@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Models\Bid;
 use App\User;
 use App\Spot;
 use Carbon\Carbon;
@@ -32,17 +33,16 @@ class PSheetController extends Controller
         $weekday = $weekMap[$dayOfTheWeek];
         $daySelected = Carbon::now();
 
-        $spots = Spot::join('shifts', 'spots.shift_id', '=', 'shifts.id')
+        $bids = Bid::join('spots', 'bids.spot_id', '=', 'spots.id')
+            ->join('shifts', 'spots.shift_id', '=', 'shifts.id')
             ->join('schedules', 'shifts.schedule_id', '=', 'schedules.id')
-            ->join('bids', 'spots.id', '=', 'bids.spot_id')
             ->where([['schedules.start_date', '<=', date('Y-m-d')], ['schedules.end_date', '>=', date('Y-m-d')], ['bids.approved', '=', 1], ['spots.'.$weekday.'_s', '<>', null], ['spots.'.$weekday.'_e', '<>', null]])
-            ->groupBy('shift_id')
             ->get();
 
         $shifts = array();
-        foreach ($spots as $spot){
-                if(!in_array($spot->shift->name, $shifts)){
-                    array_push($shifts, $spot->shift->name);
+        foreach ($bids as $bid){
+                if(!in_array($bid->spot->shift->name, $shifts)){
+                    array_push($shifts, $bid->spot->shift->name);
                 }
             }
 
@@ -50,7 +50,7 @@ class PSheetController extends Controller
         if($user->hasAnyRoles(['root', 'admin'])){
             return view('user.psheet')->with([
                 'editable' => true,
-                'spots' => $spots,
+                'spots' => $bids,
                 'weekday' => $weekday,
                 'shifts' => $shifts,
                 'daySelected' => $daySelected
@@ -58,7 +58,7 @@ class PSheetController extends Controller
         }
 
         return view('user.psheet')->with([
-            'spots' => $spots,
+            'spots' => $bids,
             'weekday' => $weekday,
             'shifts' => $shifts,
             'daySelected' => $daySelected
@@ -90,28 +90,29 @@ class PSheetController extends Controller
         ];
         $weekday = $weekMap[$dayofweek];
 
-        $spots = Spot::join('shifts', 'spots.shift_id', '=', 'shifts.id')
+        $bids = Bid::join('spots', 'bids.spot_id', '=', 'spots.id')
+            ->join('shifts', 'spots.shift_id', '=', 'shifts.id')
             ->join('schedules', 'shifts.schedule_id', '=', 'schedules.id')
-            ->join('bids', 'spots.id', '=', 'bids.spot_id')
             ->where([['schedules.start_date', '<=', $dataValidated['calendar_date']], ['schedules.end_date', '>=', $dataValidated['calendar_date']], ['bids.approved', '=', 1], ['spots.'.$weekday.'_s', '<>', null], ['spots.'.$weekday.'_e', '<>', null]])
-            ->groupBy('shift_id')
             ->get();
 
+        //$unitNumber = $spots[3]->shift->specialty->users;
+
         $shifts = array();
-        foreach ($spots as $spot){
-            if(!in_array($spot->shift->name, $shifts)){
-                array_push($shifts, $spot->shift->name);
+        foreach ($bids as $bid){
+            if(!in_array($bid->spot->shift->name, $shifts)){
+                array_push($shifts, $bid->spot->shift->name);
             }
         }
 
-        $spotsItemsLenght = sizeof($spots);
+        $spotsItemsLenght = sizeof($bids);
 
         if($spotsItemsLenght == 0){
             $user = Auth::user();
             if($user->hasAnyRoles(['root', 'admin'])){
                 return view('user.psheet')->with([
                     'editable' => true,
-                    'spots' => $spots,
+                    'spots' => $bids,
                     'weekday' => $weekday,
                     'shifts' => $shifts,
                     'daySelected' => $dataValidated['calendar_date'],
@@ -120,7 +121,7 @@ class PSheetController extends Controller
             }
 
             return view('user.psheet')->with([
-                'spots' => $spots,
+                'spots' => $bids,
                 'weekday' => $weekday,
                 'shifts' => $shifts,
                 'daySelected' => $dataValidated['calendar_date'],
@@ -132,7 +133,7 @@ class PSheetController extends Controller
         if($user->hasAnyRoles(['root', 'admin'])){
             return view('user.psheet')->with([
                 'editable' => true,
-                'spots' => $spots,
+                'spots' => $bids,
                 'weekday' => $weekday,
                 'shifts' => $shifts,
                 'daySelected' => $dataValidated['calendar_date']
@@ -140,7 +141,7 @@ class PSheetController extends Controller
         }
 
         return view('user.psheet')->with([
-            'spots' => $spots,
+            'spots' => $bids,
             'weekday' => $weekday,
             'shifts' => $shifts,
             'daySelected' => $dataValidated['calendar_date']
