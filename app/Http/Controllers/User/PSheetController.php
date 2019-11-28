@@ -18,7 +18,7 @@ class PSheetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function today()
     {
         $weekMap = [
             0 => 'sunday',
