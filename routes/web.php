@@ -29,7 +29,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::resource('/users', 'UsersController', ['except' => ['create', 'store']]);
 
     //Route for the Schedule controller.
-    Route::resource('/schedules', 'ScheduleController', ['except' => ['show', 'update', 'show']]);
+    Route::resource('/schedules', 'ScheduleController', ['except' => ['show', 'update']]);
     Route::resource('/schedules/{id}/edit', 'ScheduleController@edit');
     Route::post('/schedules/{id}/addShift', 'ScheduleController@addShift')->name('schedules.addShift');
     Route::post('/schedules/{id}/addSpot', 'ScheduleController@addSpot')->name('schedules.addSpot');
@@ -62,9 +62,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
 
 // User controllers
 Route::namespace('User')->prefix('user')->middleware(['auth'])->name('user.')->group(function() {
-    Route::get('/psheet/date', 'PSheetController@date')->name('psheet.date');
+    Route::post('/psheet/date', 'PSheetController@date');
     Route::resource('/profile', 'ProfileController', ['except' => ['create', 'store', 'show', 'destroy']]);
-    Route::resource('/psheet', 'PSheetController');
+    Route::get('/psheet/today', 'PSheetController@today');
 
     Route::get('/schedules', 'ScheduleController@index')->name('schedules.view');
     Route::get('/schedules/{id}/bid', 'ScheduleController@bid')->name('schedules.bid');

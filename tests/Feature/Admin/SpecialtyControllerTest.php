@@ -1,11 +1,13 @@
 <?php
 
-namespace Tests\Feature\User;
+namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 use App\Schedule;
 use App\Models\BiddingQueue;
@@ -21,16 +23,26 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class ScheduleTest extends TestCase
+class SpecialtyControllerTest extends TestCase
 {
-    // use DatabaseMigrations;
-    use RefreshDatabase;
 
+    use RefreshDatabase;
+        
     var $schedule;
     var $shift;
     var $spot;
     var $bid;
     var $queue;
+    var $specialty;
+    var $addedShift;
+
+    function setSpecialty() {
+        $this->specialty = factory(Specialty::class)->create();
+    }
+
+    private function getSpecialty() {
+        return $this->specialty;
+    }
 
     function setSchedule() {
         $this->schedule = factory(Schedule::class)->create();
@@ -42,8 +54,8 @@ class ScheduleTest extends TestCase
 
     private function setShift() {
         $this->shift = Shift::create([
-            'schedule_id' => 1,
-            'specialty_id' => 1,
+            'schedule_id' => $this->schedule->id,
+            'specialty_id' => $this->specialty->id,
             'name' => 'test'
         ]);
     }
@@ -106,8 +118,9 @@ class ScheduleTest extends TestCase
         $user = factory(User::class)->create();
         $role = factory(Role::class)->create(['name' => 'root']);
         $user->roles()->attach($role);
-        $specialty = factory(Specialty::class)->create();
-        $user->specialties()->attach($specialty);
+        // $specialty = factory(Specialty::class)->create();
+        $this->setSpecialty();
+        $user->specialties()->attach($this->specialty);
         $this->actingAs($user);
         $this->setSchedule();
         $this->setShift();
@@ -116,40 +129,48 @@ class ScheduleTest extends TestCase
     }
 
     /**
-     * Test the index page.
+     * A basic feature test example.
      *
      * @return void
      */
-    public function testUserIndex()
+    public function testIndex()
     {
-        $this->setUp();   
-        $response = $this->get('/user/schedules');   
-        $response->assertViewIs('user.schedules.index');
-        $response->assertViewHas(['bidding_queues']);
+        // $this->setUp();
+        $response = $this->get(route('admin.specialties'));  
+        $response->assertViewIs('admin.specialties.index');
+        $response->assertViewHas(['specialties']);
     }
 
-    public function testBid() {      
-        $response = $this->get(route('user.schedules.bid', $this->schedule->id));
-        $response->assertViewIs('user.schedules.bid');
-        $response->assertViewHas(['specialties', 'schedule']);
-    }
-
-    public function testStore() {
-        
-        $response = $this->post(route('user.schedules.store'), [
-            'spot_id' => $this->spot->id,
-            'shift_id' => $this->shift->id,
+    public function testAdd() {
+        $this->withoutExceptionHandling();
+        $response = $this->post(route('admin.specialties.add'), [
+            'name' => 'phpunittest',
         ]);
 
-        $response->assertRedirect(route('user.schedules.view'));
+        $response->assertRedirect('/admin/specialties/');
     }
 
 
-    public function testViewBid() {
-        $this->setBid();
-        $response = $this->get(route('user.schedules.viewbid', $this->bid->id));
-        $response->assertViewIs('user.schedules.viewbid');
-        $response->assertViewHas(['schedule', 'spot', 'bid']);
+    public function testDeleteNotAssigned() {
+        $this->withoutExceptionHandling();
+
+        
+        $specialt = factory(Specialty::class)->create();
+        $response = $this->get(route('admin.specialties.delete', $specialt->id));
+
+        $response->assertRedirect('/admin/specialties/');
+    }
+
+
+    public function testTryToDelete() {
+        $this->withoutExceptionHandling();
+
+        $user = factory(User::class)->create();
+
+        $specialt = factory(Specialty::class)->create();
+        $user->specialties()->attach($specialt);
+
+        $response = $this->get(route('admin.specialties.delete', $specialt->id));
+        $response->assertRedirect('/admin/specialties/');
     }
 }
-

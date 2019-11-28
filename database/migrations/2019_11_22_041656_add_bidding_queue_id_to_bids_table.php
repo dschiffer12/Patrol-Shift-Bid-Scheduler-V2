@@ -13,14 +13,11 @@ class AddBiddingQueueIdToBidsTable extends Migration
      */
     public function up()
     {
-
         Schema::table('bids', function (Blueprint $table) {
             $table->unsignedBigInteger('bidding_queue_id')->nullable();
 
             $table->foreign('bidding_queue_id')->references('id')->on('bidding_queues')->onDelete('cascade');
         });
-
-
     }
 
     /**
