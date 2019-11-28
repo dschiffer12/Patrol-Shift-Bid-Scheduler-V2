@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Bid extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'user_id', 'spot_id', 'approved', 'bidding_queue_id'
+    ];
+
+    /**
      * Returns the user associated witht this bid.
      */
     public function user() {

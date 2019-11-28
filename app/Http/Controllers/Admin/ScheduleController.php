@@ -25,14 +25,9 @@ class ScheduleController extends Controller
     {
         // Return the index view with all the schedules
         $schedules = Schedule::paginate(7);
-
-        if($schedules) {
-            return view('admin.schedules.index')->with([
-                'schedules'=> $schedules,
-            ]);
-        } else {
-            return redirect('/')->with('warning', 'Can\'t find schedule');
-        }  
+        return view('admin.schedules.index')->with([
+            'schedules'=> $schedules,
+        ]);
     }
 
     /**
@@ -54,13 +49,14 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        
         /**
          * Validate the request
          */
         $validatedData = $request->validate([
             'schedule_name' => ['required', 'string', 'max:255'],
-            'start_date' => ['required', 'after:yesterday'],
-            'end_date' => ['required', 'after:yesterday'],
+            'start_date' => ['required'],
+            'end_date' => ['required'],
             'response_time' => ['required', 'integer', 'gt:0', 'lt:100'],
         ]);
 
@@ -70,8 +66,10 @@ class ScheduleController extends Controller
         $schedule->start_date = $request->start_date;
         $schedule->end_date = $request->end_date;
         $schedule->response_time = $request->response_time;
+        $schedule->currently_active = false;
+        $schedule->template = false;
         $schedule->save();
-      
+
         return redirect('/admin/schedules/'. $schedule->id . '/edit/');
     }
 
@@ -483,20 +481,20 @@ class ScheduleController extends Controller
     }
 
 
-    /**
-     * Send Email to an user
-     *
-     * @param int $id User Id
-     * @return boolean email sent result
-    **/
-    public function sendEmail(User $user, Schedule $schedule)
-    {
-        Mail::to($user)->send(new EmailNotification($user, $schedule));
+    // /**
+    //  * Send Email to an user
+    //  *
+    //  * @param int $id User Id
+    //  * @return boolean email sent result
+    // **/
+    // public function sendEmail(User $user, Schedule $schedule)
+    // {
+    //     Mail::to($user)->send(new EmailNotification($user, $schedule));
 
-        if (Mail::failures()) {
-            return false;
-        }else{
-            return true;
-        }
-    }
+    //     if (Mail::failures()) {
+    //         return false;
+    //     }else{
+    //         return true;
+    //     }
+    // }
 }
