@@ -127,6 +127,7 @@ class ScheduleControllerTest extends TestCase
         $this->setQueue();
     }
 
+   
     /**
      * A basic feature test example.
      *
@@ -271,6 +272,25 @@ class ScheduleControllerTest extends TestCase
         $response = $this->get(route('admin.schedules.viewApproved', $this->schedule->id));  
         $response->assertViewIs('admin.schedules.approveschedule');
         $response->assertViewHas(['schedule', 'specialties', 'view_approval']);
+    }
+
+    public function Destroy()
+    {
+
+        $sch = Schedule::create([
+            'name' => 'test',
+            'start_date' => $this->schedule->start_date,
+            'end_date' => $this->schedule->end_date,
+            'response_time' => 2,
+            'currently_active' => false,
+            'template' => false,
+            'approved' => false,
+        ]);
+
+        $response = $this->call('DELETE', '/admin/schedules/destroy/1', ['_token' => csrf_token()]);
+        
+        //$response = $this->get(route('admin.schedules.destroy', $sch->id));  
+        $response->assertRedirect('/admin/schedules/');
     }
 
 }

@@ -154,8 +154,9 @@ class SpecialtyControllerTest extends TestCase
     public function testDeleteNotAssigned() {
         $this->withoutExceptionHandling();
 
-        $specialty = Specialty::first();
-        $response = $this->get(route('admin.specialties.delete', $specialty->id));
+        
+        $specialt = factory(Specialty::class)->create();
+        $response = $this->get(route('admin.specialties.delete', $specialt->id));
 
         $response->assertRedirect('/admin/specialties/');
     }

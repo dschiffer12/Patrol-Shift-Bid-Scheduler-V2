@@ -29,7 +29,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'auth.admin'])->
     Route::resource('/users', 'UsersController', ['except' => ['create', 'store']]);
 
     //Route for the Schedule controller.
-    Route::resource('/schedules', 'ScheduleController', ['except' => ['show', 'update', 'show']]);
+    Route::resource('/schedules', 'ScheduleController', ['except' => ['show', 'update']]);
     Route::resource('/schedules/{id}/edit', 'ScheduleController@edit');
     Route::post('/schedules/{id}/addShift', 'ScheduleController@addShift')->name('schedules.addShift');
     Route::post('/schedules/{id}/addSpot', 'ScheduleController@addSpot')->name('schedules.addSpot');

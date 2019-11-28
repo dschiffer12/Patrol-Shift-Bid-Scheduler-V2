@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-
+<?php
+phpinfo();
+?>
 
 <!-- Badge Logo -->
 <!-- <div class="container">

@@ -25,14 +25,9 @@ class ScheduleController extends Controller
     {
         // Return the index view with all the schedules
         $schedules = Schedule::paginate(7);
-
-        if($schedules) {
-            return view('admin.schedules.index')->with([
-                'schedules'=> $schedules,
-            ]);
-        } else {
-            return redirect('/')->with('warning', 'Can\'t find schedule');
-        }  
+        return view('admin.schedules.index')->with([
+            'schedules'=> $schedules,
+        ]);
     }
 
     /**
@@ -74,15 +69,7 @@ class ScheduleController extends Controller
         $schedule->currently_active = false;
         $schedule->template = false;
         $schedule->save();
-        
 
-        // $schedule = Schedule::create([
-        //     'schedule_name' => $validatedData['schedule_name'],
-        //     'start_date' => $validatedData['start_date'],
-        //     'end_date' => $validatedData['end_date'],
-        //     'response_time' => $validatedData['response_time'],
-        // ]);
-      
         return redirect('/admin/schedules/'. $schedule->id . '/edit/');
     }
 
@@ -494,20 +481,20 @@ class ScheduleController extends Controller
     }
 
 
-    /**
-     * Send Email to an user
-     *
-     * @param int $id User Id
-     * @return boolean email sent result
-    **/
-    public function sendEmail(User $user, Schedule $schedule)
-    {
-        Mail::to($user)->send(new EmailNotification($user, $schedule));
+    // /**
+    //  * Send Email to an user
+    //  *
+    //  * @param int $id User Id
+    //  * @return boolean email sent result
+    // **/
+    // public function sendEmail(User $user, Schedule $schedule)
+    // {
+    //     Mail::to($user)->send(new EmailNotification($user, $schedule));
 
-        if (Mail::failures()) {
-            return false;
-        }else{
-            return true;
-        }
-    }
+    //     if (Mail::failures()) {
+    //         return false;
+    //     }else{
+    //         return true;
+    //     }
+    // }
 }
