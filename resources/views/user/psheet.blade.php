@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<div style="height: 500px" class="container">
+<div class="container">
     <div class="row border border-primary ">
         <div class="col col-md-12 p-2">
             @if ($noSpots ?? '')

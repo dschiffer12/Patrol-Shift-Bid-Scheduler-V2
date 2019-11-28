@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<?php
-phpinfo();
-?>
 
 <!-- Badge Logo -->
 <!-- <div class="container">
@@ -35,7 +32,7 @@ phpinfo();
     </div>
 </div>
 
-<div style="height: 500px" class="container">
+<div class="container">
     <div class="row justify-content-center border border-primary h-100">
         <div class="col col-md-8 align-self-center">
 
