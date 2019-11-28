@@ -55,7 +55,7 @@ class UserControllerTest extends TestCase
      * Test method edit return a list of values
      *
      * @return void
-    **/
+     **/
     public function testEditReturnValueList()
     {
         $this->withoutExceptionHandling();
@@ -174,7 +174,7 @@ class UserControllerTest extends TestCase
      * modify.
      *
      * @return void
-    **/
+     **/
     public function testUpdateInDBUpdatedOfficer()
     {
         $this->withoutExceptionHandling();
@@ -229,7 +229,7 @@ class UserControllerTest extends TestCase
      * with the user created for authorization purpose
      *
      *@return void
-    **/
+     **/
     public function testDestroyDBValueOne()
     {
         $this->withoutExceptionHandling();
