@@ -25,7 +25,8 @@
 
     <div class="row justify-content-start mt-3">
         <div class="col col-md-8">
-            <form method="GET" action="{{ route('user.psheet.date') }}">
+            <form method="POST" action="/user/psheet/date">
+                @csrf
 
                 <div class="form-group row">
                     <label for="calendar_date" class="col-md-2 col-form-label ">{{ __('Select Date') }}</label>

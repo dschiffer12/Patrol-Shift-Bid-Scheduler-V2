@@ -15,7 +15,7 @@ class CreateOfficersTable extends Migration
     {
         Schema::create('officers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->integer('unit_number');
             $table->integer('emergency_number')->unique();
             $table->integer('vehicle_number');

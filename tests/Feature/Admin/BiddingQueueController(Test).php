@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\BiddingSchedule as BiddingScheduleModel;
 
-class BiddingQueueControllerTest extends TestCase
+class Test extends TestCase
 {
     use RefreshDatabase;
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Officer;
 use App\Role;
 use App\User;
 use App\Specialty;
@@ -46,6 +47,7 @@ class UserControllerTest extends TestCase
 
         $response = $this->get('/admin/users');
 
+        $response->assertViewIs('admin.users.index');
         $response->assertViewHas('users');
     }
 
@@ -101,7 +103,11 @@ class UserControllerTest extends TestCase
             'date_in_position' => '2015-3-3',
             'role' => '2',
             'specialtiess' => ['3'],
-            'notes' => 'This is my first note'
+            'notes' => 'This is my first note',
+            'unit_number' => 2,
+            'emergency_number' => 4,
+            'vehicle_number' => 5,
+            'zone' => '6'
         ]);
 
         $userUpdated = User::where('name', 'John Cabrera')->firstOrFail();
@@ -152,11 +158,70 @@ class UserControllerTest extends TestCase
             'password' => 'password2',
             'role' => '2',
             'specialtiess' => ['3'],
-            'notes' => 'This is my first note'
+            'notes' => 'This is my first note',
+            'unit_number' => 2,
+            'emergency_number' => 4,
+            'vehicle_number' => 5,
+            'zone' => '6'
         ]);
 
         $userUpdated = User::where('name', 'John Cabrera')->firstOrFail();
         $this->assertEquals('John Cabrera', $userUpdated->name);
+    }
+
+    /**
+     * Test update method to test officer information a new officer is inserted in the database and
+     * modify.
+     *
+     * @return void
+    **/
+    public function testUpdateInDBUpdatedOfficer()
+    {
+        $this->withoutExceptionHandling();
+        //Create the user with access to modify other users profile
+        $user = factory(User::class)->create();
+        $role = factory(Role::class)->create(['name' => 'root']);
+        factory(Role::class)->create(['name' => 'admin']);
+        $user->roles()->attach($role);
+        $this->actingAs($user);
+
+        //create the user that is going to be modify
+        $userTwo = factory(User::class)->create([
+            'name' => 'John Doe',
+            'email' => 'jdoe@ppd.gov',
+            'date_in_position' => '2015-4-3'
+        ]);
+        $role = factory(Role::class)->create(['name' => 'officer']);
+        $specialty = factory(Specialty::class,2)->create();
+        factory(Specialty::class)->create(['name' => 'PTO']);
+        $userTwo->specialties()->attach($specialty);
+        $userTwo->roles()->attach($role);
+        factory(Officer::class)->create(['user_id' => 2]);
+
+        $this->put('/admin/users/2',[
+            'name' => 'John Cabrera',
+            'email' => 'jcabrera@ppd.gov',
+            'date_in_position' => '2015-3-3',
+            'role' => '2',
+            'specialtiess' => ['3'],
+            'notes' => 'This is my first note',
+            'unit_number' => 2,
+            'emergency_number' => 4,
+            'vehicle_number' => 5,
+            'zone' => '6'
+        ]);
+
+        $officerUpdated = Officer::where('unit_number', 2)->firstOrFail();
+        $this->assertEquals(2, $officerUpdated->unit_number);
+
+        $officerUpdated = Officer::where('emergency_number', 4)->firstOrFail();
+        $this->assertEquals(4, $officerUpdated->emergency_number);
+
+        $officerUpdated = Officer::where('vehicle_number', 5)->firstOrFail();
+        $this->assertEquals(5, $officerUpdated->vehicle_number);
+
+        $officerUpdated = Officer::where('zone', '6')->firstOrFail();
+        $this->assertEquals('6', $officerUpdated->zone);
     }
 
     /**

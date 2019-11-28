@@ -110,7 +110,7 @@
                         <div class="row top15">
                             <div class="col pt-2">
                                 <button type="button" class="btn btn-block text-left">
-                                    <a class="nav-link" href="{{ route('user.psheet.index') }}"><h5>{{ __('Daily Roster') }}</h5></a>
+                                    <a class="nav-link" href="/user/psheet/today"><h5>{{ __('Daily Roster') }}</h5></a>
                                 </button>
                             </div>
                         </div>
@@ -122,7 +122,7 @@
                             </div>
                         </div>
 
-                        
+
                     </div>
                 @endguest
 
@@ -132,12 +132,12 @@
                         @include('partials.alerts')
                         @yield('content')
                     </main>
-                </div>  
-            </div> 
+                </div>
+            </div>
             @include('layouts.footer')
         </div>
     </div>
-        
+
         <!--JQuery hosted-->
     <script
         src="https://code.jquery.com/jquery-3.4.1.js"
