@@ -54,13 +54,14 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        
         /**
          * Validate the request
          */
         $validatedData = $request->validate([
             'schedule_name' => ['required', 'string', 'max:255'],
-            'start_date' => ['required', 'after:yesterday'],
-            'end_date' => ['required', 'after:yesterday'],
+            'start_date' => ['required'],
+            'end_date' => ['required'],
             'response_time' => ['required', 'integer', 'gt:0', 'lt:100'],
         ]);
 
@@ -70,7 +71,17 @@ class ScheduleController extends Controller
         $schedule->start_date = $request->start_date;
         $schedule->end_date = $request->end_date;
         $schedule->response_time = $request->response_time;
+        $schedule->currently_active = false;
+        $schedule->template = false;
         $schedule->save();
+        
+
+        // $schedule = Schedule::create([
+        //     'schedule_name' => $validatedData['schedule_name'],
+        //     'start_date' => $validatedData['start_date'],
+        //     'end_date' => $validatedData['end_date'],
+        //     'response_time' => $validatedData['response_time'],
+        // ]);
       
         return redirect('/admin/schedules/'. $schedule->id . '/edit/');
     }
