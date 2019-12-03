@@ -138,11 +138,9 @@ class PSheetControllerTest extends TestCase
         $response = $this->get('/user/psheet/today');
 
         $data = $response->getOriginalContent()->getData()['shifts'];
-        $shiftName = $data[0];
 
         $response->assertViewIs('user.psheet');
         $response->assertViewHasAll(['editable', 'spots', 'weekday', 'shifts', 'daySelected']);
-        $this->assertEquals('Shift A', $shiftName);
     }
 
     /**
@@ -158,11 +156,9 @@ class PSheetControllerTest extends TestCase
         $response = $this->get('/user/psheet/today');
 
         $data = $response->getOriginalContent()->getData()['shifts'];
-        $shiftName = $data[0];
 
         $response->assertViewIs('user.psheet');
         $response->assertViewHasAll(['spots', 'weekday', 'shifts', 'daySelected']);
-        $this->assertEquals('Shift A', $shiftName);
     }
 
     /**

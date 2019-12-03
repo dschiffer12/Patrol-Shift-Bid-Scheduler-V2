@@ -62,46 +62,48 @@
 <div class="container shadow">
     <div class="row border border-primary ">
         <div class="col col-md-12 p-2">
-            @if ($noSpots ?? '')
-                <div class="alert alert-warning" role="alert">
-                    {{ $noSpots }}
-                </div>
-            @endif
-            @foreach( $shifts as $shift )
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th style="width: 8%" scope="col">{{ $shift }}</th>
-                            <th style="width: 7%" scope="col">Unit #</th>
-                            <th style="width: 9%" scope="col">Emgcy #</th>
-                            <th style="width: 20%" scope="col">Name</th>
-                            <th style="width: 7%" scope="col">Shift Start</th>
-                            <th style="width: 7%" scope="col">Shift End</th>
-                            <th style="width: 7%" scope="col">Zone</th>
-                            <th style="width: 7%" scope="col">Specialties</th>
-                            <th style="width: 7%" scope="col">Vehicle</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @foreach( $spots as $index => $spot)
-                            @if($spot->spot->shift->name == $shift)
+            <div class="table-responsive-md">
+                @if ($noSpots ?? '')
+                    <div class="alert alert-warning" role="alert">
+                        {{ $noSpots }}
+                    </div>
+                @endif
+                @foreach( $shifts as $shift )
+                    <table class="table">
+                        <thead class="thead-light">
                             <tr>
-                                <td>{{ implode(', ', $spot->user->roles()->get()->pluck('name')->toArray()) }}</td>
-                                <td>{{ !empty($spot->user->officer) ? $spot->user->officer->unit_number:'' }}</td>
-                                <td>{{ !empty($spot->user->officer) ? $spot->user->officer->emergency_number:'' }}</td>
-                                <td>{{ !empty($spot->user) ? $spot->user->name:'' }}</td>
-                                <td>{{ $spot->spot->{$weekday.'_s'} }}</td>
-                                <td>{{ $spot->spot->{$weekday.'_e'} }}</td>
-                                <td></td>
-                                <td>{{ implode(', ', $spot->user->specialties()->get()->pluck('name')->toArray()) }}</td>
-                                <td>{{ !empty($spot->user->officer) ? $spot->user->officer->vehicle_number:'' }}</td>
+                                <th style="width: 8%" scope="col">{{ $shift }}</th>
+                                <th style="width: 7%" scope="col">Unit #</th>
+                                <th style="width: 9%" scope="col">Emgcy #</th>
+                                <th style="width: 20%" scope="col">Name</th>
+                                <th style="width: 7%" scope="col">Shift Start</th>
+                                <th style="width: 7%" scope="col">Shift End</th>
+                                <th style="width: 7%" scope="col">Zone</th>
+                                <th style="width: 7%" scope="col">Specialties</th>
+                                <th style="width: 7%" scope="col">Vehicle</th>
                             </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            @endforeach
+                        </thead>
+
+                        <tbody>
+                            @foreach( $spots as $index => $spot)
+                                @if($spot->spot->shift->name == $shift)
+                                <tr>
+                                    <td>{{ implode(', ', $spot->user->roles()->get()->pluck('name')->toArray()) }}</td>
+                                    <td>{{ !empty($spot->user->officer) ? $spot->user->officer->unit_number:'' }}</td>
+                                    <td>{{ !empty($spot->user->officer) ? $spot->user->officer->emergency_number:'' }}</td>
+                                    <td>{{ !empty($spot->user) ? $spot->user->name:'' }}</td>
+                                    <td>{{ $spot->spot->{$weekday.'_s'} }}</td>
+                                    <td>{{ $spot->spot->{$weekday.'_e'} }}</td>
+                                    <td></td>
+                                    <td>{{ implode(', ', $spot->user->specialties()->get()->pluck('name')->toArray()) }}</td>
+                                    <td>{{ !empty($spot->user->officer) ? $spot->user->officer->vehicle_number:'' }}</td>
+                                </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endforeach
+            </div>
         </div>
     </div>
 </div>
