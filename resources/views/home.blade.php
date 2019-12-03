@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div class="container">
+<div style="height: 500px" class="container">
     <div class="row justify-content-center border border-primary h-100">
         <div class="col col-md-8 align-self-center">
 
