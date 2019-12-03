@@ -11,6 +11,8 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+    <!-- scroll position -->
+    <script src="{{ asset('js/scrollfix.js') }}" type="text/javascript"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -146,6 +148,9 @@
 
     <script src="{{ asset('js/jquery.rowselector.min.js') }}" defer></script>
     <script src="{{ asset('js/biddingschedule.js') }}" defer></script>
+    
+    <!-- maintain scroll position -->
+    <body onunload="unloadP('UniquePageNameHereScroll')" onload="loadP('UniquePageNameHereScroll')">
 
     </body>
 </html>
